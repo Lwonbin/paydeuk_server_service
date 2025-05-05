@@ -1,6 +1,6 @@
 package com.tower_of_fisa.paydeuk_server_service.config.exception.custom;
 
-import dev.discord_server.config.exception.global.GlobalExceptionHandler;
+import com.tower_of_fisa.paydeuk_server_service.config.exception.global.GlobalExceptionHandler;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
