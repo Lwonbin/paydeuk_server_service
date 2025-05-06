@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.config;
+package com.tower_of_fisa.paydeuk_server_service.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

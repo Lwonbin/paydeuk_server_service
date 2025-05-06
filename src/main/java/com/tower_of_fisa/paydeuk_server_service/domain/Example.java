@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Example {
+public class Example extends BaseEntity{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EXAM_ID")
