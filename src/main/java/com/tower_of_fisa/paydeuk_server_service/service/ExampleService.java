@@ -35,7 +35,7 @@ public class ExampleService {
             throw new AlreadyExistElementException409(ErrorDefineCode.DUPLICATE_EXAMPLE_NAME);
         }
 
-        Example example = new Example(); // 생성자 대신 setter 방식 사용
+        Example example = new Example();
         example.setName(input.getName());
 
         example = exampleRepository.save(example);
