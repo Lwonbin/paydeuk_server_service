@@ -1,7 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.config.exception.custom;
 
 
-import com.tower_of_fisa.paydeuk_server_service.response.ErrorDefineCode;
+import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
 import lombok.Getter;
 
 @Getter

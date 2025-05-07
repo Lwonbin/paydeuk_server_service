@@ -7,9 +7,9 @@ import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exceptio
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleRequest;
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleResponse;
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleValidationRequest;
-import com.tower_of_fisa.paydeuk_server_service.response.CommonResponse;
-import com.tower_of_fisa.paydeuk_server_service.response.ErrorDefineCode;
-import com.tower_of_fisa.paydeuk_server_service.response.SwaggerErrorResponseType;
+import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
+import com.tower_of_fisa.paydeuk_server_service.common.response.SwaggerErrorResponseType;
 import com.tower_of_fisa.paydeuk_server_service.service.ExampleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,6 +31,7 @@ import java.util.List;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/example")
+@Slf4j
 public class ExampleController {
 
     private final ExampleService exampleService;
@@ -85,7 +87,7 @@ public class ExampleController {
         if(request.getErrorCode() == 500){
             // 예상치 못한 오류 발생시키기
             int[] array = {1,2,3,4,5};
-            System.out.println(array[50]);
+            log.info(String.valueOf(array[4]));
         }
 
         if(request.getErrorCode() == 403){

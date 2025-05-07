@@ -1,6 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.domain;
 
 
+import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -10,7 +11,7 @@ import lombok.*;
 @NoArgsConstructor
 @Getter
 @Setter
-public class Example extends BaseEntity{
+public class Example extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "EXAM_ID")

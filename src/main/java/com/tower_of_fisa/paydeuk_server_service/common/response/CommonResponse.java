@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.response;
+package com.tower_of_fisa.paydeuk_server_service.common.response;
 
 
 

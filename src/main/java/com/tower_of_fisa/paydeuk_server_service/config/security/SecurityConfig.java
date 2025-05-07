@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.security;
+package com.tower_of_fisa.paydeuk_server_service.config.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
