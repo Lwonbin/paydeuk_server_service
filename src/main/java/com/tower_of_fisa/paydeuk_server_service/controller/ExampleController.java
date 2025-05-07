@@ -7,9 +7,9 @@ import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exceptio
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleRequest;
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleResponse;
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleValidationRequest;
-import com.tower_of_fisa.paydeuk_server_service.response.CommonResponse;
-import com.tower_of_fisa.paydeuk_server_service.response.ErrorDefineCode;
-import com.tower_of_fisa.paydeuk_server_service.response.SwaggerErrorResponseType;
+import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
+import com.tower_of_fisa.paydeuk_server_service.common.response.SwaggerErrorResponseType;
 import com.tower_of_fisa.paydeuk_server_service.service.ExampleService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;

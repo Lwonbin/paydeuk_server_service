@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.swagger;
+package com.tower_of_fisa.paydeuk_server_service.config.swagger;
 
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;

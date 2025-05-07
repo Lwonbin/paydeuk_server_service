@@ -1,9 +1,9 @@
 package com.tower_of_fisa.paydeuk_server_service.config.exception.global;
 
 
-import com.tower_of_fisa.paydeuk_server_service.response.CommonError;
-import com.tower_of_fisa.paydeuk_server_service.response.CommonResponse;
-import com.tower_of_fisa.paydeuk_server_service.response.ErrorDefineCode;
+import com.tower_of_fisa.paydeuk_server_service.common.response.CommonError;
+import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
 import io.swagger.v3.oas.annotations.Hidden;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;

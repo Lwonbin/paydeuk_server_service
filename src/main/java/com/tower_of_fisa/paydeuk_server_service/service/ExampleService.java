@@ -6,7 +6,7 @@ import com.tower_of_fisa.paydeuk_server_service.domain.Example;
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleRequest;
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleResponse;
 import com.tower_of_fisa.paydeuk_server_service.repository.ExampleRepository;
-import com.tower_of_fisa.paydeuk_server_service.response.ErrorDefineCode;
+import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
