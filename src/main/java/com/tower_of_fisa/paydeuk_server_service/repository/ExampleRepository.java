@@ -1,6 +1,6 @@
 package com.tower_of_fisa.paydeuk_server_service.repository;
 
-import com.tower_of_fisa.paydeuk_server_service.domain.Example;
+import com.tower_of_fisa.paydeuk_server_service.domain.entity.Example;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

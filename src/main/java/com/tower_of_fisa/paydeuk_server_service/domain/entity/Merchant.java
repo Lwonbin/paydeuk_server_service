@@ -1,0 +1,59 @@
+package com.tower_of_fisa.paydeuk_server_service.domain.entity;
+
+import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
+import com.tower_of_fisa.paydeuk_server_service.domain.Enum.MerchantCategory;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
+@Getter
+@Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Table(name = "merchant")
+public class Merchant extends BaseEntity {
+    @Id
+    @Column(name = "id", nullable = false)
+    private Long id;
+
+    @Column(name = "name", length = 20, nullable = false)
+    private String name;
+
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive;
+
+    @Column(name = "commission_rate", length = 10, nullable = false)
+    private String commissionRate;
+
+    @Column(name = "business_number", length = 20, nullable = false)
+    private String businessNumber;
+
+    @Column(name = "manager_name", length = 20,nullable = false)
+    private String managerName;
+
+    @Column(name = "phone", length = 20, nullable = false)
+    private String phone;
+
+    @Column(name = "manager_phone", length = 20, nullable = false)
+    private String managerPhone;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "category", nullable = false)
+    private MerchantCategory category;
+
+    @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Benefit> benefits = new ArrayList<>();
+
+
+    @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Payment> payments = new ArrayList<>();
+
+
+}

@@ -2,7 +2,7 @@ package com.tower_of_fisa.paydeuk_server_service.service;
 
 
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.AlreadyExistElementException409;
-import com.tower_of_fisa.paydeuk_server_service.domain.Example;
+import com.tower_of_fisa.paydeuk_server_service.domain.entity.Example;
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleRequest;
 import com.tower_of_fisa.paydeuk_server_service.dto.ExampleResponse;
 import com.tower_of_fisa.paydeuk_server_service.repository.ExampleRepository;

@@ -1,107 +1,18 @@
+DROP DATABASE IF EXISTS paydeuk;
+CREATE DATABASE paydeuk;
 USE paydeuk;
-
-SET FOREIGN_KEY_CHECKS = 0;
 
 DROP TABLE IF EXISTS
     payment,
-    applied_benefit,
     card_benefit,
     discount,
-    condition_rule,
-    condition_category,
+    benefit_condition,
+    benefit,
     spending_range,
     user_card,
     users,
     card,
-    card_company,
-    merchant,
-    benefit,
-    merchant_category;
-
-SET FOREIGN_KEY_CHECKS = 1;
-
-CREATE TABLE merchant_category
-(
-    id            BIGINT AUTO_INCREMENT PRIMARY KEY,
-    category_name VARCHAR(50)
-);
-
-CREATE TABLE benefit
-(
-    id                       BIGINT AUTO_INCREMENT PRIMARY KEY,
-    description              VARCHAR(100),
-    title                    VARCHAR(100),
-    type                     ENUM ('discount', 'point', 'cashback'),
-    spending_range_id        BIGINT,
-    has_additional_condition BOOLEAN,
-    created_at               TIMESTAMP,
-    updated_at               TIMESTAMP
-);
-
-CREATE TABLE merchant
-(
-    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name            VARCHAR(20),
-    benefit_id      BIGINT,
-    category_id     BIGINT,
-    is_active       BOOLEAN,
-    commission_rate VARCHAR(10),
-    business_number VARCHAR(20),
-    manager_name    VARCHAR(20),
-    phone           VARCHAR(20),
-    manager_phone   VARCHAR(20),
-    created_at      TIMESTAMP,
-    updated_at      TIMESTAMP,
-    FOREIGN KEY (benefit_id) REFERENCES benefit (id),
-    FOREIGN KEY (category_id) REFERENCES merchant_category (id)
-);
-
-CREATE TABLE card_company
-(
-    id   BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(50)
-);
-
-CREATE TABLE card
-(
-    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name       VARCHAR(30),
-    type       ENUM ('credit', 'debit'),
-    image_url  VARCHAR(200),
-    annual_fee BIGINT,
-    company_id BIGINT,
-    FOREIGN KEY (company_id) REFERENCES card_company (id)
-);
-
-CREATE TABLE users
-(
-    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name            VARCHAR(10),
-    phone           VARCHAR(20),
-    password        BIGINT,
-    email           VARCHAR(30),
-    pay_password    VARCHAR(6),
-    address         VARCHAR(30),
-    role            ENUM ('admin', 'user'),
-    birth_date      TIMESTAMP,
-    default_card_id BIGINT,
-    status          ENUM ('active', 'inactive', 'temporary'),
-    created_at      TIMESTAMP,
-    updated_at      TIMESTAMP
-);
-
-CREATE TABLE user_card
-(
-    id          BIGINT AUTO_INCREMENT PRIMARY KEY,
-    user_id     BIGINT,
-    card_id     BIGINT,
-    card_token  VARCHAR(30),
-    card_number INT,
-    created_at  TIMESTAMP,
-    updated_at  TIMESTAMP,
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (card_id) REFERENCES card (id)
-);
+    merchant;
 
 CREATE TABLE spending_range
 (
@@ -110,89 +21,127 @@ CREATE TABLE spending_range
     max_spending BIGINT
 );
 
-CREATE TABLE condition_category
+CREATE TABLE users
 (
-    id   BIGINT AUTO_INCREMENT PRIMARY KEY,
-    type ENUM ('per_transaction_limit', 'daily_limit_count', 'monthly_limit_count', 'daily_discount_limit', 'monthly_discount_limit')
+    id           BIGINT AUTO_INCREMENT PRIMARY KEY        NOT NULL,
+    name         VARCHAR(10)                              NOT NULL,
+    username     VARCHAR(20)                              NOT NULL,
+    password     VARCHAR(50)                              NOT NULL,
+    phone        VARCHAR(20)                              NOT NULL,
+    email        VARCHAR(30),
+    pay_password VARCHAR(50)                              NOT NULL,
+    address      VARCHAR(30),
+    role         ENUM ('admin', 'user')                   NOT NULL,
+    birth_date   VARCHAR(10)                              NOT NULL,
+    status       ENUM ('active', 'inactive', 'temporary') NOT NULL,
+    created_at   TIMESTAMP,
+    updated_at   TIMESTAMP
 );
 
-CREATE TABLE condition_rule
+CREATE TABLE card
 (
-    id                BIGINT AUTO_INCREMENT PRIMARY KEY,
-    benefit_id        BIGINT,
-    category_id       BIGINT,
-    spending_range_id BIGINT,
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY                          NOT NULL,
+    name       VARCHAR(30)                                                NOT NULL,
+    type       ENUM ('credit', 'debit')                                   NOT NULL,
+    image_url  VARCHAR(200)                                               NOT NULL,
+    annual_fee BIGINT                                                     NOT NULL,
+    company    ENUM ('hyundai', 'kookmin', 'samsung', 'shinhan', 'woori') NOT NULL,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP
+);
+
+CREATE TABLE merchant
+(
+    id              BIGINT AUTO_INCREMENT PRIMARY KEY                                            NOT NULL,
+    name            VARCHAR(20)                                                                  NOT NULL,
+    is_active       BOOLEAN                                                                      NOT NULL,
+    commission_rate VARCHAR(10)                                                                  NOT NULL,
+    business_number VARCHAR(20)                                                                  NOT NULL,
+    manager_name    VARCHAR(20)                                                                  NOT NULL,
+    phone           VARCHAR(20)                                                                  NOT NULL,
+    manager_phone   VARCHAR(20)                                                                  NOT NULL,
+    category        ENUM ('culture', 'food_beverage', 'shopping', 'subscribe', 'transportation') NOT NULL,
+    created_at      TIMESTAMP,
+    updated_at      TIMESTAMP
+);
+
+CREATE TABLE benefit
+(
+    id                       BIGINT AUTO_INCREMENT PRIMARY KEY      NOT NULL,
+    description              VARCHAR(100),
+    title                    VARCHAR(100),
+    benefit_type             ENUM ('discount', 'point', 'cashback') NOT NULL,
+    has_additional_condition BOOLEAN                                NOT NULL,
+    merchant_id              BIGINT                                 NOT NULL,
+    created_at               TIMESTAMP,
+    updated_at               TIMESTAMP,
+    FOREIGN KEY (merchant_id) REFERENCES merchant (id)
+);
+
+CREATE TABLE benefit_condition
+(
+    id                BIGINT AUTO_INCREMENT PRIMARY KEY           NOT NULL,
+    benefit_id        BIGINT                                      NOT NULL,
+    spending_range_id BIGINT                                      NOT NULL,
     value             BIGINT,
+    category          ENUM ('over_10_percent', 'over_20_percent') NOT NULL,
+    created_at        TIMESTAMP,
+    updated_at        TIMESTAMP,
     FOREIGN KEY (benefit_id) REFERENCES benefit (id),
-    FOREIGN KEY (category_id) REFERENCES condition_category (id),
     FOREIGN KEY (spending_range_id) REFERENCES spending_range (id)
 );
 
 CREATE TABLE discount
 (
-    id                BIGINT AUTO_INCREMENT PRIMARY KEY,
-    benefit_id        BIGINT,
-    spending_range_id BIGINT,
-    apply_type        ENUM ('rate', 'amount'),
-    amount            BIGINT,
+    id                BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    benefit_id        BIGINT                            NOT NULL,
+    spending_range_id BIGINT                            NOT NULL,
+    apply_type        ENUM ('rate', 'amount')           NOT NULL,
+    amount            BIGINT                            NOT NULL,
+    created_at        TIMESTAMP,
+    updated_at        TIMESTAMP,
     FOREIGN KEY (benefit_id) REFERENCES benefit (id),
     FOREIGN KEY (spending_range_id) REFERENCES spending_range (id)
 );
 
 CREATE TABLE card_benefit
 (
-    id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-    card_id    BIGINT,
-    benefit_id BIGINT,
+    id         BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    card_id    BIGINT                            NOT NULL,
+    benefit_id BIGINT                            NOT NULL,
+    created_at TIMESTAMP,
+    updated_at TIMESTAMP,
     FOREIGN KEY (card_id) REFERENCES card (id),
     FOREIGN KEY (benefit_id) REFERENCES benefit (id)
 );
 
-CREATE TABLE applied_benefit
+CREATE TABLE user_card
 (
-    id              BIGINT AUTO_INCREMENT PRIMARY KEY,
-    card_benefit_id BIGINT,
-    applied_amount  INT,
-    FOREIGN KEY (card_benefit_id) REFERENCES card_benefit (id)
+    id              BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    user_id         BIGINT                            NOT NULL,
+    card_id         BIGINT                            NOT NULL,
+    card_token      VARCHAR(40)                       NOT NULL,
+    card_number     VARCHAR(40)                       NOT NULL,
+    is_default_card BOOLEAN                           NOT NULL,
+    created_at      TIMESTAMP,
+    updated_at      TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (card_id) REFERENCES card (id)
 );
 
 CREATE TABLE payment
 (
-    id                 BIGINT AUTO_INCREMENT PRIMARY KEY,
-    product_name       VARCHAR(30),
-    amount             INT,
-    status             BOOLEAN,
-    card_id            BIGINT,
-    merchant_id        BIGINT,
-    applied_benefit_id BIGINT,
-    FOREIGN KEY (card_id) REFERENCES card (id),
+    id              BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
+    product_name    VARCHAR(30)                       NOT NULL,
+    amount          INT                               NOT NULL,
+    payment_success BOOLEAN                           NOT NULL,
+    user_card_id    BIGINT                            NOT NULL,
+    merchant_id     BIGINT                            NOT NULL,
+    card_benefit_id BIGINT                            NOT NULL,
+    discount_amount INT                               NOT NULL,
+    created_at      TIMESTAMP,
+    updated_at      TIMESTAMP,
+    FOREIGN KEY (user_card_id) REFERENCES user_card (id),
     FOREIGN KEY (merchant_id) REFERENCES merchant (id),
-    FOREIGN KEY (applied_benefit_id) REFERENCES applied_benefit (id)
+    FOREIGN KEY (card_benefit_id) REFERENCES card_benefit (id)
 );
-
-# CREATE TABLE notification
-# (
-#     id               BIGINT AUTO_INCREMENT PRIMARY KEY,
-#     user_id          BIGINT,
-#     email_notify     BOOLEAN,
-#     sms_notify       BOOLEAN,
-#     marketing_notify BOOLEAN,
-#     security_notify  BOOLEAN,
-#     created_at       TIMESTAMP,
-#     updated_at       TIMESTAMP,
-#     FOREIGN KEY (user_id) REFERENCES users (id)
-# );
-#
-# CREATE TABLE announcement
-# (
-#     id         BIGINT AUTO_INCREMENT PRIMARY KEY,
-#     user_id    BIGINT,
-#     title      VARCHAR(30),
-#     content    VARCHAR(300),
-#     created_at TIMESTAMP,
-#     updated_at TIMESTAMP,
-#     FOREIGN KEY (user_id) REFERENCES users (id)
-# );
-
-ALTER TABLE user_card
-    ADD CONSTRAINT fk_user FOREIGN KEY (user_id) REFERENCES users (id);

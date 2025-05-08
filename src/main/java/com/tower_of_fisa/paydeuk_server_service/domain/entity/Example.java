@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.domain;
+package com.tower_of_fisa.paydeuk_server_service.domain.entity;
 
 
 import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
