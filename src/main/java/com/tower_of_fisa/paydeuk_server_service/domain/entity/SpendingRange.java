@@ -12,15 +12,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "spending_range")
 public class SpendingRange extends BaseEntity {
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private Long id;
 
-    @Column(name = "min_spending")
-    private Long minSpending;
+  @Column(name = "min_spending")
+  private Long minSpending;
 
-    @Column(name = "max_spending")
-    private Long maxSpending;
-
-
+  @Column(name = "max_spending")
+  private Long maxSpending;
 }

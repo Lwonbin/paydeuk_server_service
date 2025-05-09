@@ -13,24 +13,23 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "benefit_condition")
 public class BenefitCondition extends BaseEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
-    private Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "id", nullable = false)
+  private Long id;
 
-    @Column(name = "value")
-    private Long value;
+  @Column(name = "value")
+  private Long value;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "category", nullable = false)
-    private BenefitConditionCategory category;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "category", nullable = false)
+  private BenefitConditionCategory category;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "benefit_id", nullable = false)
-    private Benefit benefit;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "benefit_id", nullable = false)
+  private Benefit benefit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "spending_range_id")
-    private SpendingRange spendingRange;
-
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "spending_range_id")
+  private SpendingRange spendingRange;
 }

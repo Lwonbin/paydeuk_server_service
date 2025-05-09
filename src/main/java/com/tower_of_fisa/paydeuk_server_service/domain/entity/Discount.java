@@ -13,23 +13,22 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Table(name = "discount")
 public class Discount extends BaseEntity {
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private Long id;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "apply_type", nullable = false)
-    private DiscountApplyType applyType;
+  @Enumerated(EnumType.STRING)
+  @Column(name = "apply_type", nullable = false)
+  private DiscountApplyType applyType;
 
-    @Column(name = "amount", nullable = false)
-    private Float amount;
+  @Column(name = "amount", nullable = false)
+  private Float amount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "benefit_id", nullable = false)
-    private Benefit benefit;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "benefit_id", nullable = false)
+  private Benefit benefit;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "spending_range_id", nullable = false)
-    private SpendingRange spendingRange;
-
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "spending_range_id", nullable = false)
+  private SpendingRange spendingRange;
 }
