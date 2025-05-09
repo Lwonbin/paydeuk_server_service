@@ -17,8 +17,6 @@ public enum ErrorDefineCode {
   VERIFICATION_RESPONSE_NULL("VER_02", "인증 응답의 response 필드가 null입니다."),
   VERIFICATION_ACCESS_TOKEN_NULL("VER_03", "인증 응답의 access_token 필드가 null입니다."),
   VERIFICATION_RESULT_NULL("VER_04", "인증 결과 조회 응답이 null입니다."),
-
-  //
   MERCHANT_NOT_FOUND("MER_01", "해당 가맹점을 찾을 수가 없습니다."),
   ;
 
