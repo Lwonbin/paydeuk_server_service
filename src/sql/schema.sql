@@ -23,19 +23,20 @@ CREATE TABLE spending_range
 
 CREATE TABLE users
 (
-    id           BIGINT AUTO_INCREMENT PRIMARY KEY        NOT NULL,
-    name         VARCHAR(10)                              NOT NULL,
-    username     VARCHAR(20)                              NOT NULL,
-    password     VARCHAR(50)                              NOT NULL,
-    phone        VARCHAR(20)                              NOT NULL,
-    email        VARCHAR(30),
-    pay_password VARCHAR(50)                              NOT NULL,
-    address      VARCHAR(30),
-    role         ENUM ('admin', 'user')                   NOT NULL,
-    birth_date   VARCHAR(10)                              NOT NULL,
-    status       ENUM ('active', 'inactive', 'temporary') NOT NULL,
-    created_at   TIMESTAMP,
-    updated_at   TIMESTAMP
+    id                  BIGINT AUTO_INCREMENT PRIMARY KEY        NOT NULL,
+    name                VARCHAR(10)                              NOT NULL,
+    username            VARCHAR(20)                              NOT NULL,
+    password            VARCHAR(50)                              NOT NULL,
+    personal_auth_key   VARCHAR(100)                             NOT NULL,
+    phone               VARCHAR(20)                              NOT NULL,
+    email               VARCHAR(30),
+    pay_password        VARCHAR(50),
+    address             VARCHAR(30),
+    role                ENUM ('admin', 'user')                   NOT NULL,
+    birth_date          VARCHAR(10)                              NOT NULL,
+    status              ENUM ('active', 'inactive', 'temporary') NOT NULL,
+    created_at          TIMESTAMP,
+    updated_at          TIMESTAMP
 );
 
 CREATE TABLE card
@@ -72,7 +73,7 @@ CREATE TABLE benefit
     title                    VARCHAR(100),
     benefit_type             ENUM ('discount', 'point', 'cashback') NOT NULL,
     has_additional_condition BOOLEAN                                NOT NULL,
-    merchant_id              BIGINT                                 NOT NULL,
+    merchant_id              BIGINT,
     created_at               TIMESTAMP,
     updated_at               TIMESTAMP,
     FOREIGN KEY (merchant_id) REFERENCES merchant (id)
@@ -80,11 +81,11 @@ CREATE TABLE benefit
 
 CREATE TABLE benefit_condition
 (
-    id                BIGINT AUTO_INCREMENT PRIMARY KEY           NOT NULL,
-    benefit_id        BIGINT                                      NOT NULL,
-    spending_range_id BIGINT                                      NOT NULL,
+    id                BIGINT AUTO_INCREMENT PRIMARY KEY                                                                                             NOT NULL,
+    benefit_id        BIGINT                                                                                                                        NOT NULL,
+    spending_range_id BIGINT,
     value             BIGINT,
-    category          ENUM ('over_10_percent', 'over_20_percent') NOT NULL,
+    category          ENUM ('PER_TRANSACTION_LIMIT',  'DAILY_LIMIT_COUNT', 'MONTHLY_LIMIT_COUNT', 'DAILY_DISCOUNT_LIMIT', 'MONTHLY_DISCOUNT_LIMIT') NOT NULL,
     created_at        TIMESTAMP,
     updated_at        TIMESTAMP,
     FOREIGN KEY (benefit_id) REFERENCES benefit (id),
@@ -97,7 +98,7 @@ CREATE TABLE discount
     benefit_id        BIGINT                            NOT NULL,
     spending_range_id BIGINT                            NOT NULL,
     apply_type        ENUM ('rate', 'amount')           NOT NULL,
-    amount            BIGINT                            NOT NULL,
+    amount            FLOAT                             NOT NULL,
     created_at        TIMESTAMP,
     updated_at        TIMESTAMP,
     FOREIGN KEY (benefit_id) REFERENCES benefit (id),
@@ -136,7 +137,7 @@ CREATE TABLE payment
     amount          INT                               NOT NULL,
     payment_success BOOLEAN                           NOT NULL,
     user_card_id    BIGINT                            NOT NULL,
-    merchant_id     BIGINT                            NOT NULL,
+    merchant_id     BIGINT,
     card_benefit_id BIGINT                            NOT NULL,
     discount_amount INT                               NOT NULL,
     created_at      TIMESTAMP,

@@ -35,7 +35,7 @@ public class Payment extends BaseEntity {
     private UserCard userCard;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "merchant_id", nullable = false)
+    @JoinColumn(name = "merchant_id")
     private Merchant merchant;
 
     @OneToOne

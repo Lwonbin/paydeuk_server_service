@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Entity
@@ -31,7 +30,7 @@ public class BenefitCondition extends BaseEntity {
     private Benefit benefit;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "spending_range_id", nullable = false)
+    @JoinColumn(name = "spending_range_id")
     private SpendingRange spendingRange;
 
 }

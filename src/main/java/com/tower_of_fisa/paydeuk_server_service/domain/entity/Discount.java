@@ -6,7 +6,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Entity
@@ -23,7 +22,7 @@ public class Discount extends BaseEntity {
     private DiscountApplyType applyType;
 
     @Column(name = "amount", nullable = false)
-    private Long amount;
+    private Float amount;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "benefit_id", nullable = false)

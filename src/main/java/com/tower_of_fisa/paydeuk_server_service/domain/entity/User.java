@@ -4,13 +4,10 @@ import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
 import com.tower_of_fisa.paydeuk_server_service.domain.Enum.UserRole;
 import com.tower_of_fisa.paydeuk_server_service.domain.Enum.UserStatus;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +29,9 @@ public class User extends BaseEntity {
 
     @Column(name = "password", length = 50, nullable = false)
     private String password;
+
+    @Column(name = "personal_auth_key", length = 100, nullable = false)
+    private String personalAuthKey;
 
     @Column(name = "phone", length = 20, nullable = false)
     private String phone;
