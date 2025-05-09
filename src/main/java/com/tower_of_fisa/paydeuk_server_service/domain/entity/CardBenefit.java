@@ -5,10 +5,6 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Entity
@@ -16,17 +12,15 @@ import java.util.List;
 @NoArgsConstructor
 @Table(name = "card_benefit")
 public class CardBenefit extends BaseEntity {
-    @Id
-    @Column(name = "id", nullable = false)
-    private Long id;
+  @Id
+  @Column(name = "id", nullable = false)
+  private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "card_id", nullable = false)
-    private Card card;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "card_id", nullable = false)
+  private Card card;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "benefit_id", nullable = false)
-    private Benefit benefit;
-
-
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "benefit_id", nullable = false)
+  private Benefit benefit;
 }
