@@ -19,7 +19,7 @@ public class AdminUserService {
   /**
    * [사용자 목록 조회] 전체 사용자 목록을 조회한다.
    *
-   * @return List<UserListResponseDto> - 사용자 목록
+   * @return List<UserListResponse> - 사용자 목록
    */
   public List<UserListResponse> getAllUsers() {
     return userRepository.findAll().stream().map(this::convertToDto).toList();
@@ -28,7 +28,7 @@ public class AdminUserService {
   /**
    * [사용자 통계 조회] 전체 사용자 수, 활성 사용자 수, 비활성 사용자 수를 조회한다.
    *
-   * @return UserStatsResponseDto - 사용자 통계 정보
+   * @return UserStatsResponse - 사용자 통계 정보
    */
   public UserStatsResponse getUserStats() {
     List<User> users = userRepository.findAll();
