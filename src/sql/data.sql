@@ -1,12 +1,12 @@
 -- USERS TABLE:
 --      ROLE == USER
-INSERT INTO users ( name, username, password, phone, email, pay_password, address, role, birth_date, status, created_at, updated_at )
+INSERT INTO users ( name, username, password, personal_auth_key, phone, email, pay_password, address, role, birth_date, status, created_at, updated_at )
 -- user_id == 1
-VALUES ( '홍길동', 'test', 'encrypted_password(12345678)', '010-1234-5678', 'test@test.com', 'encrypted_payment_password(123456)', '서울 마포구 월드컵북로 434 상암 IT Tower', 'user', '1990-01-01', 'active', NOW(), NOW() );
+VALUES ( '홍길동', 'test', 'encrypted_password(12345678)', 'dummy_pak', '010-1234-5678', 'test@test.com', 'encrypted_payment_password(123456)', '서울 마포구 월드컵북로 434 상암 IT Tower', 'user', '1990-01-01', 'active', NOW(), NOW() );
 
 --      ROLE == ADMIN
-INSERT INTO users ( name, username, password,  phone, email, pay_password, address, role,  birth_date, status, created_at, updated_at )
-VALUES ( '관리자', 'admin', '12345678', '010-0000-0000', 'admin@example.com', NULL, NULL, 'admin', '1980-01-01', 'active', NOW(), NOW() );
+INSERT INTO users ( name, username, password, personal_auth_key  phone, email, pay_password, address, role,  birth_date, status, created_at, updated_at )
+VALUES ( '관리자', 'admin', '12345678', 'dummy_pak', '010-0000-0000', 'admin@example.com', NULL, NULL, 'admin', '1980-01-01', 'active', NOW(), NOW() );
 
 -- CARD TABLE
 INSERT INTO card ( name, type, image_url, annual_fee, company, created_at, updated_at )
