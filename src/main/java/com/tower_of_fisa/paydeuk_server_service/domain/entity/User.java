@@ -57,4 +57,8 @@ public class User extends BaseEntity {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<UserCard> userCards = new ArrayList<>();
+
+  public void changePassword(String password) {
+    this.password = password;
+  }
 }

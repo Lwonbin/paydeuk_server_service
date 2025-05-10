@@ -26,7 +26,7 @@ CREATE TABLE users
     id                BIGINT AUTO_INCREMENT PRIMARY KEY        NOT NULL,
     name              VARCHAR(10)                              NOT NULL,
     username          VARCHAR(20)                              NOT NULL,
-    password          VARCHAR(50)                              NOT NULL,
+    password          VARCHAR(60)                              NOT NULL,
     personal_auth_key VARCHAR(100)                             NOT NULL,
     phone             VARCHAR(20)                              NOT NULL,
     email             VARCHAR(30),

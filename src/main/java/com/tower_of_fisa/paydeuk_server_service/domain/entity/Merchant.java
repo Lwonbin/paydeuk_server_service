@@ -2,7 +2,6 @@ package com.tower_of_fisa.paydeuk_server_service.domain.entity;
 
 import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
 import com.tower_of_fisa.paydeuk_server_service.domain.Enum.MerchantCategory;
-import com.tower_of_fisa.paydeuk_server_service.dto.merchant.MerchantCategoryConverter;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -35,7 +34,7 @@ public class Merchant extends BaseEntity {
   @Column(name = "is_deleted", nullable = false, length = 20)
   private boolean isDeleted;
 
-  @Convert(converter = MerchantCategoryConverter.class)
+  @Enumerated(EnumType.STRING)
   @Column(name = "category", nullable = false)
   private MerchantCategory category;
 
