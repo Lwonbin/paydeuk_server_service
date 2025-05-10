@@ -70,7 +70,7 @@ public class AuthService {
       throw new BadRequestException400(ErrorDefineCode.PASSWORD_SAME_AS_CURRENT);
     }
 
-    user.setPassword(passwordEncoder.encode(request.getPassword()));
+    user.changePassword(passwordEncoder.encode(request.getPassword()));
     userRepository.save(user);
   }
 }

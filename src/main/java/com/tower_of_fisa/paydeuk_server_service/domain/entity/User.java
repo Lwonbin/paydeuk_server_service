@@ -9,7 +9,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
 @Entity
@@ -27,7 +26,6 @@ public class User extends BaseEntity {
   @Column(name = "username", length = 20, nullable = false)
   private String username;
 
-  @Setter
   @Column(name = "password", length = 50, nullable = false)
   private String password;
 
@@ -59,4 +57,8 @@ public class User extends BaseEntity {
 
   @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<UserCard> userCards = new ArrayList<>();
+
+  public void changePassword(String password) {
+    this.password = password;
+  }
 }
