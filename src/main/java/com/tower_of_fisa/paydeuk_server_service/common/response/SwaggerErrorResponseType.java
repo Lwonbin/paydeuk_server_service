@@ -15,7 +15,7 @@ public class SwaggerErrorResponseType {
   @Schema(description = "HTTP Status", example = "Unauthoirzation, Forbidden..")
   private final HttpStatus status;
 
-  @Schema(description = "응답 메시지", example = "~가 실패했습니다")
+  @Schema(description = "응답 메시지")
   private final String message;
 
   @Schema(description = "응답 데이터")
