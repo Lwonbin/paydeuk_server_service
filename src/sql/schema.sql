@@ -61,6 +61,7 @@ CREATE TABLE merchant
     manager_name    VARCHAR(20)                                                                  NOT NULL,
     phone           VARCHAR(20)                                                                  NOT NULL,
     manager_phone   VARCHAR(20)                                                                  NOT NULL,
+    is_deleted      BOOLEAN DEFAULT FALSE,
     category        ENUM ('culture', 'food_beverage', 'shopping', 'subscribe', 'transportation') NOT NULL,
     created_at      TIMESTAMP,
     updated_at      TIMESTAMP

@@ -2,12 +2,17 @@ package com.tower_of_fisa.paydeuk_server_service.domain.entity;
 
 import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
 import com.tower_of_fisa.paydeuk_server_service.domain.Enum.MerchantCategory;
+import com.tower_of_fisa.paydeuk_server_service.dto.merchant.MerchantCategoryConverter;
 import jakarta.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
 
 @Getter
 @Entity
@@ -31,8 +36,17 @@ public class Merchant extends BaseEntity {
   @Column(name = "business_number", length = 20, nullable = false)
   private String businessNumber;
 
+
+    @Column(name = "is_deleted", nullable = false, length = 20)
+    private boolean isDeleted;
+
+    @Convert(converter = MerchantCategoryConverter.class)
+    @Column(name = "category", nullable = false)
+    private MerchantCategory category;
+
   @Column(name = "manager_name", length = 20, nullable = false)
   private String managerName;
+
 
   @Column(name = "phone", length = 20, nullable = false)
   private String phone;
@@ -44,9 +58,19 @@ public class Merchant extends BaseEntity {
   @Column(name = "category", nullable = false)
   private MerchantCategory category;
 
+
+ 
+
   @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Benefit> benefits = new ArrayList<>();
 
+
   @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Payment> payments = new ArrayList<>();
+  
+  public void changeIsActive(boolean value) {
+        this.isActive = value;
+    }
+    public void changeIsDeleted(boolean value) {
+        this.isDeleted = value;
 }
