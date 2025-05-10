@@ -23,30 +23,30 @@ CREATE TABLE spending_range
 
 CREATE TABLE users
 (
-    id                  BIGINT AUTO_INCREMENT PRIMARY KEY        NOT NULL,
-    name                VARCHAR(10)                              NOT NULL,
-    username            VARCHAR(20)                              NOT NULL,
-    password            VARCHAR(50)                              NOT NULL,
-    personal_auth_key   VARCHAR(100)                             NOT NULL,
-    phone               VARCHAR(20)                              NOT NULL,
-    email               VARCHAR(30),
-    pay_password        VARCHAR(50),
-    address             VARCHAR(30),
-    role                ENUM ('admin', 'user')                   NOT NULL,
-    birth_date          VARCHAR(10)                              NOT NULL,
-    status              ENUM ('active', 'inactive', 'temporary') NOT NULL,
-    created_at          TIMESTAMP,
-    updated_at          TIMESTAMP
+    id                BIGINT AUTO_INCREMENT PRIMARY KEY        NOT NULL,
+    name              VARCHAR(10)                              NOT NULL,
+    username          VARCHAR(20)                              NOT NULL,
+    password          VARCHAR(50)                              NOT NULL,
+    personal_auth_key VARCHAR(100)                             NOT NULL,
+    phone             VARCHAR(20)                              NOT NULL,
+    email             VARCHAR(30),
+    pay_password      VARCHAR(50),
+    address           VARCHAR(30),
+    role              ENUM ('ADMIN', 'USER')                   NOT NULL,
+    birth_date        VARCHAR(10)                              NOT NULL,
+    status            ENUM ('ACTIVE', 'INACTIVE', 'TEMPORARY') NOT NULL,
+    created_at        TIMESTAMP,
+    updated_at        TIMESTAMP
 );
 
 CREATE TABLE card
 (
     id         BIGINT AUTO_INCREMENT PRIMARY KEY                          NOT NULL,
     name       VARCHAR(30)                                                NOT NULL,
-    type       ENUM ('credit', 'debit')                                   NOT NULL,
+    type       ENUM ('CREDIT', 'DEBIT')                                   NOT NULL,
     image_url  VARCHAR(200)                                               NOT NULL,
     annual_fee BIGINT                                                     NOT NULL,
-    company    ENUM ('hyundai', 'kookmin', 'samsung', 'shinhan', 'woori') NOT NULL,
+    company    ENUM ('HYUNDAI', 'KOOKMIN', 'SAMSUNG', 'SHINHAN', 'WOORI') NOT NULL,
     created_at TIMESTAMP,
     updated_at TIMESTAMP
 );
@@ -61,8 +61,8 @@ CREATE TABLE merchant
     manager_name    VARCHAR(20)                                                                  NOT NULL,
     phone           VARCHAR(20)                                                                  NOT NULL,
     manager_phone   VARCHAR(20)                                                                  NOT NULL,
+    category        ENUM ('CULTURE', 'FOOD_BEVERAGE', 'SHOPPING', 'SUBSCRIBE', 'TRANSPORTATION') NOT NULL,
     is_deleted      BOOLEAN DEFAULT FALSE,
-    category        ENUM ('culture', 'food_beverage', 'shopping', 'subscribe', 'transportation') NOT NULL,
     created_at      TIMESTAMP,
     updated_at      TIMESTAMP
 );
@@ -72,7 +72,7 @@ CREATE TABLE benefit
     id                       BIGINT AUTO_INCREMENT PRIMARY KEY      NOT NULL,
     description              VARCHAR(100),
     title                    VARCHAR(100),
-    benefit_type             ENUM ('discount', 'point', 'cashback') NOT NULL,
+    benefit_type             ENUM ('DISCOUNT', 'POINT', 'CASHBACK') NOT NULL,
     has_additional_condition BOOLEAN                                NOT NULL,
     merchant_id              BIGINT,
     created_at               TIMESTAMP,
@@ -82,11 +82,11 @@ CREATE TABLE benefit
 
 CREATE TABLE benefit_condition
 (
-    id                BIGINT AUTO_INCREMENT PRIMARY KEY                                                                                             NOT NULL,
-    benefit_id        BIGINT                                                                                                                        NOT NULL,
+    id                BIGINT AUTO_INCREMENT PRIMARY KEY                                                                                            NOT NULL,
+    benefit_id        BIGINT                                                                                                                       NOT NULL,
     spending_range_id BIGINT,
     value             BIGINT,
-    category          ENUM ('PER_TRANSACTION_LIMIT',  'DAILY_LIMIT_COUNT', 'MONTHLY_LIMIT_COUNT', 'DAILY_DISCOUNT_LIMIT', 'MONTHLY_DISCOUNT_LIMIT') NOT NULL,
+    category          ENUM ('PER_TRANSACTION_LIMIT', 'DAILY_LIMIT_COUNT', 'MONTHLY_LIMIT_COUNT', 'DAILY_DISCOUNT_LIMIT', 'MONTHLY_DISCOUNT_LIMIT') NOT NULL,
     created_at        TIMESTAMP,
     updated_at        TIMESTAMP,
     FOREIGN KEY (benefit_id) REFERENCES benefit (id),
@@ -98,7 +98,7 @@ CREATE TABLE discount
     id                BIGINT AUTO_INCREMENT PRIMARY KEY NOT NULL,
     benefit_id        BIGINT                            NOT NULL,
     spending_range_id BIGINT                            NOT NULL,
-    apply_type        ENUM ('rate', 'amount')           NOT NULL,
+    apply_type        ENUM ('RATE', 'AMOUNT')           NOT NULL,
     amount            FLOAT                             NOT NULL,
     created_at        TIMESTAMP,
     updated_at        TIMESTAMP,

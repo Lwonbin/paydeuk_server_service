@@ -2,9 +2,7 @@ package com.tower_of_fisa.paydeuk_server_service.domain.entity;
 
 import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
 import com.tower_of_fisa.paydeuk_server_service.domain.Enum.UserRole;
-import com.tower_of_fisa.paydeuk_server_service.domain.Enum.UserRoleConverter;
 import com.tower_of_fisa.paydeuk_server_service.domain.Enum.UserStatus;
-import com.tower_of_fisa.paydeuk_server_service.domain.Enum.UserStatusConverter;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,14 +44,14 @@ public class User extends BaseEntity {
   @Column(name = "address", length = 30)
   private String address;
 
-  @Convert(converter = UserRoleConverter.class) // Enum을 DB에 저장하기 위한 컨버터
+  @Enumerated(EnumType.STRING)
   @Column(name = "role", nullable = false)
   private UserRole role;
 
   @Column(name = "birth_date", length = 10, nullable = false) // ex 2000.05.12 (10자리)
   private String birthDate;
 
-  @Convert(converter = UserStatusConverter.class) // Enum을 DB에 저장하기 위한 컨버터
+  @Enumerated(EnumType.STRING)
   @Column(name = "status", nullable = false)
   private UserStatus status;
 
