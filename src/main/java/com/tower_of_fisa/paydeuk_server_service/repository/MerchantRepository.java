@@ -8,10 +8,14 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MerchantRepository extends JpaRepository<Merchant, Long> {
+
   @Query(
       "SELECT m, COUNT(p.id) as transactionCount, COALESCE(SUM(p.amount), 0) as totalAmount "
           + "FROM Merchant m "
           + "LEFT JOIN Payment p ON m.id = p.merchant.id "
           + "GROUP BY m.id")
   List<Object[]> findAllMerchantsWithPayment();
+
+  @Query("SELECT COUNT(m) FROM Merchant m WHERE m.isActive = true")
+  long countActiveMerchants();
 }
