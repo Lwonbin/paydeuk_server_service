@@ -19,4 +19,4 @@ public class FindPasswordRequest {
   @NotBlank(message = "아이디를 입력해주세요.")
   @Schema(description = "사용자 아이디", example = "user123")
   private String username;
-} 
+}

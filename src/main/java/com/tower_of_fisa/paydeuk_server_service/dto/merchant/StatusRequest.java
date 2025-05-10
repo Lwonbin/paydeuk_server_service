@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Schema(description = "가맹점 상태 변경 요청")
 public class StatusRequest {
 
-    @NotNull(message = "가맹점 상태는 필수입니다")
-    @Schema(description = "활성화 여부", example = "true")
-    private boolean status;
+  @NotNull(message = "가맹점 상태는 필수입니다")
+  @Schema(description = "활성화 여부", example = "true")
+  private boolean status;
 }

@@ -11,4 +11,4 @@ public class BadRequestException400 extends BasicCustomException500 {
   public BadRequestException400(ErrorDefineCode code) {
     super(code);
   }
-} 
+}

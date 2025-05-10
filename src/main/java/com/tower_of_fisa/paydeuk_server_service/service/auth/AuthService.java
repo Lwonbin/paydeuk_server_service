@@ -1,8 +1,8 @@
 package com.tower_of_fisa.paydeuk_server_service.service.auth;
 
 import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.BadRequestException400;
+import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.dto.auth.FindIdResponse;
 import com.tower_of_fisa.paydeuk_server_service.dto.auth.FindPasswordRequest;
@@ -42,8 +42,10 @@ public class AuthService {
    * @param request 사용자 이름과 아이디를 포함한 요청
    */
   public void findPassword(FindPasswordRequest request) {
-    User user = userRepository.findByUsername(request.getUsername())
-        .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+    User user =
+        userRepository
+            .findByUsername(request.getUsername())
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
     if (!user.getName().equals(request.getName())) {
       throw new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND);
@@ -58,8 +60,10 @@ public class AuthService {
    */
   @Transactional
   public void resetPassword(String username, ResetPasswordRequest request) {
-    User user = userRepository.findByUsername(username)
-        .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+    User user =
+        userRepository
+            .findByUsername(username)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
     // 기존 비밀번호와 동일한지 확인
     if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
