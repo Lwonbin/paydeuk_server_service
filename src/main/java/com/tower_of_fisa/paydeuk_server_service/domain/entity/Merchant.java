@@ -2,6 +2,7 @@ package com.tower_of_fisa.paydeuk_server_service.domain.entity;
 
 import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
 import com.tower_of_fisa.paydeuk_server_service.domain.Enum.MerchantCategory;
+import com.tower_of_fisa.paydeuk_server_service.dto.merchant.MerchantCategoryConverter;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +32,13 @@ public class Merchant extends BaseEntity {
   @Column(name = "business_number", length = 20, nullable = false)
   private String businessNumber;
 
+  @Column(name = "is_deleted", nullable = false, length = 20)
+  private boolean isDeleted;
+
+  @Enumerated(EnumType.STRING)
+  @Column(name = "category", nullable = false)
+  private MerchantCategory category;
+
   @Column(name = "manager_name", length = 20, nullable = false)
   private String managerName;
 
@@ -39,13 +47,6 @@ public class Merchant extends BaseEntity {
 
   @Column(name = "manager_phone", length = 20, nullable = false)
   private String managerPhone;
-
-  @Enumerated(EnumType.STRING)
-  @Column(name = "category", nullable = false)
-  private MerchantCategory category;
-
-  @Column(name = "is_deleted", nullable = false, length = 20)
-  private boolean isDeleted;
 
   @OneToMany(mappedBy = "merchant", cascade = CascadeType.ALL, orphanRemoval = true)
   private List<Benefit> benefits = new ArrayList<>();
