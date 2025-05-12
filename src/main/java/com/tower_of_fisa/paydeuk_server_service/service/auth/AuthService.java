@@ -6,9 +6,9 @@ import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exceptio
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.BadRequestException400;
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
 import com.tower_of_fisa.paydeuk_server_service.config.security.JwtProvider;
-import com.tower_of_fisa.paydeuk_server_service.domain.Enum.UserRole;
-import com.tower_of_fisa.paydeuk_server_service.domain.Enum.UserStatus;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserRole;
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
 import com.tower_of_fisa.paydeuk_server_service.dto.auth.FindIdResponse;
 import com.tower_of_fisa.paydeuk_server_service.dto.auth.FindPasswordRequest;
 import com.tower_of_fisa.paydeuk_server_service.dto.auth.ResetPasswordRequest;

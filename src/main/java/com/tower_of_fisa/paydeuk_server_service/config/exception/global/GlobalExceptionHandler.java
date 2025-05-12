@@ -5,6 +5,7 @@ import com.tower_of_fisa.paydeuk_server_service.common.response.CommonError;
 import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Hidden;
 import java.time.LocalDateTime;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.beans.factory.annotation.Value;
@@ -33,23 +34,22 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 
   @Override
   protected ResponseEntity<Object> handleExceptionInternal(
-      Exception ex,
+      @NonNull Exception ex,
       Object body,
-      HttpHeaders headers,
+      @NonNull HttpHeaders headers,
       HttpStatusCode statusCode,
-      WebRequest request) {
-    return buildErrorResponse(
-        ex, ErrorDefineCode.UNCAUGHT, HttpStatus.valueOf(statusCode.value()), request);
+      @NonNull WebRequest request) {
+    return buildErrorResponse(ex, ErrorDefineCode.UNCAUGHT, HttpStatus.valueOf(statusCode.value()));
   }
 
   protected ResponseEntity<Object> buildErrorResponse(
-      Exception exception, ErrorDefineCode errorCode, HttpStatus httpStatus, WebRequest request) {
+      Exception exception, ErrorDefineCode errorCode, HttpStatus httpStatus) {
     CommonError error = new CommonError(errorCode.getCode(), LocalDateTime.now());
     if (printStackTrace && isTraceOn(exception)) {
       error.setStackTrace(getStackTrace(exception, printStackTraceLine));
     }
     CommonResponse<CommonError> errorResponseDto =
-        new CommonResponse(false, httpStatus, errorCode.getMessage(), error);
+        new CommonResponse<>(false, httpStatus, errorCode.getMessage(), error);
 
     return ResponseEntity.status(httpStatus).body(errorResponseDto);
   }
@@ -57,7 +57,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   private String getStackTrace(Exception e, int line) {
     String stackTrace = ExceptionUtils.getStackTrace(e);
 
-    // 스택 트레이스를 줄 단위로 분할하여 line줄까지만 사용
+    // 스택 트레이스를 줄 단위로 분할하여 line 줄까지만 사용
     String[] lines = stackTrace.split(System.lineSeparator());
     StringBuilder limitedStackTrace = new StringBuilder();
     int limit = Math.min(lines.length, line);
@@ -69,11 +69,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   }
 
   private boolean isTraceOn(Exception exception) {
-    if (exception.getStackTrace() != null && exception.getStackTrace().length > 0) {
-      return true;
-    } else {
-      return false;
-    }
+    return exception.getStackTrace() != null && exception.getStackTrace().length > 0;
   }
 
   // 412 Validate Exception
@@ -82,16 +78,16 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
   protected ResponseEntity<Object> handleMethodArgumentNotValid(
       MethodArgumentNotValidException ex,
-      HttpHeaders headers,
-      HttpStatusCode status,
-      WebRequest request) {
+      @NonNull HttpHeaders headers,
+      @NonNull HttpStatusCode status,
+      @NonNull WebRequest request) {
     CommonError error = new CommonError(ErrorDefineCode.VALID_ERROR.getCode(), LocalDateTime.now());
     for (FieldError fieldError : ex.getBindingResult().getFieldErrors()) {
       error.addValidationError(fieldError.getField(), fieldError.getDefaultMessage());
     }
 
     CommonResponse<CommonError> errorResponseDto =
-        new CommonResponse(
+        new CommonResponse<>(
             false,
             HttpStatus.UNPROCESSABLE_ENTITY,
             ErrorDefineCode.VALID_ERROR.getMessage(),
@@ -108,7 +104,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
       Exception exception, WebRequest request) {
     log.error("Internal error occurred", exception);
     return buildErrorResponse(
-        exception, ErrorDefineCode.UNCAUGHT, HttpStatus.INTERNAL_SERVER_ERROR, request);
+        exception, ErrorDefineCode.UNCAUGHT, HttpStatus.INTERNAL_SERVER_ERROR);
   }
 
   // 403 Access Denied Exception
@@ -118,7 +114,6 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
   public ResponseEntity<Object> handleAccessDeniedException(
       AccessDeniedException exception, WebRequest request) {
     log.error("Access denied", exception);
-    return buildErrorResponse(
-        exception, ErrorDefineCode.AUTHENTICATE_FAIL, HttpStatus.FORBIDDEN, request);
+    return buildErrorResponse(exception, ErrorDefineCode.AUTHENTICATE_FAIL, HttpStatus.FORBIDDEN);
   }
 }

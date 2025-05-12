@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -53,8 +54,7 @@ public class SecurityConfig {
     loginFilter.setAuthenticationFailureHandler(failureHandler);
     loginFilter.setFilterProcessesUrl("/api/auth/signin");
 
-    http.csrf(csrf -> csrf.disable())
-        .authorizeHttpRequests(
+    http.authorizeHttpRequests(
             auth ->
                 auth.requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**")
                     .permitAll()
@@ -64,8 +64,8 @@ public class SecurityConfig {
                     .hasRole("USER")
                     .requestMatchers("/api/user/**")
                     .hasRole("USER"))
-        .formLogin(form -> form.disable()) // deprecated 대응
-        .httpBasic(httpBasic -> httpBasic.disable())
+        .formLogin(AbstractHttpConfigurer::disable)
+        .httpBasic(AbstractHttpConfigurer::disable)
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
         .addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter.class)
         .addFilterBefore(

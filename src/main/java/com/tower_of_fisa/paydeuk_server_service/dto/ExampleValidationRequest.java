@@ -16,18 +16,21 @@ import lombok.NoArgsConstructor;
 public class ExampleValidationRequest {
 
   @NotNull(message = "발생시킬 에러 유형은 필수입니다.")
-  @Schema(description = "에러 유형 (500, 404, 403, 415), 그 외 정상 ", example = "404", required = true)
+  @Schema(
+      description = "에러 유형 (500, 404, 403, 415), 그 외 정상 ",
+      example = "404",
+      requiredMode = Schema.RequiredMode.REQUIRED)
   private Integer errorCode;
 
   @NotBlank(message = "이름은 필수 입력값입니다.")
-  @Schema(description = "이름", example = "Kim", required = true)
+  @Schema(description = "이름", example = "Kim", requiredMode = Schema.RequiredMode.REQUIRED)
   private String name;
 
   @NotBlank(message = "비밀번호는 필수 입력값입니다.")
   @Pattern(
-      regexp = "(?=.*[0-9])(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}",
+      regexp = "(?=.*\\d)(?=.*[a-zA-Z])(?=.*\\W)(?=\\S+$).{8,20}",
       message = "비밀번호는 영문 대,소문자와 숫자, 특수기호가 적어도 1개 이상씩 포함된 8자 ~ 20자의 비밀번호여야 합니다.")
-  @Schema(description = "비밀번호", example = "test123!", required = true)
+  @Schema(description = "비밀번호", example = "test123!", requiredMode = Schema.RequiredMode.REQUIRED)
   private String password;
 
   @Email(message = "이메일 형식에 맞지 않습니다.")

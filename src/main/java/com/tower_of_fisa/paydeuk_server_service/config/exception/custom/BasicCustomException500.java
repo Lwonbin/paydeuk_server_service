@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public class BasicCustomException500 extends RuntimeException {
-  private ErrorDefineCode code;
+  private final ErrorDefineCode code;
 
   public BasicCustomException500(ErrorDefineCode code) {
     super(code.getMessage());

@@ -46,8 +46,6 @@ public class ExampleService {
    */
   public List<ExampleResponse> searchExampleByKeyword(String keyword) {
     List<Example> examples = exampleRepository.findByKeyword(keyword);
-    List<ExampleResponse> response =
-        examples.stream().map(e -> new ExampleResponse(e.getExamId(), e.getName())).toList();
-    return response;
+    return examples.stream().map(e -> new ExampleResponse(e.getExamId(), e.getName())).toList();
   }
 }

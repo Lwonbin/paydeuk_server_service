@@ -20,7 +20,6 @@ public class CustomExceptionHandler extends GlobalExceptionHandler {
     String classname = exception.getClass().getSimpleName();
     log.error(classname + " : " + exception.getMessage());
     int statusCode = Integer.parseInt(classname.substring(classname.length() - 3));
-    return buildErrorResponse(
-        exception, exception.getCode(), HttpStatus.valueOf(statusCode), request);
+    return buildErrorResponse(exception, exception.getCode(), HttpStatus.valueOf(statusCode));
   }
 }

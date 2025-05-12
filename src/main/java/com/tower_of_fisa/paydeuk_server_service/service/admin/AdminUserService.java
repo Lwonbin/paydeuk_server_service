@@ -1,7 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.service.admin;
 
-import com.tower_of_fisa.paydeuk_server_service.domain.Enum.UserStatus;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
 import com.tower_of_fisa.paydeuk_server_service.dto.admin.UserListResponse;
 import com.tower_of_fisa.paydeuk_server_service.dto.admin.UserStatsResponse;
 import com.tower_of_fisa.paydeuk_server_service.repository.UserRepository;

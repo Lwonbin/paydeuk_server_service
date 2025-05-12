@@ -1,7 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.domain.entity;
 
 import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
-import com.tower_of_fisa.paydeuk_server_service.domain.Enum.DiscountApplyType;
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.DiscountApplyType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

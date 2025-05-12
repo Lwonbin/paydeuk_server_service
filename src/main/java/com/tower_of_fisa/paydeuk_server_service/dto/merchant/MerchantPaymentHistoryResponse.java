@@ -1,7 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.dto.merchant;
 
-import com.tower_of_fisa.paydeuk_server_service.domain.Enum.CardType;
-import com.tower_of_fisa.paydeuk_server_service.domain.Enum.MerchantCategory;
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.CardType;
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.MerchantCategory;
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;

@@ -45,7 +45,7 @@ public class ExampleController {
   public CommonResponse<Long> saveExample(@Valid @RequestBody ExampleRequest request) {
     Long result = exampleService.addExample(request);
 
-    return new CommonResponse(true, HttpStatus.OK, "Example 저장에 성공했습니다", result);
+    return new CommonResponse<>(true, HttpStatus.OK, "Example 저장에 성공했습니다", result);
   }
 
   @GetMapping("/{pathValue}")
@@ -64,7 +64,7 @@ public class ExampleController {
 
     List<ExampleResponse> result = exampleService.searchExampleByKeyword(pathValue);
 
-    return new CommonResponse(true, HttpStatus.OK, "리스트 조회에 성공했습니다", result);
+    return new CommonResponse<>(true, HttpStatus.OK, "리스트 조회에 성공했습니다", result);
   }
 
   @PostMapping("/error")
@@ -108,6 +108,6 @@ public class ExampleController {
       throw new UnsupportedMediaTypeException415(ErrorDefineCode.EXAMPLE_OCCURER_ERROR);
     }
 
-    return new CommonResponse(true, HttpStatus.OK, "성공입니당", null);
+    return new CommonResponse<>(true, HttpStatus.OK, "성공입니당", null);
   }
 }

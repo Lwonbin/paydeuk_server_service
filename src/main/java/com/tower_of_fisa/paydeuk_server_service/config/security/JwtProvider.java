@@ -13,6 +13,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class JwtProvider {
+
   @Value("${jwt.secret-key}")
   private String rawKey;
 
