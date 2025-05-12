@@ -3,12 +3,12 @@ name: Check Build After Merge
 on:
   pull_request:
   merge_group:
-    branches: [dev]
+    types: [checks_requested]
 
 jobs:
   build:
-    name: After Merge Build
     if: ${{ github.event_name == 'merge_group' }}
+    name: After Merge Build
     runs-on: ubuntu-latest
 
     steps:
