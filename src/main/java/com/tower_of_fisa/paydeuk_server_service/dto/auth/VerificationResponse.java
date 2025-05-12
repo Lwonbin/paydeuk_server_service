@@ -27,4 +27,7 @@ public class VerificationResponse {
       example =
           "uheeR/P2ECGn+AaGPqAe1LB5swI9k/TnDK98Syo7djJerBROsv0M8+OnqpkR2cgZDRMQJFG42dSIk5f5J8IV/w==")
   private String personalAuthKey;
+
+  @Schema(description = "이미 가입된 사용자 여부", example = "false")
+  private Boolean duplicate;
 }

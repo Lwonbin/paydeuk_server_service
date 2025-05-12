@@ -43,4 +43,8 @@ public class SignupRequest {
       message = "비밀번호는 영문 대소문자, 숫자, 특수문자를 포함한 8~20자여야 합니다.")
   @Schema(description = "비밀번호", example = "Aa1234!@")
   private String password;
+
+  @NotBlank(message = "사용자 식별키가 필요합니다.")
+  @Schema(description = "본인인증 후 발급된 개인 식별키", example = "uheeR/P2ECGn+...")
+  private String personalAuthKey;
 }

@@ -104,6 +104,7 @@ public class AuthService {
             .role(UserRole.USER)
             .birthDate(request.getBirthdate())
             .status(UserStatus.ACTIVE)
+            .personalAuthKey(request.getPersonalAuthKey())
             .build();
 
     userRepository.save(user);
