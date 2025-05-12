@@ -1,4 +1,4 @@
-name: After Merge Build
+name: Check Build After Merge
 
 on:
   merge_group:
