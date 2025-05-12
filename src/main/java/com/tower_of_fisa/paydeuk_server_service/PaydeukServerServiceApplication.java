@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 @EnableJpaAuditing
 @SpringBootApplication
-public class PaydeukServerServiceApplicati {
+public class PaydeukServerServiceApplication {
 
   public static void main(String[] args) {
     SpringApplication.run(PaydeukServerServiceApplication.class, args);
