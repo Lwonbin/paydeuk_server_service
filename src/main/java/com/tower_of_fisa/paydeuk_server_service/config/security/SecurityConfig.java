@@ -54,7 +54,8 @@ public class SecurityConfig {
     loginFilter.setAuthenticationFailureHandler(failureHandler);
     loginFilter.setFilterProcessesUrl("/api/auth/signin");
 
-    http.authorizeHttpRequests(
+    http.csrf(AbstractHttpConfigurer::disable)
+        .authorizeHttpRequests(
             auth ->
                 auth.requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**")
                     .permitAll()

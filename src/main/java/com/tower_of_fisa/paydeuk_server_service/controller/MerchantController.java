@@ -3,6 +3,7 @@ package com.tower_of_fisa.paydeuk_server_service.controller;
 import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.EmptyResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.swagger_response.SwaggerResponseExample;
+import com.tower_of_fisa.paydeuk_server_service.config.security.CustomUserDetails;
 import com.tower_of_fisa.paydeuk_server_service.dto.merchant.MerchantAllResponse;
 import com.tower_of_fisa.paydeuk_server_service.dto.merchant.MerchantByIdResponse;
 import com.tower_of_fisa.paydeuk_server_service.dto.merchant.StatusRequest;
@@ -16,9 +17,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+@Slf4j
 @RestController
 @RequestMapping("/api/admin/merchants")
 @RequiredArgsConstructor
@@ -29,7 +33,10 @@ public class MerchantController {
   @GetMapping
   @Operation(summary = "가맹점 목록 조회", description = "등록된 모든 가맹점의 목록을 조회합니다.")
   @ApiResponse(responseCode = "200", description = "가맹점 목록 조회 성공")
-  public CommonResponse<List<MerchantAllResponse>> getAllMerchants() {
+  public CommonResponse<List<MerchantAllResponse>> getAllMerchants(
+      @AuthenticationPrincipal CustomUserDetails userDetails) {
+    Long userId = userDetails.getId();
+    log.info("현재 로그인한 유저 id : {}", userId);
     List<MerchantAllResponse> merchants = merchantService.getAllMerchants();
     return new CommonResponse<>(true, HttpStatus.OK, "가맹점 목록 조회에 성공했습니다.", merchants);
   }

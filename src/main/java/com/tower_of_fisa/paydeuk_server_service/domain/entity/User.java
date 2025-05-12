@@ -6,7 +6,6 @@ import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
