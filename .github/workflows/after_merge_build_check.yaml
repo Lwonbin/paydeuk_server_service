@@ -34,3 +34,6 @@ jobs:
 
       - name: Build with Gradle
         run: ./gradlew build --stacktrace
+
+      - name: Fail intentionally
+        run: exit 1
