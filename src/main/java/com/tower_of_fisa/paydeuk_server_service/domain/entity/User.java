@@ -7,9 +7,11 @@ import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+@Builder
 @Getter
 @Entity
 @AllArgsConstructor
@@ -17,6 +19,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "users")
 public class User extends BaseEntity {
   @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id", nullable = false)
   private Long id;
 
@@ -26,7 +29,7 @@ public class User extends BaseEntity {
   @Column(name = "username", length = 20, nullable = false)
   private String username;
 
-  @Column(name = "password", length = 50, nullable = false)
+  @Column(name = "password", length = 60, nullable = false)
   private String password;
 
   @Column(name = "personal_auth_key", length = 100, nullable = false)
@@ -38,7 +41,7 @@ public class User extends BaseEntity {
   @Column(name = "email", length = 30)
   private String email;
 
-  @Column(name = "pay_password", length = 50, nullable = false)
+  @Column(name = "pay_password", length = 50)
   private String payPassword;
 
   @Column(name = "address", length = 30)

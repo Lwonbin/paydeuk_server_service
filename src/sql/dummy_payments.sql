@@ -1,9 +1,11 @@
 -- FK 제약조건 비활성화
-SET FOREIGN_KEY_CHECKS = 0;
+SET
+FOREIGN_KEY_CHECKS = 0;
 
 -- 결제 내역 더미 데이터
-INSERT INTO payment (product_name, amount, payment_success, user_card_id, merchant_id, card_benefit_id, discount_amount, created_at, updated_at)
-VALUES 
+INSERT INTO payment (product_name, amount, payment_success, user_card_id, merchant_id, card_benefit_id, discount_amount,
+                     created_at, updated_at)
+VALUES
 -- 스타벅스 강남점 결제 내역 (ID: 1)
 ('아메리카노', 4500, true, 1, 1, 1, 500, NOW(), NOW()),
 ('카페라떼', 5500, true, 1, 1, 1, 500, NOW(), NOW()),
@@ -56,4 +58,5 @@ VALUES
 ('영화 관람권', 17000, true, 2, 8, 2, 6000, NOW(), NOW());
 
 -- FK 제약조건 다시 활성화
-SET FOREIGN_KEY_CHECKS = 1; 
+SET
+FOREIGN_KEY_CHECKS = 1;

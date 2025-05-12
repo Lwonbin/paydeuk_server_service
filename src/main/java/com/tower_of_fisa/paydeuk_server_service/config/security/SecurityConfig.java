@@ -1,14 +1,29 @@
 package com.tower_of_fisa.paydeuk_server_service.config.security;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
 @Configuration
+@RequiredArgsConstructor
 public class SecurityConfig {
+  private final CustomUserDetailsService userDetailsService;
+  private final JwtProvider jwtProvider;
+  private final LoginSuccessHandler successHandler;
+  private final LoginFailureHandler failureHandler;
+  private final CustomAuthenticationEntryPoint authenticationEntryPoint;
+  private final CustomAccessDeniedHandler accessDeniedHandler;
+  private final HandlerExceptionResolver handlerExceptionResolver;
 
   private static final String[] AUTH_WHITELIST = {
     "/v3/api-docs",
@@ -21,13 +36,45 @@ public class SecurityConfig {
   };
 
   @Bean
-  public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+  public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+    AuthenticationManagerBuilder builder = http.getSharedObject(AuthenticationManagerBuilder.class);
+    builder.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
+    return builder.build();
+  }
+
+  @Bean
+  public SecurityFilterChain filterChain(
+      HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+
+    // 로그인 필터 설정
+    LoginFilter loginFilter =
+        new LoginFilter(new ObjectMapper(), authenticationManager, handlerExceptionResolver);
+    loginFilter.setAuthenticationSuccessHandler(successHandler);
+    loginFilter.setAuthenticationFailureHandler(failureHandler);
+    loginFilter.setFilterProcessesUrl("/api/auth/signin");
+
     http.csrf(csrf -> csrf.disable())
         .authorizeHttpRequests(
-            auth -> auth.anyRequest().permitAll() // 모든 요청 허용
-            )
+            auth ->
+                auth.requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**")
+                    .permitAll()
+                    .requestMatchers("/api/admin/**")
+                    .hasRole("ADMIN")
+                    .requestMatchers("/api/card/**")
+                    .hasRole("USER")
+                    .requestMatchers("/api/user/**")
+                    .hasRole("USER"))
         .formLogin(form -> form.disable()) // deprecated 대응
-        .httpBasic(httpBasic -> httpBasic.disable());
+        .httpBasic(httpBasic -> httpBasic.disable())
+        .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        .addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter.class)
+        .addFilterBefore(
+            new JwtAuthorizationFilter(jwtProvider, userDetailsService, handlerExceptionResolver),
+            UsernamePasswordAuthenticationFilter.class)
+        .exceptionHandling(
+            e ->
+                e.authenticationEntryPoint(authenticationEntryPoint)
+                    .accessDeniedHandler(accessDeniedHandler));
 
     return http.build();
   }
