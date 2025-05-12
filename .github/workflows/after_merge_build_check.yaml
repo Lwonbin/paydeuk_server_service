@@ -1,28 +1,21 @@
-# .github/workflows/check-merge-queue.yml
-
 name: Check Build After Merge
 
 on:
+  pull_request:
   merge_group:
     branches: [dev]
 
 jobs:
   build:
     name: After Merge Build
+    if: ${{ github.event_name == 'merge_group' }}
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
         with:
           java-version: 17
           distribution: zulu
-
-      - name: Grant Gradle Permission
-        run: chmod +x ./gradlew
-
-      - name: Build
-        run: ./gradlew build --no-daemon --stacktrace
+      - run: chmod +x ./gradlew
+      - run: ./gradlew build --no-daemon --stacktrace
