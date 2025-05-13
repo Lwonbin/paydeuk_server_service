@@ -41,7 +41,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
   @Query(
       """
-      SELECT new com.tower_of_fisa.paydeuk_server_service.admin.dto.merchant.MerchantPaymentHistoryResponse(
+      SELECT new com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentHistoryResponse(
           p.id,
           m.name,
           c.type,
