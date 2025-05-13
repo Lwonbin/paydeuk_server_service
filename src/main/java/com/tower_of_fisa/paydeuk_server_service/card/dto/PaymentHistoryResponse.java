@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.dto.payment;
+package com.tower_of_fisa.paydeuk_server_service.card.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.time.LocalDateTime;

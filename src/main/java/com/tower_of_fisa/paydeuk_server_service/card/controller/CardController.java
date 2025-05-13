@@ -1,10 +1,10 @@
 package com.tower_of_fisa.paydeuk_server_service.card.controller;
 
+import com.tower_of_fisa.paydeuk_server_service.card.dto.MyCardResponse;
+import com.tower_of_fisa.paydeuk_server_service.card.dto.PaymentHistoryResponse;
 import com.tower_of_fisa.paydeuk_server_service.card.service.CardService;
 import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.config.security.CustomUserDetails;
-import com.tower_of_fisa.paydeuk_server_service.dto.card.MyCardResponse;
-import com.tower_of_fisa.paydeuk_server_service.dto.payment.PaymentHistoryResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
