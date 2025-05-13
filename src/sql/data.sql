@@ -77,4 +77,18 @@ VALUES (1, 1, NOW(), NOW()),
        (2, 2, NOW(), NOW()),
        (2, 3, NOW(), NOW());
 
+-- PAYMENT TABLE
+INSERT INTO payment (product_name, amount, payment_success, user_card_id, merchant_id, card_benefit_id, discount_amount, created_at, updated_at)
+VALUES 
+    ('스타벅스 아메리카노', 4500, true, 1, 1, 1, 450, NOW(), NOW()),
+    ('스타벅스 카페라떼', 5000, true, 1, 1, 1, 500, NOW(), NOW()),
+    ('컬리 생필품', 25000, true, 1, 2, 2, 1250, NOW(), NOW()),
+    ('쿠팡 전자제품', 150000, true, 1, 7, 3, 7500, NOW(), NOW()),
+    ('이마트 식료품', 50000, true, 1, 9, 4, 2500, NOW(), NOW()),
+    ('스타벅스 케이크', 6000, false, 2, 1, 1, 0, NOW(), NOW()),
+    ('컬리 신선식품', 35000, true, 2, 2, 2, 1750, NOW(), NOW()),
+    ('쿠팡 의류', 80000, true, 2, 7, 3, 4000, NOW(), NOW()),
+    ('이마트 가전제품', 200000, true, 2, 9, 4, 10000, NOW(), NOW()),
+    ('스타벅스 디저트', 7000, true, 2, 1, 1, 700, NOW(), NOW());
+
 
