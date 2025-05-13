@@ -13,13 +13,14 @@ VALUES ('관리자', 'admin', '$2a$10$rRykd2BvvRKuyPcZmytSgOz07Aoqtjrz8jkiOnJSd2
         '1980-01-01', 'ACTIVE', NOW(), NOW());
 
 -- CARD TABLE
-INSERT INTO card (name, type, image_url, annual_fee, company, created_at, updated_at)
 -- card_id == 1
-VALUES ('현대카드 M', 'credit', 'dummyurl', 30000, 'hyundai', NOW(), NOW());
-
+INSERT INTO card (name, type, image_url, annual_fee, company, created_at, updated_at)
+VALUES ('현대카드 M', 'credit', 'dummyurl', 30000, 'HYUNDAI', NOW(), NOW()),
+('삼성카드 S', 'credit', 'dummyurl2', 20000, 'SAMSUNG', NOW(), NOW());
 -- USER_CARD TABLE
 INSERT INTO user_card (user_id, card_id, card_token, card_number, is_default_card, created_at, updated_at)
-VALUES (1, 1, 'mock_token', '1234', 1, NOW(), NOW());
+VALUES (1, 1, 'mock_token', '1234', 1, NOW(), NOW()),
+(1, 2, 'mock_token2', '5678', 0, NOW(), NOW());
 
 -- MERCHANT TABLE
 INSERT INTO merchant (name, is_active, commission_rate, business_number, manager_name, phone, manager_phone, category,
@@ -72,6 +73,22 @@ INSERT INTO card_benefit (card_id, benefit_id, created_at, updated_at)
 VALUES (1, 1, NOW(), NOW()),
        (1, 2, NOW(), NOW()),
        (1, 3, NOW(), NOW()),
-       (1, 4, NOW(), NOW());
+       (1, 4, NOW(), NOW()),
+       (2, 2, NOW(), NOW()),
+       (2, 3, NOW(), NOW());
+
+-- PAYMENT TABLE
+INSERT INTO payment (product_name, amount, payment_success, user_card_id, merchant_id, card_benefit_id, discount_amount, created_at, updated_at)
+VALUES 
+    ('스타벅스 아메리카노', 4500, true, 1, 1, 1, 450, NOW(), NOW()),
+    ('스타벅스 카페라떼', 5000, true, 1, 1, 1, 500, NOW(), NOW()),
+    ('컬리 생필품', 25000, true, 1, 2, 2, 1250, NOW(), NOW()),
+    ('쿠팡 전자제품', 150000, true, 1, 7, 3, 7500, NOW(), NOW()),
+    ('이마트 식료품', 50000, true, 1, 9, 4, 2500, NOW(), NOW()),
+    ('스타벅스 케이크', 6000, false, 2, 1, 1, 0, NOW(), NOW()),
+    ('컬리 신선식품', 35000, true, 2, 2, 2, 1750, NOW(), NOW()),
+    ('쿠팡 의류', 80000, true, 2, 7, 3, 4000, NOW(), NOW()),
+    ('이마트 가전제품', 200000, true, 2, 9, 4, 10000, NOW(), NOW()),
+    ('스타벅스 디저트', 7000, true, 2, 1, 1, 700, NOW(), NOW());
 
 
