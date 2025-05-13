@@ -10,7 +10,6 @@ import java.sql.Date;
 import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -110,8 +109,6 @@ public class AdminMerchantService {
     return paymentRepository.findAllPaymentHistories();
   }
 
-
-
   /**
    * [Merchant 탐색] Merchant DB에서 가맹점 정보를 조호힌다.
    *
@@ -119,15 +116,15 @@ public class AdminMerchantService {
    */
   public List<MerchantAllResponse> getAllMerchants() {
     return merchantRepository.findAllMerchantsWithPayment().stream()
-            .map(
-                    result -> {
-                      Merchant merchant = (Merchant) result[0];
-                      Long transactionCount = (Long) result[1];
-                      Long totalAmount = (Long) result[2];
+        .map(
+            result -> {
+              Merchant merchant = (Merchant) result[0];
+              Long transactionCount = (Long) result[1];
+              Long totalAmount = (Long) result[2];
 
-                      return MerchantAllResponse.from(merchant, transactionCount, totalAmount);
-                    })
-            .toList();
+              return MerchantAllResponse.from(merchant, transactionCount, totalAmount);
+            })
+        .toList();
   }
 
   /**
@@ -138,10 +135,10 @@ public class AdminMerchantService {
    */
   public MerchantByIdResponse getMerchantById(Long merchantId) {
     Merchant merchant =
-            merchantRepository
-                    .findById(merchantId)
-                    .orElseThrow(
-                            () -> new NoSuchElementFoundException404(ErrorDefineCode.MERCHANT_NOT_FOUND));
+        merchantRepository
+            .findById(merchantId)
+            .orElseThrow(
+                () -> new NoSuchElementFoundException404(ErrorDefineCode.MERCHANT_NOT_FOUND));
     return MerchantByIdResponse.from(merchant);
   }
 
@@ -154,10 +151,10 @@ public class AdminMerchantService {
   @Transactional
   public void updateMerchantStatus(Long merchantId, boolean isActive) {
     Merchant merchant =
-            merchantRepository
-                    .findById(merchantId)
-                    .orElseThrow(
-                            () -> new NoSuchElementFoundException404(ErrorDefineCode.MERCHANT_NOT_FOUND));
+        merchantRepository
+            .findById(merchantId)
+            .orElseThrow(
+                () -> new NoSuchElementFoundException404(ErrorDefineCode.MERCHANT_NOT_FOUND));
     merchant.changeIsActive(isActive);
     merchantRepository.save(merchant);
   }
@@ -170,10 +167,10 @@ public class AdminMerchantService {
   @Transactional
   public void deleteMerchant(Long merchantId) {
     Merchant merchant =
-            merchantRepository
-                    .findById(merchantId)
-                    .orElseThrow(
-                            () -> new NoSuchElementFoundException404(ErrorDefineCode.MERCHANT_NOT_FOUND));
+        merchantRepository
+            .findById(merchantId)
+            .orElseThrow(
+                () -> new NoSuchElementFoundException404(ErrorDefineCode.MERCHANT_NOT_FOUND));
     merchant.changeIsDeleted(true);
     merchantRepository.save(merchant);
   }
