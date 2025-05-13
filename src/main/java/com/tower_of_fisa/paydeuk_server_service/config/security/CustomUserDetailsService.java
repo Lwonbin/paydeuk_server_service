@@ -1,6 +1,6 @@
 package com.tower_of_fisa.paydeuk_server_service.config.security;
 
-import com.tower_of_fisa.paydeuk_server_service.auth.repository.UserRepository;
+import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import io.swagger.v3.oas.annotations.servers.Server;
 import lombok.AllArgsConstructor;

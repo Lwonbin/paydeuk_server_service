@@ -4,7 +4,7 @@ import com.tower_of_fisa.paydeuk_server_service.auth.dto.FindIdResponse;
 import com.tower_of_fisa.paydeuk_server_service.auth.dto.FindPasswordRequest;
 import com.tower_of_fisa.paydeuk_server_service.auth.dto.ResetPasswordRequest;
 import com.tower_of_fisa.paydeuk_server_service.auth.dto.SignupRequest;
-import com.tower_of_fisa.paydeuk_server_service.auth.repository.UserRepository;
+import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.AlreadyExistElementException409;
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.AuthCredientialException401;
