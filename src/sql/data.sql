@@ -13,13 +13,14 @@ VALUES ('관리자', 'admin', '$2a$10$rRykd2BvvRKuyPcZmytSgOz07Aoqtjrz8jkiOnJSd2
         '1980-01-01', 'ACTIVE', NOW(), NOW());
 
 -- CARD TABLE
-INSERT INTO card (name, type, image_url, annual_fee, company, created_at, updated_at)
 -- card_id == 1
-VALUES ('현대카드 M', 'credit', 'dummyurl', 30000, 'hyundai', NOW(), NOW());
-
+INSERT INTO card (name, type, image_url, annual_fee, company, created_at, updated_at)
+VALUES ('현대카드 M', 'credit', 'dummyurl', 30000, 'HYUNDAI', NOW(), NOW()),
+('삼성카드 S', 'credit', 'dummyurl2', 20000, 'SAMSUNG', NOW(), NOW());
 -- USER_CARD TABLE
 INSERT INTO user_card (user_id, card_id, card_token, card_number, is_default_card, created_at, updated_at)
-VALUES (1, 1, 'mock_token', '1234', 1, NOW(), NOW());
+VALUES (1, 1, 'mock_token', '1234', 1, NOW(), NOW()),
+(1, 2, 'mock_token2', '5678', 0, NOW(), NOW());
 
 -- MERCHANT TABLE
 INSERT INTO merchant (name, is_active, commission_rate, business_number, manager_name, phone, manager_phone, category,
@@ -72,6 +73,8 @@ INSERT INTO card_benefit (card_id, benefit_id, created_at, updated_at)
 VALUES (1, 1, NOW(), NOW()),
        (1, 2, NOW(), NOW()),
        (1, 3, NOW(), NOW()),
-       (1, 4, NOW(), NOW());
+       (1, 4, NOW(), NOW()),
+       (2, 2, NOW(), NOW()),
+       (2, 3, NOW(), NOW());
 
 
