@@ -1,7 +1,7 @@
-package com.tower_of_fisa.paydeuk_server_service.repository;
+package com.tower_of_fisa.paydeuk_server_service.admin.repository;
 
+import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentHistoryResponse;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Payment;
-import com.tower_of_fisa.paydeuk_server_service.dto.merchant.MerchantPaymentHistoryResponse;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -41,7 +41,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
   @Query(
       """
-      SELECT new com.tower_of_fisa.paydeuk_server_service.dto.merchant.MerchantPaymentHistoryResponse(
+      SELECT new com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentHistoryResponse(
           p.id,
           m.name,
           c.type,
