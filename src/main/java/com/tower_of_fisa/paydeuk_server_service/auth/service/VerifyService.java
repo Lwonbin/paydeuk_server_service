@@ -4,6 +4,7 @@ import com.tower_of_fisa.paydeuk_server_service.auth.dto.VerificationResponse;
 import com.tower_of_fisa.paydeuk_server_service.auth.repository.UserRepository;
 import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
+import java.net.URI;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -12,6 +13,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 @Slf4j
 @Service
@@ -125,7 +127,12 @@ public class VerifyService {
    */
   private VerificationResponse getCertificationResult(String impUid, String accessToken) {
     RestTemplate restTemplate = new RestTemplate();
-    String url = "https://api.iamport.kr/certifications/" + impUid;
+
+    URI url =
+        UriComponentsBuilder.fromHttpUrl("https://api.iamport.kr/certifications")
+            .pathSegment(impUid) // 안전하게 경로 삽입됨
+            .build()
+            .toUri();
 
     // Authorization 헤더에 액세스 토큰 추가
     HttpHeaders headers = new HttpHeaders();
