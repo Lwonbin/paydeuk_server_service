@@ -1,12 +1,12 @@
 package com.tower_of_fisa.paydeuk_server_service.admin.controller;
 
-import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
-import com.tower_of_fisa.paydeuk_server_service.common.response.SwaggerErrorResponseType;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantIndividualStatsResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentHistoryResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantStatsResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantTransactionTrendResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.service.AdminMerchantService;
+import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.common.response.SwaggerErrorResponseType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

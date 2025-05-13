@@ -1,7 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.admin.repository;
 
-import com.tower_of_fisa.paydeuk_server_service.domain.entity.Payment;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentHistoryResponse;
+import com.tower_of_fisa.paydeuk_server_service.domain.entity.Payment;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
