@@ -1,0 +1,45 @@
+name: Validate code in the merge queue
+
+on:
+  merge_group:
+
+jobs:
+  validate-pr:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+      
+    - name: Display info
+      run: | 
+        pwd
+        tree -a -I '.git'
+        git status
+        
+    - name: Cache Gradle packages
+      uses: actions/cache@v4
+      with:
+        path: ~/.gradle/caches
+        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+        restore-keys: ${{ runner.os }}-gradle
+
+    - name: Create application-secret.yaml
+      run: |
+        cat <<EOF > ./src/main/resources/application-secret.yml  
+        iamport:
+          api:
+            key: '${{ secrets.IAMPORT_API_KEY }}'
+            secret: '${{ secrets.IAMPORT_API_SECRET }}'
+        jwt:
+          secret-key: '${{ secrets.JWT_SECRET }}'
+        EOF
+        
+    - name: Build
+      id: check
+      run: ./gradlew buil --info
+      continue-on-error: true
+    - name: Leave comment on Github Actions Log
+      if: steps.check.outcome == 'failure'
+      run: |
+        echo "❗ dev 브랜치와 병합한 코드가 빌드 실패하였습니다. 문제를 해결하고 다시 시도해주세요 ❗"
+        exit 1
