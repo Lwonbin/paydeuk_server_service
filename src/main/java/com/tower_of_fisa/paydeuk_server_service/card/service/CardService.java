@@ -7,7 +7,7 @@ import com.tower_of_fisa.paydeuk_server_service.dto.card.CardBenefitResponse;
 import com.tower_of_fisa.paydeuk_server_service.dto.card.MyCardResponse;
 import com.tower_of_fisa.paydeuk_server_service.dto.payment.PaymentHistoryResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.repository.PaymentRepository;
-import com.tower_of_fisa.paydeuk_server_service.repository.UserCardRepository;
+import com.tower_of_fisa.paydeuk_server_service.admin.repository.UserCardRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
