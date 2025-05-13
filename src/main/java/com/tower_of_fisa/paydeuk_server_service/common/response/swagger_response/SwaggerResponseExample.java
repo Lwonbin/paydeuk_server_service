@@ -21,7 +21,6 @@ public final class SwaggerResponseExample {
           }
       """;
 
-
   public static final String USER_404 =
       """
           {
@@ -36,6 +35,4 @@ public final class SwaggerResponseExample {
             }
           }
       """;
-
-
 }

@@ -65,7 +65,6 @@ public class User extends BaseEntity {
     this.password = password;
   }
 
-
   public void changeEmail(String email) {
     this.email = email;
   }
@@ -73,5 +72,4 @@ public class User extends BaseEntity {
   public void changeAddress(String address) {
     this.address = address;
   }
-
 }

@@ -8,11 +8,11 @@ import lombok.Getter;
 @Getter
 public class UpdateProfileRequest {
 
-    @Email
-    @Schema(description = "이메일", example = "abc1234@naver.com")
-    private String email;
+  @Email
+  @Schema(description = "이메일", example = "abc1234@naver.com")
+  private String email;
 
-    @Size(max = 30)
-    @Schema(description = "주소", example = "서울 마포구 월드컵북로 434 상암 IT Tower")
-    private String address;
+  @Size(max = 30)
+  @Schema(description = "주소", example = "서울 마포구 월드컵북로 434 상암 IT Tower")
+  private String address;
 }
