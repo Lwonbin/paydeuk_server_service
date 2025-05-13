@@ -2,9 +2,9 @@ package com.tower_of_fisa.paydeuk_server_service.admin.service;
 
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.UserListResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.UserStatsResponse;
-import com.tower_of_fisa.paydeuk_server_service.auth.repository.UserRepository;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
+import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
