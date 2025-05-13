@@ -56,4 +56,14 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
       JOIN uc.card c
       """)
   List<MerchantPaymentHistoryResponse> findAllPaymentHistories();
+
+  @Query("SELECT p FROM Payment p " +
+         "JOIN FETCH p.userCard uc " +
+         "JOIN FETCH uc.card c " +
+         "JOIN FETCH p.merchant m " +
+         "JOIN FETCH p.cardBenefit cb " +
+         "JOIN FETCH cb.benefit b " +
+         "WHERE uc.user.id = :userId " +
+         "ORDER BY p.createdAt DESC")
+  List<Payment> findPaymentHistoryByUserId(@Param("userId") Long userId);
 }
