@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.admin.dto;
+package com.tower_of_fisa.paydeuk_server_service.admin.dto.merchant;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;

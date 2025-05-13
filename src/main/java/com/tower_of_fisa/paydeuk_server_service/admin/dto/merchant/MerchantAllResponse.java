@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.admin.dto;
+package com.tower_of_fisa.paydeuk_server_service.admin.dto.merchant;
 
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Merchant;
 import io.swagger.v3.oas.annotations.media.Schema;
