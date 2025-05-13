@@ -29,4 +29,11 @@ public class UserService {
         if (request.getEmail() != null) user.changeEmail(request.getEmail());
         if (request.getAddress() != null) user.changeAddress(request.getAddress());
     }
+
+
+    public void checkUserExists(Long userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+    }
+
 }

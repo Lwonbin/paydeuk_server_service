@@ -20,4 +20,22 @@ public final class SwaggerResponseExample {
             }
           }
       """;
+
+
+  public static final String USER_404 =
+      """
+          {
+            "success": false,
+            "status": "NOT_FOUND",
+            "message": "해당 사용자를 찾을 수 없습니다.",
+            "response": {
+              "errorCode": "USR_01",
+              "time": "2025-05-13T16:34:17.2606453",
+              "stackTrace": "com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404: 해당 사용자를 찾을 수 없습니다.",
+              "errors": null
+            }
+          }
+      """;
+
+
 }
