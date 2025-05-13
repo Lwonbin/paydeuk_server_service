@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.admin.dto.merchant;
+package com.tower_of_fisa.paydeuk_server_service.admin.dto;
 
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.CardType;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.MerchantCategory;

@@ -1,10 +1,6 @@
 package com.tower_of_fisa.paydeuk_server_service.admin.controller;
 
-import com.tower_of_fisa.paydeuk_server_service.admin.dto.merchant.*;
-import com.tower_of_fisa.paydeuk_server_service.admin.dto.merchant.MerchantIndividualStatsResponse;
-import com.tower_of_fisa.paydeuk_server_service.admin.dto.merchant.MerchantPaymentHistoryResponse;
-import com.tower_of_fisa.paydeuk_server_service.admin.dto.merchant.MerchantStatsResponse;
-import com.tower_of_fisa.paydeuk_server_service.admin.dto.merchant.MerchantTransactionTrendResponse;
+import com.tower_of_fisa.paydeuk_server_service.admin.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.admin.service.AdminMerchantService;
 import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.EmptyResponse;
