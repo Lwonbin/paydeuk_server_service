@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.card.dto;
+package com.tower_of_fisa.paydeuk_server_service.user_card.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import java.util.List;
@@ -9,6 +9,10 @@ import lombok.Getter;
 @Builder
 @Schema(description = "내 카드 정보 응답")
 public class MyCardResponse {
+
+  @Schema(description = "카드 ID", example = "1")
+  private Long id;
+
   @Schema(description = "카드명", example = "신한 플래티넘")
   private final String cardName;
 

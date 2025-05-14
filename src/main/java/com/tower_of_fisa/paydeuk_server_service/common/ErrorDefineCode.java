@@ -23,6 +23,7 @@ public enum ErrorDefineCode {
   INVALID_JSON("AUT_01", "요청 형식이 올바르지 않습니다."),
   ACCESSTOKEN_EXPIRED("AUT_02", "Access Token이 만료되었습니다."),
   DUPLICATE_USERNAME("USR_03", "이미 사용 중인 아이디입니다."),
+  CARD_NOT_FOUND("CAR_01", "해당 카드를 찾을 수 없습니다."),
   ;
 
   private final String code;
