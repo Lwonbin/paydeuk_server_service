@@ -55,22 +55,18 @@ public class UserService {
         .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
   }
 
-
   /**
    * [내 정보 변경] 사용자의 이메일을 변경한다.
    *
    * @param userId 인증된 사용자 ID
    */
   public UserInfoResponse getUserInfo(Long userId) {
-    User user = userRepository.findById(userId)
+    User user =
+        userRepository
+            .findById(userId)
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
     return new UserInfoResponse(
-            user.getName(),
-            user.getBirthDate(),
-            user.getPhone(),
-            user.getEmail()
-    );
+        user.getName(), user.getBirthDate(), user.getPhone(), user.getEmail());
   }
-
 }
