@@ -14,13 +14,13 @@ import lombok.NoArgsConstructor;
 public class SigninRequest {
 
   @NotBlank(message = "아이디를 입력해주세요.")
-  @Schema(description = "사용자 아이디", example = "hong123")
+  @Schema(description = "사용자 아이디", example = "user")
   private String username;
 
   @NotBlank(message = "비밀번호를 입력해주세요.")
   @Pattern(
       regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
       message = "비밀번호는 영문 대소문자, 숫자, 특수문자를 포함한 8~20자여야 합니다.")
-  @Schema(description = "비밀번호", example = "Aa1234!@")
+  @Schema(description = "비밀번호", example = "12345678")
   private String password;
 }
