@@ -1,11 +1,6 @@
 package com.tower_of_fisa.paydeuk_server_service.auth.controller;
 
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.FindIdRequest;
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.FindIdResponse;
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.FindPasswordRequest;
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.ResetPasswordRequest;
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.SigninRequest;
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.SignupRequest;
+import com.tower_of_fisa.paydeuk_server_service.auth.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.auth.service.AuthService;
 import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.SwaggerErrorResponseType;
@@ -57,9 +52,10 @@ public class AuthController {
             description = "사용자를 찾을 수 없음",
             content = {@Content(schema = @Schema(implementation = SwaggerErrorResponseType.class))})
       })
-  public CommonResponse<Void> findPassword(@Valid @RequestBody FindPasswordRequest request) {
-    authService.findPassword(request);
-    return new CommonResponse<>(true, HttpStatus.OK, "본인인증이 완료되었습니다.", null);
+  public CommonResponse<FindPasswordResponse> findPassword(
+      @Valid @RequestBody FindPasswordRequest request) {
+    FindPasswordResponse response = authService.findPassword(request);
+    return new CommonResponse<>(true, HttpStatus.OK, "본인인증이 완료되었습니다.", response);
   }
 
   @PostMapping("/signup")
