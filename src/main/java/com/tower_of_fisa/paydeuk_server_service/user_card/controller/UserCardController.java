@@ -31,6 +31,7 @@ public class UserCardController {
 
   @GetMapping("/my")
   @Operation(summary = "CARD_01 : 내 카드 목록 조회", description = "사용자가 보유한 카드 목록을 조회합니다.")
+  @ApiResponse(responseCode = "200", description = "카드 리스트 조회에 성공")
   public CommonResponse<List<MyCardResponse>> getMyCards(
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     List<MyCardResponse> cards = userCardService.getMyCards(userDetails.getId());
@@ -39,6 +40,7 @@ public class UserCardController {
 
   @GetMapping("/my/payment")
   @Operation(summary = "CARD_02 : 내 결제 내역 조회", description = "사용자의 결제 내역을 조회합니다.")
+  @ApiResponse(responseCode = "200", description = "결제 내역 조회에 성공")
   public CommonResponse<List<PaymentHistoryResponse>> getPaymentHistory(
       @AuthenticationPrincipal CustomUserDetails userDetails) {
     List<PaymentHistoryResponse> payments = userCardService.getPaymentHistory(userDetails.getId());
