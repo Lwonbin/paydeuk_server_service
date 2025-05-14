@@ -4,7 +4,8 @@ import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.EmptyResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.swagger_response.SwaggerResponseExample;
 import com.tower_of_fisa.paydeuk_server_service.config.security.CustomUserDetails;
-import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateProfileRequest;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateAddressRequest;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateEmailRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -26,23 +27,42 @@ public class UserController {
 
   private final UserService userService;
 
-  @PatchMapping("/profile")
-  @Operation(summary = "USER_01 : 내 정보 변경", description = "사용자 정보중 이메일, 주소를 수정합니다.")
+  @PatchMapping("/profile/address")
+  @Operation(summary = "USER_01 : 주소 변경", description = "사용자 정보 중 주소를 수정합니다.")
   @ApiResponses(
       value = {
-        @ApiResponse(responseCode = "200", description = "가맹점 삭제 성공"),
+        @ApiResponse(responseCode = "200", description = "주소 변경 성공"),
         @ApiResponse(
             responseCode = "404",
             description = "사용자를 찾을 수 없음",
             content =
                 @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
       })
-  public CommonResponse<EmptyResponse> updateProfile(
+  public CommonResponse<EmptyResponse> updateAddress(
       @AuthenticationPrincipal CustomUserDetails userDetails,
-      @RequestBody @Valid UpdateProfileRequest request) {
+      @RequestBody @Valid UpdateAddressRequest request) {
 
-    userService.updateProfile(userDetails.getId(), request);
-    return new CommonResponse<>(true, HttpStatus.OK, "내 정보 변경에 성공했습니다.", new EmptyResponse());
+    userService.updateAddress(userDetails.getId(), request);
+    return new CommonResponse<>(true, HttpStatus.OK, "내 주소 변경에 성공했습니다.", new EmptyResponse());
+  }
+
+  @PatchMapping("/profile/email")
+  @Operation(summary = "USER_02 : 이메일 변경", description = "사용자 정보 중 이메일을 수정합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "이메일 변경 성공"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "사용자를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
+      })
+  public CommonResponse<EmptyResponse> updateEmail(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestBody @Valid UpdateEmailRequest request) {
+
+    userService.updateEmail(userDetails.getId(), request);
+    return new CommonResponse<>(true, HttpStatus.OK, "내 이메일 변경에 성공했습니다.", new EmptyResponse());
   }
 
   /*
@@ -50,7 +70,7 @@ public class UserController {
    이에 따라 실제 User의 존재 여부를 직접 확인하고, Swagger에서 404 에러 응답 예시를 명확히 표현하기 위한 전용 API를 작성하였습니다.
   */
   @GetMapping("/{userId}/check")
-  @Operation(summary = "USER_02 : 사용자 존재 여부 확인", description = "사용자 ID로 사용자의 존재 여부를 확인합니다.")
+  @Operation(summary = "USER_03 : 사용자 존재 여부 확인", description = "사용자 ID로 사용자의 존재 여부를 확인합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "사용자가 존재함"),
