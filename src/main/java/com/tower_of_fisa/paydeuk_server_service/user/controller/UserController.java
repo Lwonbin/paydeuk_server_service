@@ -72,7 +72,7 @@ public class UserController {
    이에 따라 실제 User의 존재 여부를 직접 확인하고, Swagger에서 404 에러 응답 예시를 명확히 표현하기 위한 전용 API를 작성하였습니다.
   */
   @GetMapping("/{userId}/check")
-  @Operation(summary = "USER_02 : 사용자 존재 여부 확인", description = "사용자 ID로 사용자의 존재 여부를 확인합니다.")
+  @Operation(summary = "USER_03 : 사용자 존재 여부 확인", description = "사용자 ID로 사용자의 존재 여부를 확인합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "사용자가 존재함"),
