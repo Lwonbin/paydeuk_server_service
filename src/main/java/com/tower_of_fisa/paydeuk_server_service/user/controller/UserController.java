@@ -4,6 +4,7 @@ import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.EmptyResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.swagger_response.SwaggerResponseExample;
 import com.tower_of_fisa.paydeuk_server_service.config.security.CustomUserDetails;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.SetPayPasswordRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateProfileRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.service.UserService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -21,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
-@Tag(name = "회원", description = "사용자 정보 관련 API")
+@Tag(name = "2- User API", description = "사용자 정보 관련 API")
 public class UserController {
 
   private final UserService userService;
@@ -62,5 +63,29 @@ public class UserController {
   public CommonResponse<EmptyResponse> checkUserExists(@PathVariable Long userId) {
     userService.checkUserExists(userId);
     return new CommonResponse<>(true, HttpStatus.OK, "사용자가 존재합니다.", new EmptyResponse());
+  }
+
+  @PostMapping("/payment-pin")
+  @Operation(summary = "USER_04 : 간편 결제 비밀번호 설정", description = "간편 결제 비밀번호를 설정합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "간편 결제 비밀번호 설정 성공"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "규칙에 맞지 않는 비밀번호",
+            content =
+                @Content(
+                    examples = {@ExampleObject(value = SwaggerResponseExample.PAY_PASSWORD_400)})),
+        @ApiResponse(
+            responseCode = "404",
+            description = "사용자를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
+      })
+  public CommonResponse<EmptyResponse> setPayPassword(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestBody @Valid SetPayPasswordRequest request) {
+    userService.setPayPassword(userDetails.getId(), request);
+    return new CommonResponse<>(true, HttpStatus.OK, "간편 결제 비밀번호를 설정하였습니다.", new EmptyResponse());
   }
 }

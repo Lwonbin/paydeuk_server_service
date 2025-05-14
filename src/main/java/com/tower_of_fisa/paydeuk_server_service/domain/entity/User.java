@@ -72,4 +72,8 @@ public class User extends BaseEntity {
   public void changeAddress(String address) {
     this.address = address;
   }
+
+  public void changePayPassword(String payPassword) {
+    this.payPassword = payPassword;
+  }
 }
