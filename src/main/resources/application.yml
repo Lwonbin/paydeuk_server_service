@@ -16,6 +16,10 @@ spring:
       hibernate:
         format_sql: true  # SQL을 보기 좋게 출력
 
+  sql:
+    init:
+      mode: always # MySQL에서 data.sql, schema.sql 자동 적용하기 위한 설정
+
 
 # Swagger
 springdoc:
