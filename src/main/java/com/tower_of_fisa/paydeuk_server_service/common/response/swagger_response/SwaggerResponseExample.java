@@ -21,17 +21,17 @@ public final class SwaggerResponseExample {
           }
       """;
   public static final String CARD_404 =
-          """
-              {
-                "success": false,
-                "status": "NOT_FOUND",
-                "message": "해당 카드를 찾을 수 없습니다.",
-                "response": {
-                  "errorCode": "CAR_01",
-                  "time": "2024-01-01T00:00:00",
-                  "stackTrace": "com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404: 해당 카드를 찾을 수 없습니다.",
-                  "errors": null
-                }
-              }
-          """;
+      """
+          {
+            "success": false,
+            "status": "NOT_FOUND",
+            "message": "해당 카드를 찾을 수 없습니다.",
+            "response": {
+              "errorCode": "CAR_01",
+              "time": "2024-01-01T00:00:00",
+              "stackTrace": "com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404: 해당 카드를 찾을 수 없습니다.",
+              "errors": null
+            }
+          }
+      """;
 }

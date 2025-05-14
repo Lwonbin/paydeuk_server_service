@@ -6,6 +6,6 @@ import lombok.Getter;
 @Getter
 @Schema(description = "대표카드 설정 요청")
 public class SetDefaultCardRequest {
-    @Schema(description = "카드 ID", example = "1")
-    private Long cardId;
-} 
+  @Schema(description = "카드 ID", example = "1")
+  private Long cardId;
+}
