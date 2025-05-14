@@ -21,6 +21,6 @@ public class SigninRequest {
   @Pattern(
       regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,20}$",
       message = "비밀번호는 영문 대소문자, 숫자, 특수문자를 포함한 8~20자여야 합니다.")
-  @Schema(description = "비밀번호", example = "12345678")
+  @Schema(description = "비밀번호", example = "Aa1234!@")
   private String password;
 }
