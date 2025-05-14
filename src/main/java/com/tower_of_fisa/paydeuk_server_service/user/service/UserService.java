@@ -6,8 +6,6 @@ import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.SetPayPasswordRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateProfileRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
-import com.tower_of_fisa.paydeuk_server_service.user.validator.PayPasswordContext;
-import com.tower_of_fisa.paydeuk_server_service.user.validator.PayPasswordValidator;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -56,7 +54,7 @@ public class UserService {
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
     String payPassword = request.getPayPassword();
 
-    if (payPasswordValidator.isValid(payPassword, new PayPasswordContext(user.getBirthDate())))
+    if (payPasswordValidator.isValid(payPassword, user.getBirthDate()))
       user.changePayPassword(payPassword);
   }
 }
