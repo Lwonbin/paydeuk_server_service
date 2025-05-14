@@ -1,4 +1,4 @@
-package com.tower_of_fisa.paydeuk_server_service.auth.repository;
+package com.tower_of_fisa.paydeuk_server_service.user.repository;
 
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import java.util.Optional;
