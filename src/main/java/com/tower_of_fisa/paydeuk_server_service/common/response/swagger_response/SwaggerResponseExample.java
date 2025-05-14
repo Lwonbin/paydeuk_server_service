@@ -20,9 +20,9 @@ public final class SwaggerResponseExample {
             }
           }
       """;
-        
+
   public static final String USER_404 =
-        """
+      """
           {
             "success": false,
             "status": "NOT_FOUND",
@@ -35,7 +35,6 @@ public final class SwaggerResponseExample {
             }
           }
       """;
-        
 
   public static final String CARD_404 =
       """
