@@ -49,23 +49,21 @@ public class UserController {
   @PatchMapping("/profile/email")
   @Operation(summary = "USER_02 : 이메일 변경", description = "사용자 정보 중 이메일을 수정합니다.")
   @ApiResponses(
-          value = {
-                  @ApiResponse(responseCode = "200", description = "이메일 변경 성공"),
-                  @ApiResponse(
-                          responseCode = "404",
-                          description = "사용자를 찾을 수 없음",
-                          content =
-                          @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
-          })
+      value = {
+        @ApiResponse(responseCode = "200", description = "이메일 변경 성공"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "사용자를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
+      })
   public CommonResponse<EmptyResponse> updateEmail(
-          @AuthenticationPrincipal CustomUserDetails userDetails,
-          @RequestBody @Valid UpdateEmailRequest request) {
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestBody @Valid UpdateEmailRequest request) {
 
     userService.updateEmail(userDetails.getId(), request);
     return new CommonResponse<>(true, HttpStatus.OK, "내 이메일 변경에 성공했습니다.", new EmptyResponse());
   }
-
-
 
   /*
    실제 서비스에서는 userId를 통해 User의 존재 여부를 확인해야 하는 API가 많지만, 대부분의 경우 해당 userId는 필터단에서 이미 인증되어 있으므로, 사용자 미존재 상황이 아닌 "권한이 없습니다" 에러만 확인할 수 있습니다.

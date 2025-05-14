@@ -41,22 +41,16 @@ public class UserService {
   @Transactional
   public void updateEmail(Long userId, UpdateEmailRequest request) {
     User user =
-            userRepository
-                    .findById(userId)
-                    .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
     if (request.getEmail() != null) user.changeEmail(request.getEmail());
   }
-
-
 
   public void checkUserExists(Long userId) {
     userRepository
         .findById(userId)
         .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
   }
-
-
-
-
 }
