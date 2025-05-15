@@ -4,10 +4,9 @@ import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
+@Builder
 @Getter
 @Entity
 @AllArgsConstructor
@@ -16,6 +15,7 @@ import lombok.NoArgsConstructor;
 public class UserCard extends BaseEntity {
   @Id
   @Column(name = "id", nullable = false)
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Column(name = "card_token", length = 40, nullable = false)
@@ -24,6 +24,7 @@ public class UserCard extends BaseEntity {
   @Column(name = "card_number", length = 40, nullable = false)
   private String cardNumber;
 
+  @Setter
   @Column(name = "is_default_card", nullable = false)
   private Boolean isDefaultCard;
 

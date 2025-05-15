@@ -38,3 +38,6 @@ out/
 
 ### Application Secret ###
 /src/main/resources/application-secret.yml
+
+### Redis Config ###
+/redis/redis.conf
