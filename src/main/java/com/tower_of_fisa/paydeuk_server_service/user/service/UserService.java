@@ -76,6 +76,7 @@ public class UserService {
 
     if (paymentPinCodeValidator.isValid(paymentPinCode, user.getBirthDate()))
       user.changePaymentPinCode(passwordEncoder.encode(paymentPinCode));
+    else throw new BadRequestException400(ErrorDefineCode.INVALID_PAYMENT_PIN_CODE);
   }
 
   /**
@@ -94,6 +95,7 @@ public class UserService {
 
     if (paymentPinCodeValidator.isValid(newPaymentPinCode, oldPaymentPinCode, user.getBirthDate()))
       user.changePaymentPinCode(passwordEncoder.encode(newPaymentPinCode));
+    else throw new BadRequestException400(ErrorDefineCode.INVALID_PAYMENT_PIN_CODE);
   }
 
   /**
@@ -112,6 +114,6 @@ public class UserService {
     String paymentPinCode = user.getPaymentPinCode();
 
     if (!passwordEncoder.matches(insertedPaymentPinCode, paymentPinCode))
-      throw new BadRequestException400(ErrorDefineCode.USER_NOT_FOUND);
+      throw new BadRequestException400(ErrorDefineCode.WRONG_PAYMENT_PIN_CODE);
   }
 }
