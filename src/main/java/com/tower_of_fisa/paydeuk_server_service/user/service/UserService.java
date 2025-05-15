@@ -80,11 +80,12 @@ public class UserService {
   }
 
   /**
-   * [간편 결제 비밀번호 설정] 사용자의 간편 비밀 번호를 설정합니다.
+   * [간편 결제 비밀번호 변경] 사용자의 간편 비밀 번호를 변경합니다.
    *
    * @param userId 인증된 사용자 ID
-   * @param request 설정할 간편결제비밀번호를 담은 요청 DTO
+   * @param request 변경할 간편결제비밀번호를 담은 요청 DTO
    */
+  @Transactional
   public void setNewPaymentPinCode(Long userId, SetNewPaymentPinCodeRequest request) {
     User user =
         userRepository
