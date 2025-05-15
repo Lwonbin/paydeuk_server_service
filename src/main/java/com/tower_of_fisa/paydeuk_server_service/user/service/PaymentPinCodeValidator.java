@@ -1,9 +1,13 @@
 package com.tower_of_fisa.paydeuk_server_service.user.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class PaymentPinCodeValidator {
+  private final BCryptPasswordEncoder passwordEncoder;
 
   public boolean isValid(String paymentPinCode, String birthDate) {
     return checkAllSameDigits(paymentPinCode)
@@ -15,7 +19,7 @@ public class PaymentPinCodeValidator {
     return checkAllSameDigits(newPaymentPinCode)
         && checkBirthDate(newPaymentPinCode, birthDate)
         && checkNotSequentialDigits(newPaymentPinCode)
-        && !newPaymentPinCode.equals(oldPaymentPinCode);
+        && !passwordEncoder.matches(newPaymentPinCode, oldPaymentPinCode);
   }
 
   private boolean checkAllSameDigits(String paymentPinCode) {

@@ -11,6 +11,7 @@ import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateEmailRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,6 +20,7 @@ public class UserService {
 
   private final UserRepository userRepository;
   private final PaymentPinCodeValidator paymentPinCodeValidator;
+  private final BCryptPasswordEncoder passwordEncoder;
 
   /**
    * [내 정보 변경] 사용자의 주소를 변경한다.
@@ -73,7 +75,7 @@ public class UserService {
     String paymentPinCode = request.getPaymentPinCode();
 
     if (paymentPinCodeValidator.isValid(paymentPinCode, user.getBirthDate()))
-      user.changePaymentPinCode(paymentPinCode);
+      user.changePaymentPinCode(passwordEncoder.encode(paymentPinCode));
   }
 
   /**
@@ -91,7 +93,7 @@ public class UserService {
     String oldPaymentPinCode = user.getPaymentPinCode();
 
     if (paymentPinCodeValidator.isValid(newPaymentPinCode, oldPaymentPinCode, user.getBirthDate()))
-      user.changePaymentPinCode(newPaymentPinCode);
+      user.changePaymentPinCode(passwordEncoder.encode(newPaymentPinCode));
   }
 
   /**
@@ -109,7 +111,7 @@ public class UserService {
     String insertedPaymentPinCode = request.getPaymentPinCode();
     String paymentPinCode = user.getPaymentPinCode();
 
-    if (!insertedPaymentPinCode.equals(paymentPinCode))
+    if (!passwordEncoder.matches(insertedPaymentPinCode, paymentPinCode))
       throw new BadRequestException400(ErrorDefineCode.USER_NOT_FOUND);
   }
 }
