@@ -32,12 +32,21 @@ public class AdminUserService {
    */
   public UserStatsResponse getUserStats() {
     List<User> users = userRepository.findAll();
-    int totalUsers = users.size();
-    int activeUsers =
-        (int) users.stream().filter(user -> user.getStatus() == UserStatus.ACTIVE).count();
-    int inactiveUsers = totalUsers - activeUsers;
+    long totalUsers = users.size();
+    long activeUsers = users.stream().filter(user -> user.getStatus() == UserStatus.ACTIVE).count();
+    long inactiveUsers =
+        users.stream().filter(user -> user.getStatus() == UserStatus.INACTIVE).count();
+    long newUsers =
+        users.stream()
+            .filter(
+                user ->
+                    user.getCreatedAt() != null
+                        && user.getCreatedAt().getYear() == java.time.LocalDate.now().getYear()
+                        && user.getCreatedAt().getMonthValue()
+                            == java.time.LocalDate.now().getMonthValue())
+            .count();
 
-    return new UserStatsResponse(totalUsers, activeUsers, inactiveUsers);
+    return new UserStatsResponse(totalUsers, activeUsers, inactiveUsers, newUsers);
   }
 
   /**

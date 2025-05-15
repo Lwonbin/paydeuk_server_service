@@ -11,11 +11,14 @@ import lombok.NoArgsConstructor;
 @Schema(title = "User : Stats Response 스키마")
 public class UserStatsResponse {
   @Schema(description = "총 사용자 수", example = "100")
-  private int totalUsers;
+  private long totalUsers;
 
   @Schema(description = "활성 사용자 수", example = "80")
-  private int activeUsers;
+  private long activeUsers;
 
   @Schema(description = "비활성 사용자 수", example = "20")
-  private int inactiveUsers;
+  private long inactiveUsers;
+
+  @Schema(description = "이번 달 신규 가 수", example = "10")
+  private long newUsers;
 }
