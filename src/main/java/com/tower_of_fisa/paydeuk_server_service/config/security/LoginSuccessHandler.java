@@ -31,7 +31,7 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     String role = userDetails.getRoleName();
 
     if ("ADMIN".equals(role)) {
-      redirectUrl = "/admin/merchants/stats";
+      redirectUrl = "/admin";
     } else if ("USER".equals(role)) {
       redirectUrl = "/dashboard";
     } else {

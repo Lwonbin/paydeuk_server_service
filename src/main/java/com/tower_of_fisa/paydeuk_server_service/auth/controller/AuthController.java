@@ -124,4 +124,20 @@ public class AuthController {
     Map<String, String> tokens = authService.refreshAccessToken(refreshToken);
     return new CommonResponse<>(true, HttpStatus.OK, "AccessToken 재발급 성공했습니다", tokens);
   }
+
+  @PostMapping("/logout")
+  @Operation(summary = "AUTH_04 : 로그아웃", description = "사용자를 로그아웃 처리하고 토큰을 무효화합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "로그아웃 성공"),
+        @ApiResponse(
+            responseCode = "401",
+            description = "유효하지 않은 토큰",
+            content = {@Content(schema = @Schema(implementation = SwaggerErrorResponseType.class))})
+      })
+  public CommonResponse<Void> logout(@RequestHeader("Authorization") String authHeader) {
+    String accessToken = authHeader.replace("Bearer ", "");
+    authService.logout(accessToken);
+    return new CommonResponse<>(true, HttpStatus.OK, "로그아웃이 완료되었습니다.", null);
+  }
 }

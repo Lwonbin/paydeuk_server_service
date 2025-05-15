@@ -8,6 +8,7 @@ import com.tower_of_fisa.paydeuk_server_service.user.dto.PaymentPinCodeRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.SetNewPaymentPinCodeRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateAddressRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateEmailRequest;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.UserInfoResponse;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -116,5 +117,20 @@ public class UserService {
 
     if (!passwordEncoder.matches(insertedPaymentPinCode, paymentPinCode))
       throw new BadRequestException400(ErrorDefineCode.WRONG_PAYMENT_PIN_CODE);
+  }
+
+  /**
+   * [내 정보 변경] 사용자의 이메일을 변경한다.
+   *
+   * @param userId 인증된 사용자 ID
+   */
+  public UserInfoResponse getUserInfo(Long userId) {
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+
+    return new UserInfoResponse(
+        user.getName(), user.getBirthDate(), user.getPhone(), user.getEmail(), user.getAddress());
   }
 }
