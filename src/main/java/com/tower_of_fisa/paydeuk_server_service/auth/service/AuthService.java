@@ -1,9 +1,6 @@
 package com.tower_of_fisa.paydeuk_server_service.auth.service;
 
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.FindIdResponse;
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.FindPasswordRequest;
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.ResetPasswordRequest;
-import com.tower_of_fisa.paydeuk_server_service.auth.dto.SignupRequest;
+import com.tower_of_fisa.paydeuk_server_service.auth.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.AlreadyExistElementException409;
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.AuthCredientialException401;
@@ -45,11 +42,12 @@ public class AuthService {
   }
 
   /**
-   * [비밀번호 찾기] 사용자의 이름과 아이디를 확인하여 본인인증을 수행할 수 있도록 한다.
+   * [비밀번호 찾기] 사용자의 이름과 아이디를 확인하여 personalAuthKey를 반환한다.
    *
-   * @param request 사용자 이름과 아이디를 포함한 요청
+   * @param request 사용자 이름과 아이디를 포함한 요청 DTO
+   * @return FindPasswordResponse personalAuthKey를 포함한 응답 DTO
    */
-  public void findPassword(FindPasswordRequest request) {
+  public FindPasswordResponse findPassword(FindPasswordRequest request) {
     User user =
         userRepository
             .findByUsername(request.getUsername())
@@ -58,6 +56,8 @@ public class AuthService {
     if (!user.getName().equals(request.getName())) {
       throw new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND);
     }
+
+    return new FindPasswordResponse(user.getPersonalAuthKey());
   }
 
   /**
