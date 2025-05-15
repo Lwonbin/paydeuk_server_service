@@ -4,7 +4,7 @@ import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.SetNewPaymentPinCodeRequest;
-import com.tower_of_fisa.paydeuk_server_service.user.dto.SetPayPasswordRequest;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.SetPaymentPinCodeRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateProfileRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
@@ -16,7 +16,7 @@ import org.springframework.stereotype.Service;
 public class UserService {
 
   private final UserRepository userRepository;
-  private final PayPasswordValidator payPasswordValidator;
+  private final PaymentPinCodeValidator paymentPinCodeValidator;
 
   /**
    * [내 정보 변경] 사용자의 이메일 또는 주소를 변경한다.
@@ -48,15 +48,15 @@ public class UserService {
    * @param request 설정할 간편결제비밀번호를 담은 요청 DTO
    */
   @Transactional
-  public void setPayPassword(Long userId, SetPayPasswordRequest request) {
+  public void setPaymentPinCode(Long userId, SetPaymentPinCodeRequest request) {
     User user =
         userRepository
             .findById(userId)
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
-    String payPassword = request.getPayPassword();
+    String paymentPinCode = request.getPaymentPinCode();
 
-    if (payPasswordValidator.isValid(payPassword, user.getBirthDate()))
-      user.changePayPassword(payPassword);
+    if (paymentPinCodeValidator.isValid(paymentPinCode, user.getBirthDate()))
+      user.changePaymentPinCode(paymentPinCode);
   }
 
   /**
@@ -70,10 +70,10 @@ public class UserService {
         userRepository
             .findById(userId)
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
-    String newPayPassword = request.getNewPinCode();
-    String oldPayPassword = user.getPayPassword();
+    String newPaymentPinCode = request.getNewPaymentPinCode();
+    String oldPaymentPinCode = user.getPaymentPinCode();
 
-    if (payPasswordValidator.isValid(newPayPassword, oldPayPassword, user.getBirthDate()))
-      user.changePayPassword(newPayPassword);
+    if (paymentPinCodeValidator.isValid(newPaymentPinCode, oldPaymentPinCode, user.getBirthDate()))
+      user.changePaymentPinCode(newPaymentPinCode);
   }
 }

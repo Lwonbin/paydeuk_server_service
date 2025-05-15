@@ -35,19 +35,4 @@ public final class SwaggerResponseExample {
             }
           }
       """;
-
-  public static final String PAY_PASSWORD_400 =
-      """
-          {
-            "success": false,
-            "status": "BAD_REQUEST",
-            "message": "규칙에 맞지 않는 비밀번호 입니다.",
-            "response": {
-              "errorCode": "PAY_ASSWORD_01",
-              "time": "2025-05-13T16:34:17.2606453",
-              "stackTrace": "com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.PayPasswordViolationException400: 규칙에 맞지 않는 비밀번호 입니다.",
-              "errors": null
-            }
-          }
-      """;
 }

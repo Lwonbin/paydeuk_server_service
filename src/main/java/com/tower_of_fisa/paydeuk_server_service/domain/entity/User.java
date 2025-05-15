@@ -42,7 +42,7 @@ public class User extends BaseEntity {
   private String email;
 
   @Column(name = "pay_password", length = 50)
-  private String payPassword;
+  private String paymentPinCode;
 
   @Column(name = "address", length = 30)
   private String address;
@@ -73,7 +73,7 @@ public class User extends BaseEntity {
     this.address = address;
   }
 
-  public void changePayPassword(String payPassword) {
-    this.payPassword = payPassword;
+  public void changePaymentPinCode(String paymentPinCode) {
+    this.paymentPinCode = paymentPinCode;
   }
 }

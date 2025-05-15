@@ -18,7 +18,7 @@ CREATE TABLE users
     personal_auth_key VARCHAR(100)                             NOT NULL,
     phone             VARCHAR(20)                              NOT NULL,
     email             VARCHAR(30),
-    pay_password      VARCHAR(50),
+    payment_pin_code  VARCHAR(50),
     address           VARCHAR(30),
     role              ENUM ('ADMIN', 'USER')                   NOT NULL,
     birth_date        VARCHAR(10)                              NOT NULL,

@@ -8,5 +8,5 @@ import lombok.Getter;
 public class SetNewPaymentPinCodeRequest {
   @Size(max = 50)
   @Schema(description = "간편결제비밀번호", example = "051425")
-  private String newPinCode;
+  private String newPaymentPinCode;
 }
