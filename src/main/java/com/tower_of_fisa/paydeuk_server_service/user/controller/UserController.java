@@ -123,7 +123,7 @@ public class UserController {
   }
 
   @PostMapping("/payment-pin-code/verify")
-  @Operation(summary = "USER_04 : 간편 결제 비밀번호 검증", description = "간편 결제 비밀번호를 검증합니다.")
+  @Operation(summary = "USER_06 : 간편 결제 비밀번호 검증", description = "간편 결제 비밀번호를 검증합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "간편 결제 비밀번호 검증 성공"),
