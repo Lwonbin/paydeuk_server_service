@@ -22,4 +22,13 @@ public class MerchantStatsResponse {
 
   @Schema(description = "전체 평균 결제 금액 (단위: 원)", example = "21069")
   private int averageTransactionAmount;
+
+  @Schema(description = "활성 가맹점 수", example = "1156")
+  private int activeMerchantCount;
+
+  @Schema(description = "최근 24시간 거래 증가 수", example = "342")
+  private int recent24hTransactionIncrease;
+
+  @Schema(description = "전월 대비 거래 금액 증감율 (단위: %)", example = "8.5")
+  private double transactionAmountChangePercent;
 }

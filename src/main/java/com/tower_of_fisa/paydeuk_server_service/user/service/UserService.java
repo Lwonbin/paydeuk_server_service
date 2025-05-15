@@ -67,6 +67,6 @@ public class UserService {
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
     return new UserInfoResponse(
-        user.getName(), user.getBirthDate(), user.getPhone(), user.getEmail());
+        user.getName(), user.getBirthDate(), user.getPhone(), user.getEmail(), user.getAddress());
   }
 }
