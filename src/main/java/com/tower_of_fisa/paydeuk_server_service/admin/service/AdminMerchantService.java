@@ -8,6 +8,8 @@ import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exceptio
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Merchant;
 import java.sql.Date;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -29,14 +31,43 @@ public class AdminMerchantService {
    */
   public MerchantStatsResponse getTotalMerchantStatistics() {
     int merchantCount = (int) merchantRepository.count(); // 총 가맹점 수
+    int activeMerchantCount = (int) merchantRepository.countActiveMerchants(); // 활성 가맹점 수
     int transactionCount = paymentRepository.countByPaymentSuccessTrue(); // 결제 성공 건수
     Long totalTransactionAmount = paymentRepository.sumAmountByPaymentSuccessTrue(); // 총 거래 금액
 
     int averageTransactionAmount =
         (transactionCount == 0) ? 0 : (int) (totalTransactionAmount / transactionCount); // 평균 거래 금액
 
+    // 최근 24시간 거래 증가 수
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime from24hAgo = now.minusHours(24);
+    int countUntil24hAgo = paymentRepository.countSuccessfulPaymentsBefore(from24hAgo);
+    int recent24hCount = transactionCount - countUntil24hAgo;
+
+    // 전월 대비 거래 금액 증감율 계산
+    LocalDate firstDayOfThisMonth = now.withDayOfMonth(1).toLocalDate();
+    LocalDate firstDayOfLastMonth = firstDayOfThisMonth.minusMonths(1);
+    LocalDate lastDayOfLastMonth = firstDayOfThisMonth.minusDays(1);
+
+    Long lastMonthTotal = paymentRepository.sumSuccessfulPaymentsBetween(
+            firstDayOfLastMonth.atStartOfDay(),
+            lastDayOfLastMonth.atTime(LocalTime.MAX)
+    );
+
+    double percentChange = 0.0;
+    if (lastMonthTotal != null && lastMonthTotal > 0) {
+      percentChange = ((double) (totalTransactionAmount - lastMonthTotal) / lastMonthTotal) * 100;
+    }
+
     return new MerchantStatsResponse(
-        merchantCount, transactionCount, totalTransactionAmount, averageTransactionAmount);
+            merchantCount,
+            transactionCount,
+            totalTransactionAmount,
+            averageTransactionAmount,
+            activeMerchantCount,
+            recent24hCount,
+            percentChange
+    );
   }
 
   /**

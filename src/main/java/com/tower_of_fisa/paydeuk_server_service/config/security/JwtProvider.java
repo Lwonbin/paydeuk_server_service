@@ -30,7 +30,8 @@ public class JwtProvider {
         .setSubject(user.getUsername())
         .claim("role", user.getRole().name())
         .setIssuedAt(new Date())
-        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 30)) // 30분
+        //TODO: 테스트 원활을 위해 임의로 5시간 설정 배포시에는 30분으로 바꾸기
+        .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 5))
         .signWith(SignatureAlgorithm.HS256, secretKey)
         .compact();
   }

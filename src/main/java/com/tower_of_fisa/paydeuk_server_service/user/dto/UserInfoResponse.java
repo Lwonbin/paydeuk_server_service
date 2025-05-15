@@ -10,4 +10,5 @@ public class UserInfoResponse {
   private String birth;
   private String phoneNumber;
   private String email;
+  private String address;
 }

@@ -2,6 +2,8 @@ package com.tower_of_fisa.paydeuk_server_service.admin.repository;
 
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentHistoryResponse;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Payment;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -67,4 +69,14 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
           + "WHERE uc.user.id = :userId "
           + "ORDER BY p.createdAt DESC")
   List<Payment> findPaymentHistoryByUserId(@Param("userId") Long userId);
+
+
+  @Query("SELECT COUNT(p) FROM Payment p WHERE p.paymentSuccess = true AND p.createdAt < :before")
+  int countSuccessfulPaymentsBefore(@Param("before") LocalDateTime before);
+
+
+  @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p WHERE p.paymentSuccess = true AND p.createdAt BETWEEN :start AND :end")
+  Long sumSuccessfulPaymentsBetween(@Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+
 }
