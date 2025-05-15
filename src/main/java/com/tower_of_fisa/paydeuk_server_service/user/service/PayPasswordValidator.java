@@ -11,6 +11,13 @@ public class PayPasswordValidator {
         && checkNotSequentialDigits(payPassword);
   }
 
+  public boolean isValid(String newPaymentPinCode, String oldPaymentPinCode, String birthDate) {
+    return checkAllSameDigits(newPaymentPinCode)
+        && checkBirthDate(newPaymentPinCode, birthDate)
+        && checkNotSequentialDigits(newPaymentPinCode)
+        && !newPaymentPinCode.equals(oldPaymentPinCode);
+  }
+
   private boolean checkAllSameDigits(String payPassword) {
     char firstChar = payPassword.charAt(0);
     for (int i = 1; i < payPassword.length(); i++) {

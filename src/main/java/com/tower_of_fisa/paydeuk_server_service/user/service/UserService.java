@@ -3,6 +3,7 @@ package com.tower_of_fisa.paydeuk_server_service.user.service;
 import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.SetNewPaymentPinCodeRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.SetPayPasswordRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateProfileRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
@@ -44,7 +45,7 @@ public class UserService {
    * [간편 비밀 번호 설정] 사용자의 간편 비밀 번호를 설정합니다.
    *
    * @param userId 인증된 사용자 ID
-   * @param request 변경할 간편결제비밀번호를 담은 요청 DTO
+   * @param request 설정할 간편결제비밀번호를 담은 요청 DTO
    */
   @Transactional
   public void setPayPassword(Long userId, SetPayPasswordRequest request) {
@@ -56,5 +57,23 @@ public class UserService {
 
     if (payPasswordValidator.isValid(payPassword, user.getBirthDate()))
       user.changePayPassword(payPassword);
+  }
+
+  /**
+   * [간편 비밀 번호 설정] 사용자의 간편 비밀 번호를 설정합니다.
+   *
+   * @param userId 인증된 사용자 ID
+   * @param request 설정할 간편결제비밀번호를 담은 요청 DTO
+   */
+  public void setNewPaymentPinCode(Long userId, SetNewPaymentPinCodeRequest request) {
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+    String newPayPassword = request.getNewPinCode();
+    String oldPayPassword = user.getPayPassword();
+
+    if (payPasswordValidator.isValid(newPayPassword, oldPayPassword, user.getBirthDate()))
+      user.changePayPassword(newPayPassword);
   }
 }
