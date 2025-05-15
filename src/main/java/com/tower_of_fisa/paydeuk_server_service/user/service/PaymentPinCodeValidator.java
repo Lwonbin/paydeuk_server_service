@@ -1,5 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.user.service;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
@@ -33,7 +35,9 @@ public class PaymentPinCodeValidator {
   }
 
   private boolean checkBirthDate(String paymentPinCode, String birthDate) {
-    return !paymentPinCode.equals(birthDate);
+    LocalDate localDate = LocalDate.parse(birthDate, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+    String formattedBirthDate = localDate.format(DateTimeFormatter.ofPattern("yyMMdd"));
+    return !paymentPinCode.equals(formattedBirthDate);
   }
 
   private boolean checkNotSequentialDigits(String paymentPinCode) {
