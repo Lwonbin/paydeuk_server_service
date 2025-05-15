@@ -117,7 +117,7 @@ public class AuthService {
    * @return Map<String, String> - 재발급하는 Access 토큰과 Refresh 토큰
    */
   public Map<String, String> refreshAccessToken(String refreshToken) {
-
+    // RefreshToken 유효성 검증
     if (!jwtProvider.validateRefreshToken(refreshToken)) {
       throw new AuthCredientialException401(ErrorDefineCode.AUTHENTICATE_FAIL);
     }
@@ -129,11 +129,45 @@ public class AuthService {
             .orElseThrow(
                 () -> new AuthCredientialException401(ErrorDefineCode.AUTH_NOT_FOUND_EMAIL));
 
+    // Redis에 저장된 RefreshToken과 일치하는지 검증
+    if (!jwtProvider.validateStoredRefreshToken(user.getId(), refreshToken)) {
+      throw new AuthCredientialException401(ErrorDefineCode.AUTHENTICATE_FAIL);
+    }
+
+    // 기존 RefreshToken을 블랙리스트에 추가
+    jwtProvider.addToBlacklist(refreshToken);
+
+    // 새로운 토큰 발급
     String newAccessToken = jwtProvider.generateAccessToken(user);
     String newRefreshToken = jwtProvider.generateRefreshToken(user);
 
     return Map.of(
         "accessToken", newAccessToken,
         "refreshToken", newRefreshToken);
+  }
+
+  /**
+   * [로그아웃] 사용자의 토큰을 무효화하고 로그아웃 처리한다.
+   *
+   * @param accessToken String - 무효화할 Access 토큰
+   */
+  @Transactional
+  public void logout(String accessToken) {
+    if (!jwtProvider.validateAccessToken(accessToken)) {
+      throw new AuthCredientialException401(ErrorDefineCode.AUTHENTICATE_FAIL);
+    }
+
+    String username = jwtProvider.extractUsername(accessToken);
+    User user =
+        userRepository
+            .findByUsername(username)
+            .orElseThrow(
+                () -> new AuthCredientialException401(ErrorDefineCode.AUTH_NOT_FOUND_EMAIL));
+
+    // AccessToken을 블랙리스트에 추가
+    jwtProvider.addToBlacklist(accessToken);
+    
+    // RefreshToken 제거
+    jwtProvider.removeRefreshToken(user.getId());
   }
 }
