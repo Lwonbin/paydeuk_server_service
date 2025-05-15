@@ -1,13 +1,13 @@
 -- USERS TABLE:
 --      ROLE == USER
-INSERT INTO users (name, username, password, personal_auth_key, phone, email, pay_password, address, role, birth_date,
+INSERT INTO users (name, username, password, personal_auth_key, phone, email, payment_pin_code, address, role, birth_date,
                    status, created_at, updated_at)
 VALUES ('일반유저', 'user', '$2a$10$rRykd2BvvRKuyPcZmytSgOz07Aoqtjrz8jkiOnJSd21DjBFx12tLy', '12345', '010-1234-5678', 'test@test.com',
         NULL, '서울 마포구 월드컵북로 434 상암 IT Tower', 'USER', '1990-01-01', 'active', NOW(),
         NOW());
 
 --      ROLE == ADMIN
-INSERT INTO users (name, username, password, personal_auth_key, phone, email, pay_password, address, role, birth_date,
+INSERT INTO users (name, username, password, personal_auth_key, phone, email, payment_pin_code, address, role, birth_date,
                    status, created_at, updated_at)
 VALUES ('관리자', 'admin', '$2a$10$rRykd2BvvRKuyPcZmytSgOz07Aoqtjrz8jkiOnJSd21DjBFx12tLy', '1234', '010-0000-0000', 'admin@example.com', NULL, NULL, 'ADMIN',
         '1980-01-01', 'ACTIVE', NOW(), NOW());

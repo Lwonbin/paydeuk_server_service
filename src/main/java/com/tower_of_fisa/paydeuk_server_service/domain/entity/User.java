@@ -41,7 +41,7 @@ public class User extends BaseEntity {
   @Column(name = "email", length = 30)
   private String email;
 
-  @Column(name = "pay_password", length = 50)
+  @Column(name = "payment_pin_code", length = 50)
   private String paymentPinCode;
 
   @Column(name = "address", length = 30)
