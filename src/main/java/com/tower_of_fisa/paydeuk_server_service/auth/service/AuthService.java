@@ -166,7 +166,7 @@ public class AuthService {
 
     // AccessToken을 블랙리스트에 추가
     jwtProvider.addToBlacklist(accessToken);
-    
+
     // RefreshToken 제거
     jwtProvider.removeRefreshToken(user.getId());
   }
