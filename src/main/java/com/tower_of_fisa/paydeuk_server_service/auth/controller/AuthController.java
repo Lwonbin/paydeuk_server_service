@@ -25,7 +25,7 @@ public class AuthController {
 
   @PostMapping("/find-id")
   @Operation(
-      summary = "AUTH_01 : 아이디 찾기",
+      summary = "AUTH_04 : 아이디 찾기",
       description = "본인인증 후 발급받은 personal_auth_key를 통해 사용자의 아이디를 조회한다.")
   @ApiResponses(
       value = {
@@ -44,7 +44,7 @@ public class AuthController {
   }
 
   @PostMapping("/find-password")
-  @Operation(summary = "AUTH_02 : 비밀번호 찾기", description = "사용자의 이름과 아이디를 입력받아 본인인증을 수행합니다.")
+  @Operation(summary = "AUTH_05 : 비밀번호 찾기", description = "사용자의 이름과 아이디를 입력받아 본인인증을 수행합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(
@@ -74,7 +74,7 @@ public class AuthController {
   }
 
   @PostMapping("/reset-password")
-  @Operation(summary = "AUTH_03 : 비밀번호 재설정", description = "본인인증이 완료된 사용자의 비밀번호를 재설정합니다.")
+  @Operation(summary = "AUTH_06 : 비밀번호 재설정", description = "본인인증이 완료된 사용자의 비밀번호를 재설정합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(
