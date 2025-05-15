@@ -1,12 +1,9 @@
 package com.tower_of_fisa.paydeuk_server_service.admin.repository;
 
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Merchant;
-
-import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,8 +18,4 @@ public interface MerchantRepository extends JpaRepository<Merchant, Long> {
 
   @Query("SELECT COUNT(m) FROM Merchant m WHERE m.isActive = true")
   long countActiveMerchants();
-
-
-
-
 }

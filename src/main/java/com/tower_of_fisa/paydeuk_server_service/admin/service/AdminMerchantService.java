@@ -49,10 +49,9 @@ public class AdminMerchantService {
     LocalDate firstDayOfLastMonth = firstDayOfThisMonth.minusMonths(1);
     LocalDate lastDayOfLastMonth = firstDayOfThisMonth.minusDays(1);
 
-    Long lastMonthTotal = paymentRepository.sumSuccessfulPaymentsBetween(
-            firstDayOfLastMonth.atStartOfDay(),
-            lastDayOfLastMonth.atTime(LocalTime.MAX)
-    );
+    Long lastMonthTotal =
+        paymentRepository.sumSuccessfulPaymentsBetween(
+            firstDayOfLastMonth.atStartOfDay(), lastDayOfLastMonth.atTime(LocalTime.MAX));
 
     double percentChange = 0.0;
     if (lastMonthTotal != null && lastMonthTotal > 0) {
@@ -60,14 +59,13 @@ public class AdminMerchantService {
     }
 
     return new MerchantStatsResponse(
-            merchantCount,
-            transactionCount,
-            totalTransactionAmount,
-            averageTransactionAmount,
-            activeMerchantCount,
-            recent24hCount,
-            percentChange
-    );
+        merchantCount,
+        transactionCount,
+        totalTransactionAmount,
+        averageTransactionAmount,
+        activeMerchantCount,
+        recent24hCount,
+        percentChange);
   }
 
   /**
