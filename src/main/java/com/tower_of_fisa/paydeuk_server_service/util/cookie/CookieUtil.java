@@ -4,6 +4,9 @@ import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class CookieUtil {
+
+  private CookieUtil() {}
+
   public static void setRefreshTokenCookie(HttpServletResponse response, String refreshToken) {
     Cookie refreshCookie = new Cookie("refreshToken", refreshToken);
     refreshCookie.setHttpOnly(true); // XSS 공격 방지
