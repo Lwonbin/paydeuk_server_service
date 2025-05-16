@@ -44,6 +44,44 @@ jobs:
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
           restore-keys: ${{ runner.os }}-gradle
 
+      - name: Start MySQL
+        run: |
+          docker run -d \
+            --name mysql \
+            -e MYSQL_ROOT_PASSWORD=${{ needs.setup-mysql.outputs.db-password }} \
+            -e MYSQL_DATABASE=paydeuk \
+            -p ${{ needs.setup-mysql.outputs.db-port }}:3306 \
+            mysql:8
+
+      - name: Wait for MySQL
+        run: |
+          for i in {30..0}; do
+            docker exec mysql mysqladmin ping \
+              -u${{ needs.setup-mysql.outputs.db-username }} \
+              -p${{ needs.setup-mysql.outputs.db-password }} --silent && break
+            echo "⏳ Waiting for MySQL... ($i)"
+            sleep 2
+          done
+
+      - name: Start Redis
+        run: |
+          docker run -d \
+            --name redis \
+            -e REDIS_PASSWORD=${{ needs.setup-redis.outputs.redis-password }} \
+            -p ${{ needs.setup-redis.outputs.redis-port }}:6379 \
+            redis:7 \
+            --requirepass ${{ needs.setup-redis.outputs.redis-password }}
+
+      - name: Wait for Redis
+        run: |
+          for i in {30..0}; do
+            redis-cli -h ${{ needs.setup-redis.outputs.redis-host }} \
+                      -p ${{ needs.setup-redis.outputs.redis-port }} \
+                      -a ${{ needs.setup-redis.outputs.redis-password }} ping | grep PONG && break
+            echo "⏳ Waiting for Redis... ($i)"
+            sleep 2
+          done
+
       - name: Create application-secret.yaml
         run: |
           cat <<EOF > ./src/main/resources/application-secret.yml
@@ -58,7 +96,6 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          # Optional: If you use MySQL/Redis connection details in env
           MYSQL_HOST: ${{ needs.setup-mysql.outputs.db-host }}
           MYSQL_PORT: ${{ needs.setup-mysql.outputs.db-port }}
           MYSQL_USER: ${{ needs.setup-mysql.outputs.db-username }}
