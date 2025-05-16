@@ -48,8 +48,10 @@ public class UserCardController {
       @AuthenticationPrincipal CustomUserDetails userDetails,
       @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
       @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
-    Page<PaymentHistoryResponse> payments = userCardService.getPaymentHistory(userDetails.getId(),page,size);
-    return new CommonResponse<>(true, HttpStatus.OK, "결제 내역 조회에 성공했습니다.", CustomPageResDto.fromPage(payments));
+    Page<PaymentHistoryResponse> payments =
+        userCardService.getPaymentHistory(userDetails.getId(), page, size);
+    return new CommonResponse<>(
+        true, HttpStatus.OK, "결제 내역 조회에 성공했습니다.", CustomPageResDto.fromPage(payments));
   }
 
   @PostMapping

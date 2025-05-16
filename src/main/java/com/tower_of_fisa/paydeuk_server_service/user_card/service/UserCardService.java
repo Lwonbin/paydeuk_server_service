@@ -64,7 +64,8 @@ public class UserCardService {
   public Page<PaymentHistoryResponse> getPaymentHistory(Long userId, int page, int size) {
     Pageable pageable = PageRequest.of(page - 1, size);
 
-    return paymentRepository.findPaymentHistoryByUserId(userId,pageable)
+    return paymentRepository
+        .findPaymentHistoryByUserId(userId, pageable)
         .map(
             payment ->
                 PaymentHistoryResponse.builder()
