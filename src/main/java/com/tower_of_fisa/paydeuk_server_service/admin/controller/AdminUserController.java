@@ -3,7 +3,7 @@ package com.tower_of_fisa.paydeuk_server_service.admin.controller;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.UserListResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.UserStatsResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.service.AdminUserService;
-import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

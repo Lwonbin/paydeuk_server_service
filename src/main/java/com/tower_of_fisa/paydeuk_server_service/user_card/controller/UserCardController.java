@@ -1,9 +1,9 @@
 package com.tower_of_fisa.paydeuk_server_service.user_card.controller;
 
-import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
-import com.tower_of_fisa.paydeuk_server_service.common.response.EmptyResponse;
-import com.tower_of_fisa.paydeuk_server_service.common.response.swagger_response.SwaggerResponseExample;
-import com.tower_of_fisa.paydeuk_server_service.config.security.CustomUserDetails;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.EmptyResponse;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.swagger_response.SwaggerResponseExample;
+import com.tower_of_fisa.paydeuk_server_service.global.config.security.CustomUserDetails;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.AddCardRequest;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.MyCardResponse;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.PaymentHistoryResponse;

@@ -1,15 +1,15 @@
 package com.tower_of_fisa.paydeuk_server_service.example.controller;
 
-import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
-import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
-import com.tower_of_fisa.paydeuk_server_service.common.response.SwaggerErrorResponseType;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.ForbiddenException403;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.UnsupportedMediaTypeException415;
 import com.tower_of_fisa.paydeuk_server_service.example.dto.ExampleRequest;
 import com.tower_of_fisa.paydeuk_server_service.example.dto.ExampleResponse;
 import com.tower_of_fisa.paydeuk_server_service.example.dto.ExampleValidationRequest;
 import com.tower_of_fisa.paydeuk_server_service.example.service.ExampleService;
+import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.SwaggerErrorResponseType;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.ForbiddenException403;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.NoSuchElementFoundException404;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.UnsupportedMediaTypeException415;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;

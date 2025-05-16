@@ -1,8 +1,8 @@
 package com.tower_of_fisa.paydeuk_server_service.user.service;
 
-import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
+import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.NoSuchElementFoundException404;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateAddressRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateEmailRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UserInfoResponse;
