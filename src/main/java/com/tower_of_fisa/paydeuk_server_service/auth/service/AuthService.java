@@ -11,6 +11,8 @@ import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserRole;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
+import com.tower_of_fisa.paydeuk_server_service.util.cookie.CookieUtil;
+import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -116,7 +118,7 @@ public class AuthService {
    * @param refreshToken String - 검증할 Refresh 토큰
    * @return Map<String, String> - 재발급하는 Access 토큰과 Refresh 토큰
    */
-  public Map<String, String> refreshAccessToken(String refreshToken) {
+  public Map<String, String> refreshAccessToken(String refreshToken, HttpServletResponse response) {
     // RefreshToken 유효성 검증
     if (!jwtProvider.validateRefreshToken(refreshToken)) {
       throw new AuthCredientialException401(ErrorDefineCode.AUTHENTICATE_FAIL);
@@ -141,9 +143,9 @@ public class AuthService {
     String newAccessToken = jwtProvider.generateAccessToken(user);
     String newRefreshToken = jwtProvider.generateRefreshToken(user);
 
-    return Map.of(
-        "accessToken", newAccessToken,
-        "refreshToken", newRefreshToken);
+    CookieUtil.setRefreshTokenCookie(response, newRefreshToken);
+
+    return Map.of("accessToken", newAccessToken);
   }
 
   /**
@@ -152,7 +154,7 @@ public class AuthService {
    * @param accessToken String - 무효화할 Access 토큰
    */
   @Transactional
-  public void logout(String accessToken) {
+  public void logout(String accessToken, HttpServletResponse response) {
     if (!jwtProvider.validateAccessToken(accessToken)) {
       throw new AuthCredientialException401(ErrorDefineCode.AUTHENTICATE_FAIL);
     }
@@ -169,5 +171,7 @@ public class AuthService {
 
     // RefreshToken 제거
     jwtProvider.removeRefreshToken(user.getId());
+
+    CookieUtil.deleteRefreshTokenCookie(response);
   }
 }

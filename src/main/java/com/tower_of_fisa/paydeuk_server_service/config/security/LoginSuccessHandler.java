@@ -2,6 +2,7 @@ package com.tower_of_fisa.paydeuk_server_service.config.security;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.util.cookie.CookieUtil;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -41,11 +42,12 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
     Map<String, String> tokenMap =
         Map.of(
             "accessToken", accessToken,
-            "refreshToken", refreshToken,
             "redirectUrl", redirectUrl);
 
     CommonResponse<Map<String, String>> commonResponse =
         new CommonResponse<>(true, HttpStatus.OK, "로그인에 성공했습니다.", tokenMap);
+
+    CookieUtil.setRefreshTokenCookie(response, refreshToken);
 
     response.setStatus(HttpStatus.OK.value());
     response.setContentType("application/json");

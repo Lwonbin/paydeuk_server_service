@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
@@ -119,9 +120,8 @@ public class AuthController {
             content = {@Content(schema = @Schema(implementation = SwaggerErrorResponseType.class))})
       })
   public CommonResponse<Map<String, String>> refreshAccessToken(
-      @RequestHeader("Authorization") String authHeader) {
-    String refreshToken = authHeader.replace("Bearer ", "");
-    Map<String, String> tokens = authService.refreshAccessToken(refreshToken);
+      @CookieValue("refreshToken") String refreshToken, HttpServletResponse response) {
+    Map<String, String> tokens = authService.refreshAccessToken(refreshToken, response);
     return new CommonResponse<>(true, HttpStatus.OK, "AccessToken 재발급 성공했습니다", tokens);
   }
 
@@ -135,9 +135,10 @@ public class AuthController {
             description = "유효하지 않은 토큰",
             content = {@Content(schema = @Schema(implementation = SwaggerErrorResponseType.class))})
       })
-  public CommonResponse<Void> logout(@RequestHeader("Authorization") String authHeader) {
+  public CommonResponse<Void> logout(
+      @RequestHeader("Authorization") String authHeader, HttpServletResponse response) {
     String accessToken = authHeader.replace("Bearer ", "");
-    authService.logout(accessToken);
+    authService.logout(accessToken, response);
     return new CommonResponse<>(true, HttpStatus.OK, "로그아웃이 완료되었습니다.", null);
   }
 }
