@@ -128,8 +128,30 @@ public class AdminMerchantService {
 
     int avgAmount = transactionCount == 0 ? 0 : (int) (totalAmount / transactionCount);
 
+    int totalCount = paymentRepository.countByMerchantIdAndPaymentSuccessTrue(merchantId);
+    LocalDateTime now = LocalDateTime.now();
+    LocalDateTime from24hAgo = now.minusHours(24);
+    int countUntil24hAgo = paymentRepository.countByMerchantIdAndPaymentSuccessTrueBefore(merchantId, from24hAgo);
+    int recent24hCount = totalCount - countUntil24hAgo;
+
+    LocalDate firstDayOfThisMonth = now.withDayOfMonth(1).toLocalDate();
+    LocalDate firstDayOfLastMonth = firstDayOfThisMonth.minusMonths(1);
+    LocalDate lastDayOfLastMonth = firstDayOfThisMonth.minusDays(1);
+
+    Long lastMonthTotal = paymentRepository.sumSuccessfulPaymentsForMerchantBetween(
+            merchantId,
+            firstDayOfLastMonth.atStartOfDay(),
+            lastDayOfLastMonth.atTime(LocalTime.MAX)
+    );
+
+    double percentChange = 0.0;
+    if (lastMonthTotal != null && lastMonthTotal > 0) {
+      percentChange = ((double)(totalAmount - lastMonthTotal) / lastMonthTotal) * 100;
+    }
+
+
     return new MerchantIndividualStatsResponse(
-        transactionCount, totalAmount, avgAmount, merchant.getCommissionRate());
+        transactionCount, totalAmount, avgAmount, merchant.getCommissionRate(), recent24hCount, percentChange);
   }
 
   /**

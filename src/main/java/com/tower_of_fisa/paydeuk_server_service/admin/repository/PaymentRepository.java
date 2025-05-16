@@ -77,4 +77,25 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
           + " p.createdAt BETWEEN :start AND :end")
   Long sumSuccessfulPaymentsBetween(
       @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
+
+
+
+  @Query("SELECT COUNT(p) FROM Payment p WHERE p.merchant.id = :merchantId AND p.paymentSuccess = true AND p.createdAt < :before")
+  int countByMerchantIdAndPaymentSuccessTrueBefore(
+          @Param("merchantId") Long merchantId,
+          @Param("before") LocalDateTime before
+  );
+
+  @Query(
+          "SELECT COALESCE(SUM(p.amount), 0) FROM Payment p " +
+                  "WHERE p.merchant.id = :merchantId AND p.paymentSuccess = true " +
+                  "AND p.createdAt BETWEEN :start AND :end"
+  )
+  Long sumSuccessfulPaymentsForMerchantBetween(
+          @Param("merchantId") Long merchantId,
+          @Param("start") LocalDateTime start,
+          @Param("end") LocalDateTime end
+  );
+
+
 }
