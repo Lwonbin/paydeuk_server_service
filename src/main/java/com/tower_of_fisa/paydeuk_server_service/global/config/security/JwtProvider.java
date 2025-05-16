@@ -1,6 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.global.config.security;
 
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
@@ -89,9 +90,13 @@ public class JwtProvider {
    * @return true이면 만료됨, false이면 만료되지 않음
    */
   public boolean isTokenExpired(String token) {
-    Date expiration =
-        Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration();
-    return expiration.before(new Date());
+    try {
+      Date expiration =
+          Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody().getExpiration();
+      return expiration.before(new Date());
+    } catch (ExpiredJwtException e) {
+      return true;
+    }
   }
 
   /**
