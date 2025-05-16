@@ -28,7 +28,6 @@ public enum ErrorDefineCode {
   // PIN_CODE_SAME_AS_CURRENT("PIN_02", "기존 비밀번호와 동일한 비밀번호는 사용할 수 없습니다."),
   WRONG_PAYMENT_PIN_CODE("PIN_03", "간편 결제 비밀번호가 일치 하지 않습니다.");
 
-
   private final String code;
   private final String message;
 }
