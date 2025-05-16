@@ -22,7 +22,7 @@ public class MerchantIndividualStatsResponse {
   private String commissionRate;
 
   @Schema(description = "24시간동안 가맹점의 결제 성공 건수", example = "10")
-  int recent24hTransactionCount; // ← 이거
+  int recent24hTransactionCount;
 
   @Schema(description = "전월 대비 증가율 (%)", example = "3.0%")
   private double percentChange;
