@@ -53,6 +53,16 @@ jobs:
             -p ${{ needs.setup-mysql.outputs.db-port }}:3306 \
             mysql:8
 
+      - name: Wait for MySQL
+        run: |
+          for i in {30..0}; do
+            docker exec mysql mysqladmin ping \
+              -u${{ needs.setup-mysql.outputs.db-username }} \
+              -p${{ needs.setup-mysql.outputs.db-password }} --silent && break
+            echo "⏳ Waiting for MySQL... ($i)"
+            sleep 2
+          done
+
       - name: Start Redis
         run: |
           docker run -d \
@@ -61,16 +71,6 @@ jobs:
             -p ${{ needs.setup-redis.outputs.redis-port }}:6379 \
             redis:7 \
             --requirepass ${{ needs.setup-redis.outputs.redis-password }}
-
-      - name: Wait for Redis
-        run: |
-          for i in {30..0}; do
-            redis-cli -h ${{ needs.setup-redis.outputs.redis-host }} \
-                      -p ${{ needs.setup-redis.outputs.redis-port }} \
-                      -a ${{ needs.setup-redis.outputs.redis-password }} ping | grep PONG && break
-            echo "⏳ Waiting for Redis... ($i)"
-            sleep 2
-          done
 
       - name: Create application-secret.yaml
         run: |
