@@ -9,10 +9,10 @@ on:
 
 jobs:
   setup-mysql:
-    uses: ./.github/workflows/setup-mysql.yml
+    uses: ./.github/workflows/mysql-setting.yaml
 
   setup-redis:
-    uses: ./.github/workflows/setup-redis.yml
+    uses: ./.github/workflows/redis-setting.yaml
 
   build:
     name: Build and analyze
