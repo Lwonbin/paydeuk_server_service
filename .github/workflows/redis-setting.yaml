@@ -5,19 +5,17 @@ on:
     inputs:
       environment:
         required: false
+        type: string
     outputs:
       redis-host:
         description: "Redis host address"
         value: ${{ jobs.redis-setup.outputs.redis-host }}
-        type: string
       redis-port:
         description: "Redis port"
         value: ${{ jobs.redis-setup.outputs.redis-port }}
-        type: string
       redis-password:
         description: "Redis password"
         value: ${{ jobs.redis-setup.outputs.redis-password }}
-        type: string
 
 jobs:
   redis-setup:
