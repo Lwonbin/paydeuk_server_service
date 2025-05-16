@@ -3,6 +3,7 @@ package com.tower_of_fisa.paydeuk_server_service.admin.service;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.UserListResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.UserStatsResponse;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserRole;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import java.util.List;
@@ -22,7 +23,10 @@ public class AdminUserService {
    * @return List<UserListResponse> - 사용자 목록
    */
   public List<UserListResponse> getAllUsers() {
-    return userRepository.findAll().stream().map(this::convertToDto).toList();
+    return userRepository.findAll().stream()
+        .filter(user -> user.getRole() == UserRole.USER) // 일반 사용자만 필터링
+        .map(this::convertToDto)
+        .toList();
   }
 
   /**
@@ -31,7 +35,10 @@ public class AdminUserService {
    * @return UserStatsResponse - 사용자 통계 정보
    */
   public UserStatsResponse getUserStats() {
-    List<User> users = userRepository.findAll();
+    List<User> users =
+        userRepository.findAll().stream()
+            .filter(user -> user.getRole() == UserRole.USER) // 일반 사용자만 필터링
+            .toList();
     long totalUsers = users.size();
     long activeUsers = users.stream().filter(user -> user.getStatus() == UserStatus.ACTIVE).count();
     long inactiveUsers =
