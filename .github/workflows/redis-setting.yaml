@@ -1,0 +1,35 @@
+# .github/workflows/redis-setting.yaml
+
+name: Redis Setting - called_workflow
+
+on:
+  workflow_call:
+    inputs:
+      environment:
+        required: false
+        type: string
+    outputs:
+      redis-host:
+        description: "Redis host address"
+        value: ${{ jobs.output-vars.outputs.redis-host }}
+      redis-port:
+        description: "Redis port"
+        value: ${{ jobs.output-vars.outputs.redis-port }}
+      redis-password:
+        description: "Redis password"
+        value: ${{ jobs.output-vars.outputs.redis-password }}
+
+jobs:
+  output-vars:
+    runs-on: ubuntu-latest
+    outputs:
+      redis-host: ${{ steps.set-vars.outputs.redis-host }}
+      redis-port: ${{ steps.set-vars.outputs.redis-port }}
+      redis-password: ${{ steps.set-vars.outputs.redis-password }}
+
+    steps:
+      - id: set-vars
+        run: |
+          echo "redis-host=127.0.0.1" >> $GITHUB_OUTPUT
+          echo "redis-port=6379" >> $GITHUB_OUTPUT
+          echo "redis-password=1234" >> $GITHUB_OUTPUT

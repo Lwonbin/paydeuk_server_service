@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Tag(name = "관리자용 가맹점 관리 API", description = "관리자용 가맹점 관리 API")
+@Tag(name = "5 - Admin Merchant API", description = "관리자용 가맹점 관리 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/merchants")

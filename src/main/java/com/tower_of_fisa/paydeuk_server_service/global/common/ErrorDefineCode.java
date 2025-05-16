@@ -24,7 +24,9 @@ public enum ErrorDefineCode {
   ACCESSTOKEN_EXPIRED("AUT_02", "Access Token이 만료되었습니다."),
   DUPLICATE_USERNAME("USR_03", "이미 사용 중인 아이디입니다."),
   CARD_NOT_FOUND("CAR_01", "해당 카드를 찾을 수 없습니다."),
-  ;
+  INVALID_PAYMENT_PIN_CODE("PIN_01", "적절하지 않은 비밀번호 형식입니다."),
+  ALREADY_HAS_PIN_CODE("PIN_02", "간편 결제 비밀번호가 이미 설정되었습니다."),
+  WRONG_PAYMENT_PIN_CODE("PIN_03", "간편 결제 비밀번호가 일치 하지 않습니다.");
 
   private final String code;
   private final String message;

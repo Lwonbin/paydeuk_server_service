@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/auth")
-@Tag(name = "Auth API", description = "인증 관련 API")
+@Tag(name = "1 - Auth API", description = "인증 관련 API")
 public class VerifyController {
 
   private final VerifyService verifyService;
@@ -36,7 +36,7 @@ public class VerifyController {
    */
   @GetMapping("/verification")
   @Operation(
-      summary = "AUTH_02 : 본인인증 결과 조회",
+      summary = "AUTH_07 : 본인인증 결과 조회",
       description = "imp_uid를 이용하여 iamport로부터 본인인증 결과를 조회한다.")
   @ApiResponses(
       value = {
