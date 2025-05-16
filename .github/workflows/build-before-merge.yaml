@@ -7,8 +7,8 @@ jobs:
   setup-mysql:
     uses: ./.github/workflows/mysql-setting.yaml
 
-    setup-redis:
-      uses: ./.github/workflows/redis-setting.yaml
+  setup-redis:
+    uses: ./.github/workflows/redis-setting.yaml
 
   validate-pr:
     runs-on: ubuntu-latest
@@ -93,8 +93,8 @@ jobs:
           REDIS_HOST: ${{ needs.setup-redis.outputs.redis-host }}
           REDIS_PORT: ${{ needs.setup-redis.outputs.redis-port }}
           REDIS_PASSWORD: ${{ needs.setup-redis.outputs.redis-password }}
-          run: ./gradlew build --info
-          continue-on-error: true
+        run: ./gradlew build --info
+        continue-on-error: true
 
       - name: Leave comment on Github Actions Log
         if: steps.check.outcome == 'failure'
