@@ -1,4 +1,5 @@
 name: SonarQube
+
 on:
   push:
     branches:
@@ -7,13 +8,21 @@ on:
     types: [ opened, synchronize, reopened ]
 
 jobs:
+  setup-mysql:
+    uses: ./.github/workflows/setup-mysql.yml
+
+  setup-redis:
+    uses: ./.github/workflows/setup-redis.yml
+
   build:
     name: Build and analyze
+    needs: [ setup-mysql, setup-redis ]
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0
 
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -49,4 +58,12 @@ jobs:
       - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          # Optional: If you use MySQL/Redis connection details in env
+          MYSQL_HOST: ${{ needs.setup-mysql.outputs.db-host }}
+          MYSQL_PORT: ${{ needs.setup-mysql.outputs.db-port }}
+          MYSQL_USER: ${{ needs.setup-mysql.outputs.db-username }}
+          MYSQL_PASSWORD: ${{ needs.setup-mysql.outputs.db-password }}
+          REDIS_HOST: ${{ needs.setup-redis.outputs.redis-host }}
+          REDIS_PORT: ${{ needs.setup-redis.outputs.redis-port }}
+          REDIS_PASSWORD: ${{ needs.setup-redis.outputs.redis-password }}
         run: ./gradlew build sonar --info
