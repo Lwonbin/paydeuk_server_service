@@ -2,8 +2,8 @@ package com.tower_of_fisa.paydeuk_server_service.auth.controller;
 
 import com.tower_of_fisa.paydeuk_server_service.auth.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.auth.service.AuthService;
-import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
-import com.tower_of_fisa.paydeuk_server_service.common.response.SwaggerErrorResponseType;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.SwaggerErrorResponseType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;

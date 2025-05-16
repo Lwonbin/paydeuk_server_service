@@ -1,8 +1,8 @@
 package com.tower_of_fisa.paydeuk_server_service.domain.entity;
 
-import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserRole;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
+import com.tower_of_fisa.paydeuk_server_service.global.common.BaseEntity;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
