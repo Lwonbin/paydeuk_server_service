@@ -8,6 +8,9 @@ import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,11 +25,10 @@ public class AdminUserService {
    *
    * @return List<UserListResponse> - 사용자 목록
    */
-  public List<UserListResponse> getAllUsers() {
-    return userRepository.findAll().stream()
-        .filter(user -> user.getRole() == UserRole.USER) // 일반 사용자만 필터링
-        .map(this::convertToDto)
-        .toList();
+  public Page<UserListResponse> getAllUsers(int page, int size) {
+    Pageable pageable = PageRequest.of(page - 1, size);
+    return userRepository.findByRole(pageable) // 일반 사용자만 필터링
+        .map(this::convertToDto);
   }
 
   /**

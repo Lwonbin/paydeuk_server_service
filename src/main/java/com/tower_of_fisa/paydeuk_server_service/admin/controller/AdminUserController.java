@@ -4,17 +4,20 @@ import com.tower_of_fisa.paydeuk_server_service.admin.dto.UserListResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.UserStatsResponse;
 import com.tower_of_fisa.paydeuk_server_service.admin.service.AdminUserService;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.global.dto.CustomPageResDto;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Admin User API", description = "관리자용 사용자 관련 API")
@@ -30,12 +33,15 @@ public class AdminUserController {
       value = {
         @ApiResponse(
             responseCode = "200",
-            description = "사용자 목록 조회 성공",
-            content = {@Content(schema = @Schema(implementation = UserListResponse.class))})
+            description = "사용자 목록 조회 성공"
+            )
       })
-  public CommonResponse<List<UserListResponse>> getAllUsers() {
-    List<UserListResponse> result = adminUserService.getAllUsers();
-    return new CommonResponse<>(true, HttpStatus.OK, "사용자 목록 조회에 성공했습니다", result);
+  public CommonResponse<CustomPageResDto<UserListResponse>> getAllUsers(
+          @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
+          @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size
+  ) {
+    Page<UserListResponse> result = adminUserService.getAllUsers(page,size);
+    return new CommonResponse<>(true, HttpStatus.OK, "사용자 목록 조회에 성공했습니다", CustomPageResDto.fromPage(result));
   }
 
   @GetMapping("/stats")
