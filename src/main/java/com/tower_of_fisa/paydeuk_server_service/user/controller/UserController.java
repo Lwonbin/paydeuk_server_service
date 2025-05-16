@@ -4,6 +4,8 @@ import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonRes
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.EmptyResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.swagger_response.SwaggerResponseExample;
 import com.tower_of_fisa.paydeuk_server_service.global.config.security.CustomUserDetails;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.PaymentPinCodeRequest;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.SetNewPaymentPinCodeRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateAddressRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateEmailRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UserInfoResponse;
@@ -23,7 +25,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/user")
 @RequiredArgsConstructor
-@Tag(name = "회원", description = "사용자 정보 관련 API")
+@Tag(name = "2- User API", description = "사용자 정보 관련 API")
 public class UserController {
 
   private final UserService userService;
@@ -85,8 +87,77 @@ public class UserController {
     return new CommonResponse<>(true, HttpStatus.OK, "사용자가 존재합니다.", new EmptyResponse());
   }
 
+  @PostMapping("/payment-pin-code")
+  @Operation(summary = "USER_04 : 간편 결제 비밀번호 설정", description = "간편 결제 비밀번호를 설정합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "간편 결제 비밀번호 설정 성공"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "형식에 맞지 않는 비밀번호",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.PIN_400_01)})),
+        @ApiResponse(
+            responseCode = "404",
+            description = "사용자를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
+      })
+  public CommonResponse<EmptyResponse> setPaymentPinCode(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestBody @Valid PaymentPinCodeRequest request) {
+    userService.setPaymentPinCode(userDetails.getId(), request);
+    return new CommonResponse<>(true, HttpStatus.OK, "간편 결제 비밀번호를 설정하였습니다.", new EmptyResponse());
+  }
+
+  @PatchMapping("/payment-pin-code")
+  @Operation(summary = "USER_05 : 간편 결제 비밀번호 변경", description = "간편 결제 비밀번호를 변경합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "간편 결제 비밀번호 변경 성공"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "형식에 맞지 않는 비밀번호",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.PIN_400_01)})),
+        @ApiResponse(
+            responseCode = "404",
+            description = "사용자를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
+      })
+  public CommonResponse<EmptyResponse> setNewPaymentPinCode(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestBody @Valid SetNewPaymentPinCodeRequest request) {
+    userService.setNewPaymentPinCode(userDetails.getId(), request);
+    return new CommonResponse<>(true, HttpStatus.OK, "간편 결제 비밀번호를 변경하였습니다.", new EmptyResponse());
+  }
+
+  @PostMapping("/payment-pin-code/verify")
+  @Operation(summary = "USER_06 : 간편 결제 비밀번호 검증", description = "간편 결제 비밀번호를 검증합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "간편 결제 비밀번호 검증 성공"),
+        @ApiResponse(
+            responseCode = "400",
+            description = "비밀번호가 일치하지 않음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.PIN_400_03)})),
+        @ApiResponse(
+            responseCode = "404",
+            description = "사용자를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
+      })
+  public CommonResponse<EmptyResponse> verifyPaymentPinCode(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestBody @Valid PaymentPinCodeRequest request) {
+    userService.verifyPaymentPinCode(userDetails.getId(), request);
+    return new CommonResponse<>(true, HttpStatus.OK, "간편 결제 비밀번호가 일치합니다.", new EmptyResponse());
+  }
+
   @GetMapping("/profile")
-  @Operation(summary = "USER_04 : 내 정보 조회", description = "로그인한 사용자의 정보를 조회합니다.")
+  @Operation(summary = "USER_07 : 내 정보 조회", description = "로그인한 사용자의 정보를 조회합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "내 정보 조회 성공"),
