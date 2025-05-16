@@ -4,7 +4,6 @@ import com.tower_of_fisa.paydeuk_server_service.admin.repository.PaymentReposito
 import com.tower_of_fisa.paydeuk_server_service.card.repository.CardRepository;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Card;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.CardBenefit;
-import com.tower_of_fisa.paydeuk_server_service.domain.entity.Payment;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.UserCard;
 import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
@@ -15,6 +14,9 @@ import com.tower_of_fisa.paydeuk_server_service.user_card.repository.UserCardRep
 import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,10 +61,10 @@ public class UserCardService {
    * @param userId Long - 유저 ID
    * @return List<PaymentHistoryResponse> - 결제 내역 리스트
    */
-  public List<PaymentHistoryResponse> getPaymentHistory(Long userId) {
-    List<Payment> payments = paymentRepository.findPaymentHistoryByUserId(userId);
+  public Page<PaymentHistoryResponse> getPaymentHistory(Long userId, int page, int size) {
+    Pageable pageable = PageRequest.of(page - 1, size);
 
-    return payments.stream()
+    return paymentRepository.findPaymentHistoryByUserId(userId,pageable)
         .map(
             payment ->
                 PaymentHistoryResponse.builder()
@@ -73,8 +75,7 @@ public class UserCardService {
                     .discountAmount(payment.getDiscountAmount())
                     .applicationBenefit(payment.getCardBenefit().getBenefit().getDescription())
                     .createdAt(payment.getCreatedAt())
-                    .build())
-        .toList();
+                    .build());
   }
 
   /**
