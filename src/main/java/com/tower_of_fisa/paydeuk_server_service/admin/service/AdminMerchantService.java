@@ -148,15 +148,16 @@ public class AdminMerchantService {
    */
   public Page<MerchantAllResponse> getAllMerchants(int page, int size) {
     Pageable pageable = PageRequest.of(page - 1, size);
-    return merchantRepository.findAllMerchantsWithPayment(pageable)
-            .map(
-                    result -> {
-                      Merchant merchant = (Merchant) result[0];
-                      Long transactionCount = (Long) result[1];
-                      Long totalAmount = (Long) result[2];
+    return merchantRepository
+        .findAllMerchantsWithPayment(pageable)
+        .map(
+            result -> {
+              Merchant merchant = (Merchant) result[0];
+              Long transactionCount = (Long) result[1];
+              Long totalAmount = (Long) result[2];
 
-                      return MerchantAllResponse.from(merchant, transactionCount, totalAmount);
-                    });
+              return MerchantAllResponse.from(merchant, transactionCount, totalAmount);
+            });
   }
 
   /**
