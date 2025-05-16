@@ -13,6 +13,9 @@ import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -143,17 +146,17 @@ public class AdminMerchantService {
    *
    * @return List<MerchantAllResponse> - 가맹점 정보 리스트
    */
-  public List<MerchantAllResponse> getAllMerchants() {
-    return merchantRepository.findAllMerchantsWithPayment().stream()
-        .map(
-            result -> {
-              Merchant merchant = (Merchant) result[0];
-              Long transactionCount = (Long) result[1];
-              Long totalAmount = (Long) result[2];
+  public Page<MerchantAllResponse> getAllMerchants(int page, int size) {
+    Pageable pageable = PageRequest.of(page - 1, size);
+    return merchantRepository.findAllMerchantsWithPayment(pageable)
+            .map(
+                    result -> {
+                      Merchant merchant = (Merchant) result[0];
+                      Long transactionCount = (Long) result[1];
+                      Long totalAmount = (Long) result[2];
 
-              return MerchantAllResponse.from(merchant, transactionCount, totalAmount);
-            })
-        .toList();
+                      return MerchantAllResponse.from(merchant, transactionCount, totalAmount);
+                    });
   }
 
   /**

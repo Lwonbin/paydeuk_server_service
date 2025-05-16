@@ -6,7 +6,7 @@ import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.EmptyResponse;
 import com.tower_of_fisa.paydeuk_server_service.common.response.SwaggerErrorResponseType;
 import com.tower_of_fisa.paydeuk_server_service.common.response.swagger_response.SwaggerResponseExample;
-import com.tower_of_fisa.paydeuk_server_service.config.security.CustomUserDetails;
+import com.tower_of_fisa.paydeuk_server_service.global.dto.CustomPageResDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -18,8 +18,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
@@ -81,12 +81,11 @@ public class AdminMerchantController {
   @GetMapping
   @Operation(summary = "ADMIN_05 : 가맹점 목록 조회", description = "등록된 모든 가맹점의 목록을 조회합니다.")
   @ApiResponse(responseCode = "200", description = "가맹점 목록 조회 성공")
-  public CommonResponse<List<MerchantAllResponse>> getAllMerchants(
-      @AuthenticationPrincipal CustomUserDetails userDetails) {
-    Long userId = userDetails.getId();
-    log.info("현재 로그인한 유저 id : {}", userId);
-    List<MerchantAllResponse> merchants = adminMerchantService.getAllMerchants();
-    return new CommonResponse<>(true, HttpStatus.OK, "가맹점 목록 조회에 성공했습니다.", merchants);
+  public CommonResponse<CustomPageResDto<MerchantAllResponse>> getAllMerchants(
+      @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
+      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
+    Page<MerchantAllResponse> merchants = adminMerchantService.getAllMerchants(page,size);
+    return new CommonResponse<>(true, HttpStatus.OK, "가맹점 목록 조회에 성공했습니다.", CustomPageResDto.fromPage(merchants));
   }
 
   @Operation(summary = "ADMIN_06 : 가맹점 상세 조회", description = "특정 가맹점의 상세 정보를 조회합니다.")
