@@ -3,24 +3,20 @@ name: MySQL Setting - called_workflow
 on:
   workflow_call:
     outputs:
-      db-host:
-        description: 'Database host'
-        value: ${{ jobs.setup-mysql.outputs.db-host }}
-        db-port:
-          description: 'Database port'
-          value: ${{ jobs.setup-mysql.outputs.db-port }}
-        db-username:
-          description: 'Database username'
-          value: ${{ jobs.setup-mysql.outputs.db-username }}
-        db-password:
-          description: 'Database password'
-          value: ${{ jobs.setup-mysql.outputs.db-password }}
+      db-port:
+        description: "MySQL port"
+        value: ${{ jobs.setup-mysql.outputs.db-port }}
+      db-username:
+        description: "MySQL user"
+        value: ${{ jobs.setup-mysql.outputs.db-username }}
+      db-password:
+        description: "MySQL password"
+        value: ${{ jobs.setup-mysql.outputs.db-password }}
 
 jobs:
   setup-mysql:
     runs-on: ubuntu-latest
     outputs:
-      db-host: ${{ steps.set-vars.outputs.db-host }}
       db-port: ${{ steps.set-vars.outputs.db-port }}
       db-username: ${{ steps.set-vars.outputs.db-username }}
       db-password: ${{ steps.set-vars.outputs.db-password }}
@@ -28,12 +24,12 @@ jobs:
     steps:
       - name: Start MySQL
         run: |
-          docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=1234 -e MYSQL_DATABASE=paydeuk -p 3306:3306 -d mysql:8
+          docker run --name mysql-container -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=testdb -p 3306:3306 -d mysql:8
 
-      - name: Wait for MySQL to be ready
+      - name: Wait for MySQL
         run: |
           for i in {30..0}; do
-            if docker exec mysql-container mysqladmin ping -uroot -p1234 --silent; then
+            if docker exec mysql-container mysqladmin ping -uroot -proot --silent; then
               echo "MySQL is ready"
               break
             fi
@@ -41,11 +37,9 @@ jobs:
             sleep 2
           done
 
-      - name: Set outputs
+      - name: Set output variables
         id: set-vars
         run: |
-          echo "db-host=127.0.0.1" >> $GITHUB_OUTPUT
           echo "db-port=3306" >> $GITHUB_OUTPUT
           echo "db-username=root" >> $GITHUB_OUTPUT
           echo "db-password=root" >> $GITHUB_OUTPUT
-
