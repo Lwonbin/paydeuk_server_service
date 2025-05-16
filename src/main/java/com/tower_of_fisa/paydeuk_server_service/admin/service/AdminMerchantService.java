@@ -8,8 +8,6 @@ import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.NoSuchElementFoundException404;
 import java.sql.Date;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +24,7 @@ public class AdminMerchantService {
 
   private final MerchantRepository merchantRepository;
   private final PaymentRepository paymentRepository;
+  private final AdminMerchantUtils adminMerchantUtils;
 
   /**
    * [전체 가맹점 통계 조회]
@@ -38,9 +37,9 @@ public class AdminMerchantService {
     int transactionCount = paymentRepository.countByPaymentSuccessTrue(); // 전체 거래 건수
     Long totalTransactionAmount = paymentRepository.sumAmountByPaymentSuccessTrue(); // 총 거래 금액
 
-    int averageTransactionAmount = calculateAverageAmount(totalTransactionAmount, transactionCount); // 평균 거래 금액
-    int recent24hCount = calculateRecent24hTransactionCount(transactionCount); // 최근 24시간 거래 수
-    double percentChange = calculateMonthlyChangeRate(totalTransactionAmount); // 전월 대비 거래 금액 증감율
+    int averageTransactionAmount = adminMerchantUtils.calculateAverageAmount(totalTransactionAmount, transactionCount); // 평균 거래 금액
+    int recent24hCount = adminMerchantUtils.calculateRecent24hTransactionCount(transactionCount); // 최근 24시간 거래 수
+    double percentChange = adminMerchantUtils.calculateMonthlyChangeRate(totalTransactionAmount); // 전월 대비 거래 금액 증감율
 
     return new MerchantStatsResponse(
             merchantCount,
@@ -66,9 +65,9 @@ public class AdminMerchantService {
     int transactionCount = paymentRepository.countByMerchantIdAndPaymentSuccessTrue(merchantId);
     Long totalAmount = paymentRepository.sumAmountByMerchantIdAndPaymentSuccessTrue(merchantId);
 
-    int avgAmount = calculateAverageAmount(totalAmount, transactionCount);
-    int recent24hCount = calculateRecent24hTransactionCount(transactionCount, merchantId);
-    double percentChange = calculateMonthlyChangeRate(merchantId, totalAmount);
+    int avgAmount = adminMerchantUtils.calculateAverageAmount(totalAmount, transactionCount);
+    int recent24hCount = adminMerchantUtils.calculateRecent24hTransactionCount(transactionCount, merchantId);
+    double percentChange = adminMerchantUtils.calculateMonthlyChangeRate(merchantId, totalAmount);
 
     return new MerchantIndividualStatsResponse(
             transactionCount, totalAmount, avgAmount, merchant.getCommissionRate(), recent24hCount, percentChange
@@ -170,67 +169,4 @@ public class AdminMerchantService {
     merchantRepository.save(merchant);
   }
 
-  // ========== 내부 계산 유틸 함수 ========== //
-
-  /**
-   * 평균 거래 금액 계산
-   */
-  private int calculateAverageAmount(Long totalAmount, int transactionCount) {
-    return (transactionCount == 0) ? 0 : (int) (totalAmount / transactionCount);
-  }
-
-  /**
-   * 최근 24시간 거래 건수 계산 (전체)
-   */
-  private int calculateRecent24hTransactionCount(int totalCount) {
-    LocalDateTime from24hAgo = LocalDateTime.now().minusHours(24);
-    int countUntil24hAgo = paymentRepository.countSuccessfulPaymentsBefore(from24hAgo);
-    return totalCount - countUntil24hAgo;
-  }
-
-  /**
-   * 최근 24시간 거래 건수 계산 (개별 가맹점)
-   */
-  private int calculateRecent24hTransactionCount(int totalCount, Long merchantId) {
-    LocalDateTime from24hAgo = LocalDateTime.now().minusHours(24);
-    int countUntil24hAgo = paymentRepository.countByMerchantIdAndPaymentSuccessTrueBefore(merchantId, from24hAgo);
-    return totalCount - countUntil24hAgo;
-  }
-
-  /**
-   * 전월 대비 거래 금액 증감율 계산 (개별 가맹점)
-   */
-  private double calculateMonthlyChangeRate(Long merchantId, Long thisMonthTotalAmount) {
-    LocalDate firstDayOfThisMonth = LocalDate.now().withDayOfMonth(1);
-    LocalDate firstDayOfLastMonth = firstDayOfThisMonth.minusMonths(1);
-    LocalDate lastDayOfLastMonth = firstDayOfThisMonth.minusDays(1);
-
-    Long lastMonthTotal = paymentRepository.sumSuccessfulPaymentsForMerchantBetween(
-            merchantId,
-            firstDayOfLastMonth.atStartOfDay(),
-            lastDayOfLastMonth.atTime(LocalTime.MAX)
-    );
-
-    return (lastMonthTotal != null && lastMonthTotal > 0)
-            ? ((double) (thisMonthTotalAmount - lastMonthTotal) / lastMonthTotal) * 100
-            : 0.0;
-  }
-
-  /**
-   * 전월 대비 거래 금액 증감율 계산 (전체)
-   */
-  private double calculateMonthlyChangeRate(Long totalAmount) {
-    LocalDate firstDayOfThisMonth = LocalDate.now().withDayOfMonth(1);
-    LocalDate firstDayOfLastMonth = firstDayOfThisMonth.minusMonths(1);
-    LocalDate lastDayOfLastMonth = firstDayOfThisMonth.minusDays(1);
-
-    Long lastMonthTotal = paymentRepository.sumSuccessfulPaymentsBetween(
-            firstDayOfLastMonth.atStartOfDay(),
-            lastDayOfLastMonth.atTime(LocalTime.MAX)
-    );
-
-    return (lastMonthTotal != null && lastMonthTotal > 0)
-            ? ((double) (totalAmount - lastMonthTotal) / lastMonthTotal) * 100
-            : 0.0;
-  }
 }
