@@ -1,3 +1,5 @@
+# .github/workflows/redis-setting.yaml
+
 name: Redis Setting - called_workflow
 
 on:
@@ -9,34 +11,24 @@ on:
     outputs:
       redis-host:
         description: "Redis host address"
-        value: ${{ jobs.redis-setup.outputs.redis-host }}
+        value: ${{ jobs.output-vars.outputs.redis-host }}
       redis-port:
         description: "Redis port"
-        value: ${{ jobs.redis-setup.outputs.redis-port }}
+        value: ${{ jobs.output-vars.outputs.redis-port }}
       redis-password:
         description: "Redis password"
-        value: ${{ jobs.redis-setup.outputs.redis-password }}
+        value: ${{ jobs.output-vars.outputs.redis-password }}
 
 jobs:
-  redis-setup:
+  output-vars:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        redis-version: [ 6, 7 ]
     outputs:
       redis-host: ${{ steps.set-vars.outputs.redis-host }}
       redis-port: ${{ steps.set-vars.outputs.redis-port }}
       redis-password: ${{ steps.set-vars.outputs.redis-password }}
 
     steps:
-      - name: Setup Redis ${{ matrix.redis-version }}
-        uses: supercharge/redis-github-action@1.7.0
-        with:
-          redis-version: ${{ matrix.redis-version }}
-          redis-password: 'password'
-
-      - name: Set Redis connection info
-        id: set-vars
+      - id: set-vars
         run: |
           echo "redis-host=127.0.0.1" >> $GITHUB_OUTPUT
           echo "redis-port=6379" >> $GITHUB_OUTPUT
