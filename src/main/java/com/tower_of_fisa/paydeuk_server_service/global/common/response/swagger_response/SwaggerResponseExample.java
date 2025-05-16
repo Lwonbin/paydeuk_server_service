@@ -65,6 +65,22 @@ public final class SwaggerResponseExample {
             }
           }
       """;
+
+  public static final String PIN_400_02 =
+      """
+          {
+            "success": false,
+            "status": "BAD_REQUEST",
+            "message": "간편 결제 비밀번호가 이미 설정되었습니다.",
+            "response": {
+              "errorCode": "PIN_02",
+              "time": "2025-05-16T16:12:35.613453",
+              "stackTrace": "com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.BadRequestException400: 간편 결제 비밀번호가 이미 설정되었습니다.
+              "errors": null
+            }
+          }
+      """;
+
   public static final String PIN_400_03 =
       """
           {

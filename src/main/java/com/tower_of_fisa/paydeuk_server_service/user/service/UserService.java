@@ -75,6 +75,9 @@ public class UserService {
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
     String paymentPinCode = request.getPaymentPinCode();
 
+    if (user.getPaymentPinCode() != null)
+      throw new BadRequestException400(ErrorDefineCode.ALREADY_HAS_PIN_CODE);
+
     if (paymentPinCodeValidator.isValid(paymentPinCode, user.getBirthDate()))
       user.changePaymentPinCode(passwordEncoder.encode(paymentPinCode));
     else throw new BadRequestException400(ErrorDefineCode.INVALID_PAYMENT_PIN_CODE);

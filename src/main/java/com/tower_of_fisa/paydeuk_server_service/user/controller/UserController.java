@@ -98,6 +98,11 @@ public class UserController {
             content =
                 @Content(examples = {@ExampleObject(value = SwaggerResponseExample.PIN_400_01)})),
         @ApiResponse(
+            responseCode = "400",
+            description = "간편 결제 비밀번호가 이미 설정됨",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.PIN_400_02)})),
+        @ApiResponse(
             responseCode = "404",
             description = "사용자를 찾을 수 없음",
             content =
