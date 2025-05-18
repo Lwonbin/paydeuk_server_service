@@ -4,42 +4,89 @@ on:
   merge_group:
 
 jobs:
+  setup-mysql:
+    uses: ./.github/workflows/mysql-setting.yaml
+
+  setup-redis:
+    uses: ./.github/workflows/redis-setting.yaml
+
   validate-pr:
     runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-      
-    - name: Display info
-      run: | 
-        pwd
-        tree -a -I '.git'
-        git status
-        
-    - name: Cache Gradle packages
-      uses: actions/cache@v4
-      with:
-        path: ~/.gradle/caches
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
-        restore-keys: ${{ runner.os }}-gradle
+    needs: [ setup-mysql, setup-redis ]
 
-    - name: Create application-secret.yaml
-      run: |
-        cat <<EOF > ./src/main/resources/application-secret.yml  
-        iamport:
-          api:
-            key: '${{ secrets.IAMPORT_API_KEY }}'
-            secret: '${{ secrets.IAMPORT_API_SECRET }}'
-        jwt:
-          secret-key: '${{ secrets.JWT_SECRET }}'
-        EOF
-        
-    - name: Build
-      id: check
-      run: ./gradlew buil --info
-      continue-on-error: true
-    - name: Leave comment on Github Actions Log
-      if: steps.check.outcome == 'failure'
-      run: |
-        echo "❗ dev 브랜치와 병합한 코드가 빌드 실패하였습니다. 문제를 해결하고 다시 시도해주세요 ❗"
-        exit 1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Display info
+        run: |
+          pwd
+          tree -a -I '.git'
+          git status
+
+      - name: Cache Gradle packages
+        uses: actions/cache@v4
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
+          restore-keys: ${{ runner.os }}-gradle
+
+      # ✅ Start MySQL
+      - name: Start MySQL
+        run: |
+          docker run -d \
+            --name mysql \
+            -e MYSQL_ROOT_PASSWORD=${{ needs.setup-mysql.outputs.db-password }} \
+            -e MYSQL_DATABASE=paydeuk \
+            -p ${{ needs.setup-mysql.outputs.db-port }}:3306 \
+            mysql:8
+
+      - name: Wait for MySQL
+        run: |
+          for i in {30..0}; do
+            docker exec mysql mysqladmin ping \
+              -u${{ needs.setup-mysql.outputs.db-username }} \
+              -p${{ needs.setup-mysql.outputs.db-password }} --silent && break
+            echo "⏳ Waiting for MySQL... ($i)"
+            sleep 2
+          done
+
+      # ✅ Start Redis
+      - name: Start Redis
+        run: |
+          docker run -d \
+            --name redis \
+            -e REDIS_PASSWORD=${{ needs.setup-redis.outputs.redis-password }} \
+            -p ${{ needs.setup-redis.outputs.redis-port }}:6379 \
+            redis:7 \
+            --requirepass ${{ needs.setup-redis.outputs.redis-password }}
+
+      - name: Create application-secret.yaml
+        run: |
+          cat <<EOF > ./src/main/resources/application-secret.yml  
+          iamport:
+            api:
+              key: '${{ secrets.IAMPORT_API_KEY }}'
+              secret: '${{ secrets.IAMPORT_API_SECRET }}'
+          jwt:
+            secret-key: '${{ secrets.JWT_SECRET }}'
+          EOF
+
+      - name: Build
+        id: check
+        env:
+          MYSQL_HOST: ${{ needs.setup-mysql.outputs.db-host }}
+          MYSQL_PORT: ${{ needs.setup-mysql.outputs.db-port }}
+          MYSQL_USER: ${{ needs.setup-mysql.outputs.db-username }}
+          MYSQL_PASSWORD: ${{ needs.setup-mysql.outputs.db-password }}
+          REDIS_HOST: ${{ needs.setup-redis.outputs.redis-host }}
+          REDIS_PORT: ${{ needs.setup-redis.outputs.redis-port }}
+          REDIS_PASSWORD: ${{ needs.setup-redis.outputs.redis-password }}
+        run: ./gradlew build --info
+        continue-on-error: true
+
+      - name: Leave comment on Github Actions Log
+        if: steps.check.outcome == 'failure'
+        run: |
+          echo "❗ dev 브랜치와 병합한 코드가 빌드 실패하였습니다. 문제를 해결하고 다시 시도해주세요 ❗"
+          exit 1

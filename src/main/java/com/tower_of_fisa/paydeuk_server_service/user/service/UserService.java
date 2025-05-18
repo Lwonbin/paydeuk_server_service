@@ -1,8 +1,11 @@
 package com.tower_of_fisa.paydeuk_server_service.user.service;
 
-import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
+import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.BadRequestException400;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.NoSuchElementFoundException404;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.PaymentPinCodeRequest;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.SetNewPaymentPinCodeRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateAddressRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateEmailRequest;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.UserBenefitResponse;
@@ -10,6 +13,7 @@ import com.tower_of_fisa.paydeuk_server_service.user.dto.UserInfoResponse;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
@@ -22,6 +26,8 @@ import java.time.LocalDate;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final PaymentPinCodeValidator paymentPinCodeValidator;
+  private final BCryptPasswordEncoder passwordEncoder;
   private final RedisTemplate<String, String> redisTemplate;
 
   /**
@@ -60,6 +66,67 @@ public class UserService {
     userRepository
         .findById(userId)
         .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+  }
+
+  /**
+   * [간편 비밀 번호 설정] 사용자의 간편 비밀 번호를 설정합니다.
+   *
+   * @param userId 인증된 사용자 ID
+   * @param request 설정할 간편결제비밀번호를 담은 요청 DTO
+   */
+  @Transactional
+  public void setPaymentPinCode(Long userId, PaymentPinCodeRequest request) {
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+    String paymentPinCode = request.getPaymentPinCode();
+
+    if (user.getPaymentPinCode() != null)
+      throw new BadRequestException400(ErrorDefineCode.ALREADY_HAS_PIN_CODE);
+
+    if (paymentPinCodeValidator.isValid(paymentPinCode, user.getBirthDate()))
+      user.changePaymentPinCode(passwordEncoder.encode(paymentPinCode));
+    else throw new BadRequestException400(ErrorDefineCode.INVALID_PAYMENT_PIN_CODE);
+  }
+
+  /**
+   * [간편 결제 비밀번호 변경] 사용자의 간편 비밀 번호를 변경합니다.
+   *
+   * @param userId 인증된 사용자 ID
+   * @param request 변경할 간편결제비밀번호를 담은 요청 DTO
+   */
+  @Transactional
+  public void setNewPaymentPinCode(Long userId, SetNewPaymentPinCodeRequest request) {
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+    String newPaymentPinCode = request.getNewPaymentPinCode();
+    String oldPaymentPinCode = user.getPaymentPinCode();
+
+    if (paymentPinCodeValidator.isValid(newPaymentPinCode, oldPaymentPinCode, user.getBirthDate()))
+      user.changePaymentPinCode(passwordEncoder.encode(newPaymentPinCode));
+    else throw new BadRequestException400(ErrorDefineCode.INVALID_PAYMENT_PIN_CODE);
+  }
+
+  /**
+   * [간편 결제 비밀번호 검증] 사용자가 간편 결제 비밃번호를 변경하는 과정에서 입력하는 기존 간편 결제 비밀 번호를 검증합니다.
+   *
+   * @param userId 인증된 사용자 ID
+   * @param request 검증할 기존 간편 결제 비밀번호를 담은 요청 DTO
+   */
+  public void verifyPaymentPinCode(Long userId, PaymentPinCodeRequest request) {
+    User user =
+        userRepository
+            .findById(userId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+
+    String insertedPaymentPinCode = request.getPaymentPinCode();
+    String paymentPinCode = user.getPaymentPinCode();
+
+    if (!passwordEncoder.matches(insertedPaymentPinCode, paymentPinCode))
+      throw new BadRequestException400(ErrorDefineCode.WRONG_PAYMENT_PIN_CODE);
   }
 
   /**

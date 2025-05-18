@@ -1,6 +1,6 @@
 package com.tower_of_fisa.paydeuk_server_service.domain.entity;
 
-import com.tower_of_fisa.paydeuk_server_service.common.BaseEntity;
+import com.tower_of_fisa.paydeuk_server_service.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

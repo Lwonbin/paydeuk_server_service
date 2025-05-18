@@ -1,17 +1,17 @@
 package com.tower_of_fisa.paydeuk_server_service.auth.service;
 
 import com.tower_of_fisa.paydeuk_server_service.auth.dto.*;
-import com.tower_of_fisa.paydeuk_server_service.common.ErrorDefineCode;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.AlreadyExistElementException409;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.AuthCredientialException401;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.BadRequestException400;
-import com.tower_of_fisa.paydeuk_server_service.config.exception.custom.exception.NoSuchElementFoundException404;
-import com.tower_of_fisa.paydeuk_server_service.config.security.JwtProvider;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserRole;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
+import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.AlreadyExistElementException409;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.AuthCredientialException401;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.BadRequestException400;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.NoSuchElementFoundException404;
+import com.tower_of_fisa.paydeuk_server_service.global.config.security.JwtProvider;
+import com.tower_of_fisa.paydeuk_server_service.global.util.cookie.CookieUtil;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
-import com.tower_of_fisa.paydeuk_server_service.util.cookie.CookieUtil;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;

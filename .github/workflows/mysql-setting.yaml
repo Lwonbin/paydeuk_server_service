@@ -1,0 +1,36 @@
+# .github/workflows/mysql-setting.yaml
+
+name: MySQL Setting - called_workflow
+
+on:
+  workflow_call:
+    outputs:
+      db-host:
+        description: "MySQL host"
+        value: ${{ jobs.output-vars.outputs.db-host }}
+      db-port:
+        description: "MySQL port"
+        value: ${{ jobs.output-vars.outputs.db-port }}
+      db-username:
+        description: "MySQL username"
+        value: ${{ jobs.output-vars.outputs.db-username }}
+      db-password:
+        description: "MySQL password"
+        value: ${{ jobs.output-vars.outputs.db-password }}
+
+jobs:
+  output-vars:
+    runs-on: ubuntu-latest
+    outputs:
+      db-host: ${{ steps.set-vars.outputs.db-host }}
+      db-port: ${{ steps.set-vars.outputs.db-port }}
+      db-username: ${{ steps.set-vars.outputs.db-username }}
+      db-password: ${{ steps.set-vars.outputs.db-password }}
+
+    steps:
+      - id: set-vars
+        run: |
+          echo "db-host=127.0.0.1" >> $GITHUB_OUTPUT
+          echo "db-port=3306" >> $GITHUB_OUTPUT
+          echo "db-username=root" >> $GITHUB_OUTPUT
+          echo "db-password=1234" >> $GITHUB_OUTPUT

@@ -2,10 +2,10 @@ package com.tower_of_fisa.paydeuk_server_service.admin.controller;
 
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.admin.service.AdminMerchantService;
-import com.tower_of_fisa.paydeuk_server_service.common.response.CommonResponse;
-import com.tower_of_fisa.paydeuk_server_service.common.response.EmptyResponse;
-import com.tower_of_fisa.paydeuk_server_service.common.response.SwaggerErrorResponseType;
-import com.tower_of_fisa.paydeuk_server_service.common.response.swagger_response.SwaggerResponseExample;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.EmptyResponse;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.SwaggerErrorResponseType;
+import com.tower_of_fisa.paydeuk_server_service.global.common.response.swagger_response.SwaggerResponseExample;
 import com.tower_of_fisa.paydeuk_server_service.global.dto.CustomPageResDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -23,7 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
-@Tag(name = "관리자용 가맹점 관리 API", description = "관리자용 가맹점 관리 API")
+@Tag(name = "5 - Admin Merchant API", description = "관리자용 가맹점 관리 API")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/admin/merchants")
