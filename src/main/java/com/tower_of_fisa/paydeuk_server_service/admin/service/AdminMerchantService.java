@@ -25,6 +25,7 @@ public class AdminMerchantService {
   private final MerchantRepository merchantRepository;
   private final PaymentRepository paymentRepository;
   private final AdminMerchantUtils adminMerchantUtils;
+  private static final int TOP_MERCHANT_LIMIT = 8;
 
   /**
    * [전체 가맹점 통계 조회]
@@ -96,7 +97,7 @@ public class AdminMerchantService {
                     Comparator.comparing(MerchantTopStatsResponse::getTransactionCount, Comparator.reverseOrder())
                             .thenComparing(MerchantTopStatsResponse::getTotalAmount, Comparator.reverseOrder())
             )
-            .limit(8)
+            .limit(TOP_MERCHANT_LIMIT)
             .collect(Collectors.toList());
   }
 
