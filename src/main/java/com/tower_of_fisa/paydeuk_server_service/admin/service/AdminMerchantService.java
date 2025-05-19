@@ -108,8 +108,9 @@ public class AdminMerchantService {
    * [전체 가맹점 결제 내역 조회]
    * 모든 결제 내역을 조회하여 가맹점명, 카드 유형 등 상세 정보와 함께 반환한다.
    */
-  public List<MerchantPaymentHistoryResponse> getAllMerchantPaymentHistories() {
-    return paymentRepository.findAllPaymentHistories();
+  public Page<MerchantPaymentHistoryResponse> getAllMerchantPaymentHistories(int page, int size) {
+    Pageable pageable = PageRequest.of(page - 1, size);
+    return paymentRepository.findAllPaymentHistories(pageable);
   }
 
   /**

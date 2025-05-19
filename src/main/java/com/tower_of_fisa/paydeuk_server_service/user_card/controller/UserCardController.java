@@ -4,12 +4,14 @@ import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonRes
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.EmptyResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.swagger_response.SwaggerResponseExample;
 import com.tower_of_fisa.paydeuk_server_service.global.config.security.CustomUserDetails;
+import com.tower_of_fisa.paydeuk_server_service.global.dto.CustomPageResDto;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.AddCardRequest;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.MyCardResponse;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.PaymentHistoryResponse;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.SetDefaultCardRequest;
 import com.tower_of_fisa.paydeuk_server_service.user_card.service.UserCardService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -17,6 +19,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -41,10 +44,14 @@ public class UserCardController {
   @GetMapping("/my/payment")
   @Operation(summary = "CARD_02 : 내 결제 내역 조회", description = "사용자의 결제 내역을 조회합니다.")
   @ApiResponse(responseCode = "200", description = "결제 내역 조회에 성공")
-  public CommonResponse<List<PaymentHistoryResponse>> getPaymentHistory(
-      @AuthenticationPrincipal CustomUserDetails userDetails) {
-    List<PaymentHistoryResponse> payments = userCardService.getPaymentHistory(userDetails.getId());
-    return new CommonResponse<>(true, HttpStatus.OK, "결제 내역 조회에 성공했습니다.", payments);
+  public CommonResponse<CustomPageResDto<PaymentHistoryResponse>> getPaymentHistory(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
+      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
+    Page<PaymentHistoryResponse> payments =
+        userCardService.getPaymentHistory(userDetails.getId(), page, size);
+    return new CommonResponse<>(
+        true, HttpStatus.OK, "결제 내역 조회에 성공했습니다.", CustomPageResDto.fromPage(payments));
   }
 
   @PostMapping

@@ -4,6 +4,8 @@ import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentHistory
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Payment;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -55,7 +57,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
       JOIN p.userCard uc
       JOIN uc.card c
       """)
-  List<MerchantPaymentHistoryResponse> findAllPaymentHistories();
+  Page<MerchantPaymentHistoryResponse> findAllPaymentHistories(Pageable pageable);
 
   @Query(
       "SELECT p FROM Payment p "
@@ -66,7 +68,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
           + "JOIN FETCH cb.benefit b "
           + "WHERE uc.user.id = :userId "
           + "ORDER BY p.createdAt DESC")
-  List<Payment> findPaymentHistoryByUserId(@Param("userId") Long userId);
+  Page<Payment> findPaymentHistoryByUserId(@Param("userId") Long userId, Pageable pageable);
 
   @Query("SELECT COUNT(p) FROM Payment p WHERE p.paymentSuccess = true AND p.createdAt < :before")
   int countSuccessfulPaymentsBefore(@Param("before") LocalDateTime before);
