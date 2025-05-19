@@ -17,21 +17,20 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
   Long sumAmountByPaymentSuccessTrue();
 
   @Query(
-      value =
-          """
-          SELECT
-              DATE(p.created_at) AS date,
-              COALESCE(SUM(p.amount), 0) AS total_amount,
-              COUNT(*) AS total_count
-          FROM payment p
-          WHERE p.merchant_id = :merchantId
-            AND p.payment_success = true
-            AND p.created_at >= CURDATE() - INTERVAL 6 DAY
-          GROUP BY DATE(p.created_at)
-          ORDER BY DATE(p.created_at)
-          """,
-      nativeQuery = true)
-  List<Object[]> findWeeklyTrendsNative(@Param("merchantId") Long merchantId);
+          value = """
+        SELECT
+            DATE(p.created_at) AS date,
+            COALESCE(SUM(p.amount), 0) AS total_amount,
+            COUNT(*) AS total_count
+        FROM payment p
+        WHERE p.payment_success = true
+          AND p.created_at >= CURDATE() - INTERVAL 6 DAY
+        GROUP BY DATE(p.created_at)
+        ORDER BY DATE(p.created_at)
+        """,
+          nativeQuery = true)
+  List<Object[]> findWeeklyTrendsForAllMerchants();
+
 
   int countByMerchantIdAndPaymentSuccessTrue(Long merchantId);
 

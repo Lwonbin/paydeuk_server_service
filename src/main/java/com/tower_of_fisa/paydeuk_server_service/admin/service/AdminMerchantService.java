@@ -79,12 +79,8 @@ public class AdminMerchantService {
    * 특정 가맹점의 최근 7일간 일별 거래 금액 및 건수를 반환한다.
    * 거래가 없는 날짜는 0으로 채워진다.
    */
-  public List<MerchantTransactionTrendResponse> getMerchantTransactionTrends(Long merchantId) {
-    merchantRepository
-            .findById(merchantId)
-            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.MERCHANT_NOT_FOUND));
-
-    List<Object[]> rawData = paymentRepository.findWeeklyTrendsNative(merchantId);
+  public List<MerchantTransactionTrendResponse> getTotalMerchantTransactionTrends() {
+    List<Object[]> rawData = paymentRepository.findWeeklyTrendsForAllMerchants();
 
     Map<LocalDate, MerchantTransactionTrendResponse> trendMap = rawData.stream()
             .collect(Collectors.toMap(
@@ -99,7 +95,6 @@ public class AdminMerchantService {
     List<MerchantTransactionTrendResponse> completeTrends = new ArrayList<>();
     LocalDate today = LocalDate.now();
 
-    // 최근 7일간 데이터 구성
     for (int i = 6; i >= 0; i--) {
       LocalDate targetDate = today.minusDays(i);
       completeTrends.add(trendMap.getOrDefault(targetDate, new MerchantTransactionTrendResponse(targetDate, 0L, 0L)));
@@ -107,6 +102,7 @@ public class AdminMerchantService {
 
     return completeTrends;
   }
+
 
   /**
    * [전체 가맹점 결제 내역 조회]
