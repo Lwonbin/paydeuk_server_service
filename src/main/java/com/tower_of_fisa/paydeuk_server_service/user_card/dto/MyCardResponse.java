@@ -19,6 +19,9 @@ public class MyCardResponse {
   @Schema(description = "카드번호 뒷 4자리", example = "1234")
   private final String cardNumber;
 
+  @Schema(description = "카드 이미지 URL", example = "https://example.com/card.png")
+  private final String imageUrl;
+
   @Schema(description = "대표카드", example = "true")
   private final Boolean isDefaultCard;
 

@@ -46,6 +46,7 @@ public class UserCardService {
                     .cardName(userCard.getCard().getName())
                     .cardNumber(
                         userCard.getCardNumber().substring(userCard.getCardNumber().length() - 4))
+                    .imageUrl(userCard.getCard().getImageUrl())
                     .isDefaultCard(userCard.getIsDefaultCard())
                     .cardBenefits(
                         userCard.getCard().getCardBenefits().stream()
