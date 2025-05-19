@@ -25,6 +25,7 @@ spring:
   sql:
     init:
       mode: always # MySQL에서 data.sql, schema.sql 자동 적용하기 위한 설정
+      encoding: UTF-8
 
 
 # Swagger
