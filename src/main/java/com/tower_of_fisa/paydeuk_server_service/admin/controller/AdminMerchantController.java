@@ -46,21 +46,21 @@ public class AdminMerchantController {
     return new CommonResponse<>(true, HttpStatus.OK, "전체 결제 내역 조회 성공", response);
   }
 
-  @GetMapping("/{merchantId}/trends")
-  @Operation(summary = "ADMIN_03 : 가맹점 거래 추이", description = "해당 가맹점의 거래 추이를 조회한다.")
+  @GetMapping("/trends")
+  @Operation(summary = "ADMIN_03 : 전체 가맹점 거래 추이", description = "전체 가맹점의 거래 추이를 조회한다.")
   @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "404",
-            description = "존재하지 않는 가맹점 ID로 요청 시 발생",
-            content = @Content(schema = @Schema(implementation = SwaggerErrorResponseType.class)))
-      })
-  public CommonResponse<List<MerchantTransactionTrendResponse>> getMerchantTransactionTrends(
-      @Parameter(description = "가맹점 ID", example = "1") @PathVariable Long merchantId) {
+          value = {
+                  @ApiResponse(
+                          responseCode = "404",
+                          description = "존재하지 않는 가맹점 ID로 요청 시 발생",
+                          content = @Content(schema = @Schema(implementation = SwaggerErrorResponseType.class)))
+          })
+  public CommonResponse<List<MerchantTransactionTrendResponse>> getMerchantTransactionTrends() {
     List<MerchantTransactionTrendResponse> response =
-        adminMerchantService.getMerchantTransactionTrends(merchantId);
+            adminMerchantService.getTotalMerchantTransactionTrends();
     return new CommonResponse<>(true, HttpStatus.OK, "거래 추이 조회 성공", response);
   }
+
 
   @GetMapping("/{merchantId}/stats")
   @Operation(summary = "ADMIN_04 : 가맹점별 통계 조회", description = "특정 가맹점의 통계를 조회한다.")
