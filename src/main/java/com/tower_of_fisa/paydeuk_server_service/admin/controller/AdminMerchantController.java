@@ -65,6 +65,20 @@ public class AdminMerchantController {
   }
 
 
+  @GetMapping("/top-stats")
+  @Operation(summary = "ADMIN_05 : 상위 가맹점 통계 조회", description = "거래 금액 또는 거래 건수 기준 상위 가맹점들의 통계를 조회한다.")
+  @ApiResponses(
+          value = {
+                  @ApiResponse(
+                          responseCode = "200",
+                          description = "상위 가맹점 통계 조회 성공"
+                  )
+          })
+  public CommonResponse<List<MerchantTopStatsResponse>> getTopMerchantStats(){
+    List<MerchantTopStatsResponse> response = adminMerchantService.getTopMerchantStats();
+    return new CommonResponse<>(true, HttpStatus.OK, "상위 가맹점 통계 조회 성공", response);
+  }
+
   @GetMapping("/{merchantId}/stats")
   @Operation(summary = "ADMIN_04 : 가맹점별 통계 조회", description = "특정 가맹점의 통계를 조회한다.")
   @ApiResponses(

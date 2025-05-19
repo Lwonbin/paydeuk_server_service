@@ -74,6 +74,34 @@ public class AdminMerchantService {
     );
   }
 
+
+  /**
+   * [상위 가맹점 통계 조회]
+   * 상위 8개 가맹점의 id, 이름. 거래 건수, 총 거래 금액을 반환,
+   */
+  public List<MerchantTopStatsResponse> getTopMerchantStats() {
+    return merchantRepository.findAll().stream()
+            .map(merchant -> {
+              Long transactionCount = (long) paymentRepository.countByMerchantIdAndPaymentSuccessTrue(merchant.getId());
+              Long totalAmount = paymentRepository.sumAmountByMerchantIdAndPaymentSuccessTrue(merchant.getId());
+              return new MerchantTopStatsResponse(
+                      merchant.getId(),
+                      merchant.getName(),
+                      transactionCount,
+                      totalAmount
+              );
+            })
+            .filter(res -> res.getTransactionCount() > 0)
+            .sorted(
+                    Comparator.comparing(MerchantTopStatsResponse::getTransactionCount, Comparator.reverseOrder())
+                            .thenComparing(MerchantTopStatsResponse::getTotalAmount, Comparator.reverseOrder())
+            )
+            .limit(8)
+            .collect(Collectors.toList());
+  }
+
+
+
   /**
    * [가맹점 주간 거래 추이 조회]
    * 특정 가맹점의 최근 7일간 일별 거래 금액 및 건수를 반환한다.
