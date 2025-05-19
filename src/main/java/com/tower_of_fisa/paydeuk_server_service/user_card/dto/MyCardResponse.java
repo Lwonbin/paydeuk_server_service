@@ -20,7 +20,7 @@ public class MyCardResponse {
   private final String cardNumber;
 
   @Schema(description = "카드 이미지 URL", example = "https://example.com/card.png")
-  private final String cardImageUrl;
+  private final String imageUrl;
 
   @Schema(description = "대표카드", example = "true")
   private final Boolean isDefaultCard;
