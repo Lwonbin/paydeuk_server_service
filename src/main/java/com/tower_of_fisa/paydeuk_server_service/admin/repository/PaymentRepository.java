@@ -58,7 +58,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
       JOIN p.userCard uc
       JOIN uc.card c
       """)
-  List<MerchantPaymentHistoryResponse> findAllPaymentHistories();
+  Page<MerchantPaymentHistoryResponse> findAllPaymentHistories(Pageable pageable);
 
   @Query(
       "SELECT p FROM Payment p "

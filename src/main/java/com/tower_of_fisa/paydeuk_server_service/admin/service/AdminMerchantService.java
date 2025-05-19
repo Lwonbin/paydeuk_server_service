@@ -137,8 +137,9 @@ public class AdminMerchantService {
    *
    * @return List<MerchantPaymentHistoryResponse> - 결제 내역 리스트
    */
-  public List<MerchantPaymentHistoryResponse> getAllMerchantPaymentHistories() {
-    return paymentRepository.findAllPaymentHistories();
+  public Page<MerchantPaymentHistoryResponse> getAllMerchantPaymentHistories(int page, int size) {
+    Pageable pageable = PageRequest.of(page - 1, size);
+    return paymentRepository.findAllPaymentHistories(pageable);
   }
 
   /**
