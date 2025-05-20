@@ -22,7 +22,7 @@ public class BenefitCondition extends BaseEntity {
   private Long value;
 
   @Enumerated(EnumType.STRING)
-  @Column(name = "category", nullable = false)
+  @Column(name = "condition_category", nullable = false)
   private BenefitConditionCategory category;
 
   @ManyToOne(fetch = FetchType.LAZY)

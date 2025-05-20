@@ -82,13 +82,13 @@ CREATE TABLE benefit
 
 CREATE TABLE benefit_condition
 (
-    id                BIGINT AUTO_INCREMENT PRIMARY KEY                                                                                            NOT NULL,
-    benefit_id        BIGINT                                                                                                                       NOT NULL,
-    spending_range_id BIGINT,
-    value             BIGINT,
-    category          ENUM ('PER_TRANSACTION_LIMIT', 'DAILY_LIMIT_COUNT', 'MONTHLY_LIMIT_COUNT', 'DAILY_DISCOUNT_LIMIT', 'MONTHLY_DISCOUNT_LIMIT') NOT NULL,
-    created_at        TIMESTAMP,
-    updated_at        TIMESTAMP,
+    id                          BIGINT AUTO_INCREMENT PRIMARY KEY                                                                                            NOT NULL,
+    benefit_id                  BIGINT                                                                                                                       NOT NULL,
+    spending_range_id           BIGINT,
+    value                       BIGINT,
+    condition_category          ENUM ('PER_TRANSACTION_LIMIT', 'DAILY_LIMIT_COUNT', 'MONTHLY_LIMIT_COUNT', 'DAILY_DISCOUNT_LIMIT', 'MONTHLY_DISCOUNT_LIMIT') NOT NULL,
+    created_at                  TIMESTAMP,
+    updated_at                  TIMESTAMP,
     FOREIGN KEY (benefit_id) REFERENCES benefit (id),
     FOREIGN KEY (spending_range_id) REFERENCES spending_range (id)
 );
