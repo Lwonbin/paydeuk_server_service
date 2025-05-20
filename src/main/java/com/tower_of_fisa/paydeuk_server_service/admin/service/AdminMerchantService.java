@@ -25,6 +25,7 @@ public class AdminMerchantService {
   private final MerchantRepository merchantRepository;
   private final PaymentRepository paymentRepository;
   private final AdminMerchantUtils adminMerchantUtils;
+  private static final int TOP_MERCHANT_LIMIT = 8;
 
   /**
    * [전체 가맹점 통계 조회]
@@ -73,6 +74,34 @@ public class AdminMerchantService {
             transactionCount, totalAmount, avgAmount, merchant.getCommissionRate(), recent24hCount, percentChange
     );
   }
+
+
+  /**
+   * [상위 가맹점 통계 조회]
+   * 상위 8개 가맹점의 id, 이름. 거래 건수, 총 거래 금액을 반환,
+   */
+  public List<MerchantTopStatsResponse> getTopMerchantStats() {
+    return merchantRepository.findAll().stream()
+            .map(merchant -> {
+              Long transactionCount = (long) paymentRepository.countByMerchantIdAndPaymentSuccessTrue(merchant.getId());
+              Long totalAmount = paymentRepository.sumAmountByMerchantIdAndPaymentSuccessTrue(merchant.getId());
+              return new MerchantTopStatsResponse(
+                      merchant.getId(),
+                      merchant.getName(),
+                      transactionCount,
+                      totalAmount
+              );
+            })
+            .filter(res -> res.getTransactionCount() > 0)
+            .sorted(
+                    Comparator.comparing(MerchantTopStatsResponse::getTransactionCount, Comparator.reverseOrder())
+                            .thenComparing(MerchantTopStatsResponse::getTotalAmount, Comparator.reverseOrder())
+            )
+            .limit(TOP_MERCHANT_LIMIT)
+            .collect(Collectors.toList());
+  }
+
+
 
   /**
    * [가맹점 주간 거래 추이 조회]

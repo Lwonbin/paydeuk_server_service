@@ -65,6 +65,7 @@ public class AdminMerchantController {
   }
 
 
+
   @GetMapping("/{merchantId}/stats")
   @Operation(summary = "ADMIN_04 : 가맹점별 통계 조회", description = "특정 가맹점의 통계를 조회한다.")
   @ApiResponses(
@@ -81,8 +82,22 @@ public class AdminMerchantController {
     return new CommonResponse<>(true, HttpStatus.OK, "가맹점 통계 조회 성공", response);
   }
 
+  @GetMapping("/top-stats")
+  @Operation(summary = "ADMIN_05 : 상위 가맹점 통계 조회", description = "거래 금액 또는 거래 건수 기준 상위 가맹점들의 통계를 조회한다.")
+  @ApiResponses(
+          value = {
+                  @ApiResponse(
+                          responseCode = "200",
+                          description = "상위 가맹점 통계 조회 성공"
+                  )
+          })
+  public CommonResponse<List<MerchantTopStatsResponse>> getTopMerchantStats(){
+    List<MerchantTopStatsResponse> response = adminMerchantService.getTopMerchantStats();
+    return new CommonResponse<>(true, HttpStatus.OK, "상위 가맹점 통계 조회 성공", response);
+  }
+
   @GetMapping
-  @Operation(summary = "ADMIN_05 : 가맹점 목록 조회", description = "등록된 모든 가맹점의 목록을 조회합니다.")
+  @Operation(summary = "ADMIN_06 : 가맹점 목록 조회", description = "등록된 모든 가맹점의 목록을 조회합니다.")
   @ApiResponse(responseCode = "200", description = "가맹점 목록 조회 성공")
   public CommonResponse<CustomPageResDto<MerchantAllResponse>> getAllMerchants(
       @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
@@ -92,7 +107,7 @@ public class AdminMerchantController {
         true, HttpStatus.OK, "가맹점 목록 조회에 성공했습니다.", CustomPageResDto.fromPage(merchants));
   }
 
-  @Operation(summary = "ADMIN_06 : 가맹점 상세 조회", description = "특정 가맹점의 상세 정보를 조회합니다.")
+  @Operation(summary = "ADMIN_07 : 가맹점 상세 조회", description = "특정 가맹점의 상세 정보를 조회합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "가맹점 상세 정보 조회 성공"),
@@ -110,7 +125,7 @@ public class AdminMerchantController {
   }
 
   @PatchMapping("/{merchantId}/status")
-  @Operation(summary = "ADMIN_07 : 가맹점 상태 변경", description = "가맹점의 활성화/비활성화 상태를 변경합니다.")
+  @Operation(summary = "ADMIN_08 : 가맹점 상태 변경", description = "가맹점의 활성화/비활성화 상태를 변경합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "가맹점 상태 변경 성공"),
@@ -128,7 +143,7 @@ public class AdminMerchantController {
   }
 
   @PatchMapping("/{merchantId}/delete")
-  @Operation(summary = "ADMIN_08 : 가맹점 삭제", description = "가맹점을 삭제합니다.")
+  @Operation(summary = "ADMIN_09 : 가맹점 삭제", description = "가맹점을 삭제합니다.")
   @ApiResponses(
       value = {
         @ApiResponse(responseCode = "200", description = "가맹점 삭제 성공"),
