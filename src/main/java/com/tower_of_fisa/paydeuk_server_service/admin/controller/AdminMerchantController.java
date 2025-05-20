@@ -61,7 +61,7 @@ public class AdminMerchantController {
                           @Content(examples = {@ExampleObject(value = SwaggerResponseExample.MERCHANT_404)}))
           })
   public CommonResponse<CustomPageResDto<SingleMerchantPaymentResponse>> getSingleMerchantPayment(
-          @Parameter(description = "가맹점 ID", example = "1") Long merchantId,
+          @Parameter(description = "가맹점 ID", example = "1") @PathVariable Long merchantId,
           @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
           @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
 
