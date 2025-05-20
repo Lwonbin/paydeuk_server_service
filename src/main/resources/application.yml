@@ -1,6 +1,9 @@
 spring:
   config:
     import: application-secret.yml
+  servlet:
+    multipart:
+      max-file-size: 3MB # profile 이미지 사이즈 제한
   datasource:
     url: jdbc:mysql://localhost:3306/paydeuk?Timezone=Asia/Seoul
     username: root

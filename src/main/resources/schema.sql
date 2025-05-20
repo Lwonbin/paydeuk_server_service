@@ -19,6 +19,7 @@ CREATE TABLE users
     phone             VARCHAR(20)                              NOT NULL,
     email             VARCHAR(30),
     payment_pin_code  VARCHAR(60),
+    image_url        VARCHAR(255),
     address           VARCHAR(30),
     role              ENUM ('ADMIN', 'USER')                   NOT NULL,
     birth_date        VARCHAR(10)                              NOT NULL,

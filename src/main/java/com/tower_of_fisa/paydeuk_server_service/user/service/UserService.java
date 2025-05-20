@@ -4,12 +4,8 @@ import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.BadRequestException400;
 import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.NoSuchElementFoundException404;
-import com.tower_of_fisa.paydeuk_server_service.user.dto.PaymentPinCodeRequest;
-import com.tower_of_fisa.paydeuk_server_service.user.dto.SetNewPaymentPinCodeRequest;
-import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateAddressRequest;
-import com.tower_of_fisa.paydeuk_server_service.user.dto.UpdateEmailRequest;
-import com.tower_of_fisa.paydeuk_server_service.user.dto.UserBenefitResponse;
-import com.tower_of_fisa.paydeuk_server_service.user.dto.UserInfoResponse;
+import com.tower_of_fisa.paydeuk_server_service.global.config.s3.S3Service;
+import com.tower_of_fisa.paydeuk_server_service.user.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +13,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 
 @Slf4j
@@ -29,6 +27,38 @@ public class UserService {
   private final PaymentPinCodeValidator paymentPinCodeValidator;
   private final BCryptPasswordEncoder passwordEncoder;
   private final RedisTemplate<String, String> redisTemplate;
+  private final S3Service s3Service;
+  /**
+   * [내 정보 변경] 사용자의 프로필 이미지를 변경한다.
+   *
+   * @param userId 인증된 사용자 ID
+   * @param image 변경할 이미지 정보를 담은 MultipartFile
+   *
+   * @return 변경된 이미지 URL을 담은 응답 DTO (UserProfileImageResponse)
+   */
+  @Transactional
+  public UserProfileImageResponse updateProfileImage(Long userId, MultipartFile image) throws IOException {
+    User user = userRepository.findById(userId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
+
+    // 기존 이미지 삭제
+    if (user.getImageUrl() != null && user.getImageUrl().contains(".amazonaws.com")) {
+      String key = extractKeyFromUrl(user.getImageUrl());
+      s3Service.deleteImage(key);
+    }
+    // 어디서 용량크기 에러가 터지는지? 확인후 거기에 따른 에러 코드 설정 및 프론트에서 막기    yml파일 변경ㅎ 실험
+    // 새 이미지 업로드
+    String newImageUrl = s3Service.uploadProfileImage(image,userId);
+    user.setImageUrl(newImageUrl);
+    userRepository.save(user);
+    return UserProfileImageResponse.builder()
+            .imageUrl(newImageUrl)
+            .build();
+  }
+
+  private String extractKeyFromUrl(String url) {
+    return url.substring(url.lastIndexOf("/") + 1);
+  }
 
   /**
    * [내 정보 변경] 사용자의 주소를 변경한다.
@@ -141,7 +171,7 @@ public class UserService {
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
     return new UserInfoResponse(
-        user.getName(), user.getBirthDate(), user.getPhone(), user.getEmail(), user.getAddress());
+        user.getName(), user.getBirthDate(), user.getPhone(), user.getEmail(), user.getAddress(), user.getImageUrl());
   }
 
   /**

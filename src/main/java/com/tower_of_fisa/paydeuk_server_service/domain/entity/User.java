@@ -6,10 +6,8 @@ import com.tower_of_fisa.paydeuk_server_service.global.common.BaseEntity;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 @Builder
 @Getter
@@ -40,6 +38,10 @@ public class User extends BaseEntity {
 
   @Column(name = "email", length = 30)
   private String email;
+
+  @Setter
+  @Column(name = "image_url", length = 255)
+  private String imageUrl;
 
   @Column(name = "payment_pin_code", length = 60)
   private String paymentPinCode;
