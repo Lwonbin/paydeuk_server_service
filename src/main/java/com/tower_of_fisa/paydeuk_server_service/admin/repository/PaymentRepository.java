@@ -1,6 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.admin.repository;
 
-import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentHistoryResponse;
+import com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentResponse;
+import com.tower_of_fisa.paydeuk_server_service.admin.dto.SingleMerchantPaymentResponse;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Payment;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -43,7 +44,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
   @Query(
       """
-      SELECT new com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentHistoryResponse(
+      SELECT new com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentResponse(
           p.id,
           m.name,
           c.type,
@@ -57,7 +58,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
       JOIN p.userCard uc
       JOIN uc.card c
       """)
-  Page<MerchantPaymentHistoryResponse> findAllPaymentHistories(Pageable pageable);
+  Page<MerchantPaymentResponse> findAllPaymentHistories(Pageable pageable);
 
   @Query(
       "SELECT p FROM Payment p "
@@ -96,6 +97,21 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
           @Param("merchantId") Long merchantId,
           @Param("start") LocalDateTime start,
           @Param("end") LocalDateTime end
+  );
+
+  @Query("""
+        SELECT new com.tower_of_fisa.paydeuk_server_service.admin.dto.SingleMerchantPaymentResponse(
+                   p.id, uc.cardNumber, c.name, p.createdAt, p.amount, p.paymentSuccess
+               )
+        FROM Payment p
+        JOIN p.userCard uc
+        JOIN uc.card c
+        WHERE p.merchant.id = :merchantId
+        ORDER BY p.createdAt DESC
+        """)
+  Page<SingleMerchantPaymentResponse> findSingleMerchantPaymentsByMerchantId(
+          @Param("merchantId") Long merchantId,
+          Pageable pageable
   );
 
 

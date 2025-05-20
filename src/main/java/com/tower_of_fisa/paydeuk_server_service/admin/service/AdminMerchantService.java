@@ -137,7 +137,7 @@ public class AdminMerchantService {
    * [전체 가맹점 결제 내역 조회]
    * 모든 결제 내역을 조회하여 가맹점명, 카드 유형 등 상세 정보와 함께 반환한다.
    */
-  public Page<MerchantPaymentHistoryResponse> getAllMerchantPaymentHistories(int page, int size) {
+  public Page<MerchantPaymentResponse> getAllMerchantPaymentHistories(int page, int size) {
     Pageable pageable = PageRequest.of(page - 1, size);
     return paymentRepository.findAllPaymentHistories(pageable);
   }
@@ -193,6 +193,19 @@ public class AdminMerchantService {
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.MERCHANT_NOT_FOUND));
     merchant.changeIsDeleted(true);
     merchantRepository.save(merchant);
+  }
+
+  /**
+   * [개별 가맹점 결제내역 조회]
+   * merchantId로 해당 가맹점의 결제내역을 조회한다.
+   */
+  public Page<SingleMerchantPaymentResponse> getSingleMerchantPayment(Long merchantId, int page, int size) {
+
+    merchantRepository.findById(merchantId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.MERCHANT_NOT_FOUND));
+
+    Pageable pageable = PageRequest.of(page - 1, size);
+    return paymentRepository.findSingleMerchantPaymentsByMerchantId(merchantId, pageable);
   }
 
 }
