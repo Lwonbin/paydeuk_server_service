@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(title = "MerchantPaymentHistoryResponse : 가맹점 결제 내역 응답 스키마")
-public class MerchantPaymentHistoryResponse {
+public class MerchantPaymentResponse {
 
   @Schema(description = "결제 ID (PK)", example = "1001")
   private Long paymentId;
@@ -36,7 +36,7 @@ public class MerchantPaymentHistoryResponse {
   private boolean status;
 
   // DTO Projection을 위한 생성자
-  public MerchantPaymentHistoryResponse(
+  public MerchantPaymentResponse(
       Long paymentId,
       String merchantName,
       CardType cardType,
