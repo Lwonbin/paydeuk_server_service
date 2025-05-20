@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 public class MerchantStatsResponse {
 
   @Schema(description = "총 가맹점 수", example = "235")
-  private int merchantCount;
+  private int totalMerchantCount;
 
   @Schema(description = "전체 결제 건수 (성공 기준)", example = "4892")
-  private int transactionCount;
+  private int totalTransactionCount;
 
   @Schema(description = "전체 결제 금액 합계 (단위: 원)", example = "103040000")
   private long totalTransactionAmount;
