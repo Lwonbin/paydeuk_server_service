@@ -168,4 +168,11 @@ public class AdminMerchantController {
     adminMerchantService.deleteMerchant(merchantId);
     return new CommonResponse<>(true, HttpStatus.OK, "가맹점이 성공적으로 삭제되었습니다.", new EmptyResponse());
   }
+
+  @GetMapping("/payments/stats")
+  @Operation(summary = "ADMIN_11 : 가맹점 결제 통계 조회", description = "총 가맹점 결제 통계를 조회합니다.")
+  public CommonResponse<MerchantPaymentStatsResponse> getMerchantPaymentStats() {
+    MerchantPaymentStatsResponse response = adminMerchantService.getMerchantPaymentStats();
+    return new CommonResponse<>(true, HttpStatus.OK, "총 가맹점 결제 통계 조회에 성공하였습니다.", response);
+  }
 }

@@ -114,5 +114,13 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
           Pageable pageable
   );
 
+  @Query("SELECT COUNT(p) FROM Payment p WHERE p.createdAt >= :start AND p.createdAt < :end")
+  int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
+  @Query(
+      "SELECT COALESCE(SUM(p.amount), 0) FROM Payment p WHERE p.createdAt >= :start AND p.createdAt < :end")
+  Long sumAmountByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
+
+  @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p")
+  Long sumTotalAmount();
 }

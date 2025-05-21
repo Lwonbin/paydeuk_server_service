@@ -26,4 +26,7 @@ public class MerchantIndividualStatsResponse {
 
   @Schema(description = "전월 대비 증가율 (%)", example = "3.0%")
   private double percentChange;
+
+  @Schema(description = "가맹점 상태 (활성|비활성)", example = "true")
+  private boolean status;
 }

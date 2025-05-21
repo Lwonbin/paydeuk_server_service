@@ -91,4 +91,14 @@ VALUES
     ('이마트 가전제품', 200000, true, 2, 9, 4, 10000, NOW(), NOW()),
     ('스타벅스 디저트', 7000, true, 2, 1, 1, 700, NOW(), NOW());
 
-
+-- 어제 결제 데이터 추가
+INSERT INTO payment (
+    product_name, amount, payment_success, user_card_id,
+    merchant_id, card_benefit_id, discount_amount, created_at, updated_at
+)
+VALUES
+    ('컬리 어제 채소', 20000, true, 1, 2, 2, 1000, NOW() - INTERVAL 1 DAY, NOW() - INTERVAL 1 DAY),
+    ('쿠팡 어제 생필품', 40000, true, 2, 7, 3, 2000, NOW() - INTERVAL 1 DAY, NOW() - INTERVAL 1 DAY),
+    ('이마트 어제 식자재', 55000, true, 1, 9, 4, 2750, NOW() - INTERVAL 1 DAY, NOW() - INTERVAL 1 DAY),
+    ('스타벅스 어제 음료', 4800, true, 1, 1, 1, 480, NOW() - INTERVAL 1 DAY, NOW() - INTERVAL 1 DAY),
+    ('스타벅스 어제 샌드위치', 6200, false, 2, 1, 1, 0, NOW() - INTERVAL 1 DAY, NOW() - INTERVAL 1 DAY);
