@@ -1,12 +1,12 @@
 package com.tower_of_fisa.paydeuk_server_service.global.dto;
 
-import java.util.List;
-
 import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
 import org.springframework.data.domain.Page;
+
 @Data
 @Getter
 @AllArgsConstructor
@@ -27,10 +27,9 @@ public class CustomPageResDto<T> {
 
   public static <T> CustomPageResDto<T> fromPage(Page<T> page) {
     return new CustomPageResDto<>(
-            page.getContent(),
-            new PageInfo(page.getNumber() + 1, page.getSize()), // 1부터 시작
-            page.getTotalPages(),
-            page.getTotalElements()
-    );
+        page.getContent(),
+        new PageInfo(page.getNumber() + 1, page.getSize()), // 1부터 시작
+        page.getTotalPages(),
+        page.getTotalElements());
   }
 }

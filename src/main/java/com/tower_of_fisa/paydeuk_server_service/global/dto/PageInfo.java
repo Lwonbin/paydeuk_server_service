@@ -9,7 +9,7 @@ import lombok.Getter;
 @Schema(description = "페이지 정보")
 public class PageInfo {
 
-  @Schema(description = "현재 페이지 번호 (1부터 시작)" , example = "1")
+  @Schema(description = "현재 페이지 번호 (1부터 시작)", example = "1")
   private int page;
 
   @Schema(description = "페이지 크기", example = "5")

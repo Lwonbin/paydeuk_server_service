@@ -13,14 +13,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.io.IOException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
 
 @RestController
 @RequestMapping("/api/user")
@@ -29,7 +28,6 @@ import java.io.IOException;
 public class UserController {
 
   private final UserService userService;
-
 
   @PatchMapping("/profile/address")
   @Operation(summary = "USER_01 : 주소 변경", description = "사용자 정보 중 주소를 수정합니다.")
@@ -69,25 +67,27 @@ public class UserController {
     return new CommonResponse<>(true, HttpStatus.OK, "내 이메일 변경에 성공했습니다.", new EmptyResponse());
   }
 
-    @PatchMapping(value = "/profile/image",
-            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    @Operation(summary = "USER_03 : 프로필 이미지 변경", description = "사용자 정보 중 프로필 이미지를 수정합니다.")
-    @ApiResponses(
-            value = {
-                    @ApiResponse(responseCode = "200", description = "프로필 이미지 변경 성공"),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "사용자를 찾을 수 없음",
-                            content =
-                            @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
-            })
-    public CommonResponse<UserProfileImageResponse> updateImage(
-            @AuthenticationPrincipal CustomUserDetails userDetails,
-            @RequestParam("image") MultipartFile image
-            ) throws IOException {
-        UserProfileImageResponse userProfileImageResponse = userService.updateProfileImage(userDetails.getId(), image);
-        return new CommonResponse<>(true, HttpStatus.OK, "프로필 이미지 변경 성공했습니다.", userProfileImageResponse);
-    }
+  @PatchMapping(value = "/profile/image", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  @Operation(summary = "USER_03 : 프로필 이미지 변경", description = "사용자 정보 중 프로필 이미지를 수정합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "프로필 이미지 변경 성공"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "사용자를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.USER_404)}))
+      })
+  public CommonResponse<UserProfileImageResponse> updateImage(
+      @AuthenticationPrincipal CustomUserDetails userDetails,
+      @RequestParam("image") MultipartFile image)
+      throws IOException {
+    UserProfileImageResponse userProfileImageResponse =
+        userService.updateProfileImage(userDetails.getId(), image);
+    return new CommonResponse<>(
+        true, HttpStatus.OK, "프로필 이미지 변경 성공했습니다.", userProfileImageResponse);
+  }
+
   /*
    실제 서비스에서는 userId를 통해 User의 존재 여부를 확인해야 하는 API가 많지만, 대부분의 경우 해당 userId는 필터단에서 이미 인증되어 있으므로, 사용자 미존재 상황이 아닌 "권한이 없습니다" 에러만 확인할 수 있습니다.
    이에 따라 실제 User의 존재 여부를 직접 확인하고, Swagger에서 404 에러 응답 예시를 명확히 표현하기 위한 전용 API를 작성하였습니다.
@@ -212,6 +212,4 @@ public class UserController {
     UserBenefitResponse response = userService.getUserBenefits(userDetails.getId());
     return new CommonResponse<>(true, HttpStatus.OK, "수혜 혜택 조회에 성공했습니다.", response);
   }
-
-
 }

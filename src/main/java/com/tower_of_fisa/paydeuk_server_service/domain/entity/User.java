@@ -6,7 +6,6 @@ import com.tower_of_fisa.paydeuk_server_service.global.common.BaseEntity;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
-
 import lombok.*;
 
 @Builder

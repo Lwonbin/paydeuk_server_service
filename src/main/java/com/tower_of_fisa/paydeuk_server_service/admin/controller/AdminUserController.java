@@ -29,19 +29,13 @@ public class AdminUserController {
 
   @GetMapping
   @Operation(summary = "ADMIN_USER_01 : 사용자 목록 조회", description = "전체 사용자 목록을 조회한다.")
-  @ApiResponses(
-      value = {
-        @ApiResponse(
-            responseCode = "200",
-            description = "사용자 목록 조회 성공"
-            )
-      })
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "사용자 목록 조회 성공")})
   public CommonResponse<CustomPageResDto<UserListResponse>> getAllUsers(
-          @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
-          @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size
-  ) {
-    Page<UserListResponse> result = adminUserService.getAllUsers(page,size);
-    return new CommonResponse<>(true, HttpStatus.OK, "사용자 목록 조회에 성공했습니다", CustomPageResDto.fromPage(result));
+      @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
+      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
+    Page<UserListResponse> result = adminUserService.getAllUsers(page, size);
+    return new CommonResponse<>(
+        true, HttpStatus.OK, "사용자 목록 조회에 성공했습니다", CustomPageResDto.fromPage(result));
   }
 
   @GetMapping("/stats")
