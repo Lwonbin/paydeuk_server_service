@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum ErrorDefineCode {
-  UNCAUGHT("ERR_00", "Uncaught Exception"),
+  UNCAUGHT("ERR_00", "잘못된 요청입니다."),
   VALID_ERROR("ERR_01", "Field Validation fail"),
   EXAMPLE_OCCURER_ERROR("ERR_02", "예제 코드에서 그냥 발생시킨 오류랍니다"),
   DUPLICATE_EXAMPLE_NAME("ERR_03", "Example로 중복된 이름을 사용할 수 없습니다"),
@@ -24,6 +24,9 @@ public enum ErrorDefineCode {
   ACCESSTOKEN_EXPIRED("AUT_02", "Access Token이 만료되었습니다."),
   DUPLICATE_USERNAME("USR_03", "이미 사용 중인 아이디입니다."),
   CARD_NOT_FOUND("CAR_01", "해당 카드를 찾을 수 없습니다."),
+  CARD_OWNER_MISMATCH("CAR_02", "카드 소유자가 아닙니다."),
+  INVALID_CARD("CAR_03", "카드 정보가 유효하지 않습니다."),
+  CARD_ALREADY_ISSUED("CAR_04", "이미 발급된 카드입니다."),
   INVALID_PAYMENT_PIN_CODE("PIN_01", "적절하지 않은 비밀번호 형식입니다."),
   ALREADY_HAS_PIN_CODE("PIN_02", "간편 결제 비밀번호가 이미 설정되었습니다."),
   WRONG_PAYMENT_PIN_CODE("PIN_03", "간편 결제 비밀번호가 일치 하지 않습니다.");
