@@ -14,7 +14,6 @@ import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.user_card.repository.UserCardRepository;
 import java.util.List;
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
