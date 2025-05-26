@@ -1,5 +1,7 @@
 package com.tower_of_fisa.paydeuk_server_service.user_card.service;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tower_of_fisa.paydeuk_server_service.admin.repository.PaymentRepository;
 import com.tower_of_fisa.paydeuk_server_service.card.repository.CardRepository;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Card;
@@ -9,6 +11,8 @@ import com.tower_of_fisa.paydeuk_server_service.domain.entity.UserCard;
 import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.AlreadyExistElementException409;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.BadRequestException400;
+import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.ForbiddenException403;
 import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.NoSuchElementFoundException404;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.*;
@@ -23,6 +27,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Slf4j
@@ -187,31 +193,59 @@ public class UserCardService {
             .build();
 
     HttpEntity<CardTokenRequest> entity = new HttpEntity<>(cardTokenRequest, headers);
-    String cardToken;
 
-    ResponseEntity<CommonResponse<CardTokenResponse>> response =
-        restTemplate.exchange(url, HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
-    CommonResponse<CardTokenResponse> body = response.getBody();
-    if (body == null || body.getResponse() == null) {
-      throw new NoSuchElementFoundException404(ErrorDefineCode.UNCAUGHT);
+    try {
+      ResponseEntity<CommonResponse<CardTokenResponse>> response =
+          restTemplate.exchange(
+              url, HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
+      CommonResponse<CardTokenResponse> body = response.getBody();
+
+      if (body == null || body.getResponse() == null) {
+        throw new NoSuchElementFoundException404(ErrorDefineCode.UNCAUGHT);
+      }
+
+      String cardToken = body.getResponse().getCardToken();
+
+      if (userCardRepository.existsByCardToken(cardToken)) {
+        throw new AlreadyExistElementException409(ErrorDefineCode.CARD_ALREADY_ISSUED);
+      }
+
+      // 4. UserCard 생성
+      UserCard userCard =
+          UserCard.builder()
+              .cardToken(cardToken)
+              .cardNumber(addCardRequest.getCardNumber())
+              .isDefaultCard(user.getUserCards().isEmpty()) // 첫 카드면 대표카드로 설정
+              .user(user)
+              .card(card)
+              .build();
+
+      // 5. UserCard 저장
+      userCardRepository.save(userCard);
+    } catch (HttpClientErrorException | HttpServerErrorException e) {
+      // 8081 서버의 에러 메시지 추출
+      String errorBody = e.getResponseBodyAsString();
+      String status = extractStatusFromJson(errorBody);
+
+      if ("NOT_FOUND".equals(status)) {
+        throw new NoSuchElementFoundException404(ErrorDefineCode.CARD_NOT_FOUND);
+      } else if ("FORBIDDEN".equals(status)) {
+        throw new ForbiddenException403(ErrorDefineCode.CARD_OWNER_MISMATCH);
+      } else if ("BAD_REQUEST".equals(status)) {
+        throw new BadRequestException400(ErrorDefineCode.INVALID_CARD);
+      } else {
+        throw new BadRequestException400(ErrorDefineCode.UNCAUGHT);
+      }
     }
+  }
 
-    cardToken = body.getResponse().getCardToken();
-    if (userCardRepository.existsByCardToken(cardToken)) {
-      throw new AlreadyExistElementException409(ErrorDefineCode.UNCAUGHT);
+  private String extractStatusFromJson(String json) {
+    try {
+      ObjectMapper mapper = new ObjectMapper();
+      JsonNode node = mapper.readTree(json);
+      return node.get("status").asText();
+    } catch (Exception e) {
+      return "500";
     }
-
-    // 4. UserCard 생성
-    UserCard userCard =
-        UserCard.builder()
-            .cardToken(cardToken)
-            .cardNumber(addCardRequest.getCardNumber())
-            .isDefaultCard(user.getUserCards().isEmpty()) // 첫 카드면 대표카드로 설정
-            .user(user)
-            .card(card)
-            .build();
-
-    // 5. UserCard 저장
-    userCardRepository.save(userCard);
   }
 }
