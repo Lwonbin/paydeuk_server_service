@@ -20,20 +20,20 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
   Long sumAmountByPaymentSuccessTrue();
 
   @Query(
-          value = """
-        SELECT
-            DATE(p.created_at) AS date,
-            COALESCE(SUM(p.amount), 0) AS total_amount,
-            COUNT(*) AS total_count
-        FROM payment p
-        WHERE p.payment_success = true
-          AND p.created_at >= CURDATE() - INTERVAL 6 DAY
-        GROUP BY DATE(p.created_at)
-        ORDER BY DATE(p.created_at)
-        """,
-          nativeQuery = true)
+      value =
+          """
+          SELECT
+              DATE(p.created_at) AS date,
+              COALESCE(SUM(p.amount), 0) AS total_amount,
+              COUNT(*) AS total_count
+          FROM payment p
+          WHERE p.payment_success = true
+            AND p.created_at >= CURDATE() - INTERVAL 6 DAY
+          GROUP BY DATE(p.created_at)
+          ORDER BY DATE(p.created_at)
+          """,
+      nativeQuery = true)
   List<Object[]> findWeeklyTrendsForAllMerchants();
-
 
   int countByMerchantIdAndPaymentSuccessTrue(Long merchantId);
 
@@ -80,45 +80,41 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
   Long sumSuccessfulPaymentsBetween(
       @Param("start") LocalDateTime start, @Param("end") LocalDateTime end);
 
-
-
-  @Query("SELECT COUNT(p) FROM Payment p WHERE p.merchant.id = :merchantId AND p.paymentSuccess = true AND p.createdAt < :before")
+  @Query(
+      "SELECT COUNT(p) FROM Payment p WHERE p.merchant.id = :merchantId AND p.paymentSuccess = true"
+          + " AND p.createdAt < :before")
   int countByMerchantIdAndPaymentSuccessTrueBefore(
-          @Param("merchantId") Long merchantId,
-          @Param("before") LocalDateTime before
-  );
+      @Param("merchantId") Long merchantId, @Param("before") LocalDateTime before);
 
   @Query(
-          "SELECT COALESCE(SUM(p.amount), 0) FROM Payment p " +
-                  "WHERE p.merchant.id = :merchantId AND p.paymentSuccess = true " +
-                  "AND p.createdAt BETWEEN :start AND :end"
-  )
+      "SELECT COALESCE(SUM(p.amount), 0) FROM Payment p "
+          + "WHERE p.merchant.id = :merchantId AND p.paymentSuccess = true "
+          + "AND p.createdAt BETWEEN :start AND :end")
   Long sumSuccessfulPaymentsForMerchantBetween(
-          @Param("merchantId") Long merchantId,
-          @Param("start") LocalDateTime start,
-          @Param("end") LocalDateTime end
-  );
+      @Param("merchantId") Long merchantId,
+      @Param("start") LocalDateTime start,
+      @Param("end") LocalDateTime end);
 
-  @Query("""
-        SELECT new com.tower_of_fisa.paydeuk_server_service.admin.dto.SingleMerchantPaymentResponse(
-                   p.id, uc.cardNumber, c.name, p.createdAt, p.amount, p.paymentSuccess
-               )
-        FROM Payment p
-        JOIN p.userCard uc
-        JOIN uc.card c
-        WHERE p.merchant.id = :merchantId
-        ORDER BY p.createdAt DESC
-        """)
+  @Query(
+      """
+      SELECT new com.tower_of_fisa.paydeuk_server_service.admin.dto.SingleMerchantPaymentResponse(
+                 p.id, uc.cardNumber, c.name, p.createdAt, p.amount, p.paymentSuccess
+             )
+      FROM Payment p
+      JOIN p.userCard uc
+      JOIN uc.card c
+      WHERE p.merchant.id = :merchantId
+      ORDER BY p.createdAt DESC
+      """)
   Page<SingleMerchantPaymentResponse> findSingleMerchantPaymentsByMerchantId(
-          @Param("merchantId") Long merchantId,
-          Pageable pageable
-  );
+      @Param("merchantId") Long merchantId, Pageable pageable);
 
   @Query("SELECT COUNT(p) FROM Payment p WHERE p.createdAt >= :start AND p.createdAt < :end")
   int countByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
   @Query(
-      "SELECT COALESCE(SUM(p.amount), 0) FROM Payment p WHERE p.createdAt >= :start AND p.createdAt < :end")
+      "SELECT COALESCE(SUM(p.amount), 0) FROM Payment p WHERE p.createdAt >= :start AND p.createdAt"
+          + " < :end")
   Long sumAmountByCreatedAtBetween(LocalDateTime start, LocalDateTime end);
 
   @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p")

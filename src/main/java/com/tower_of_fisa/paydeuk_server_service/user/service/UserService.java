@@ -8,15 +8,14 @@ import com.tower_of_fisa.paydeuk_server_service.global.config.s3.S3Service;
 import com.tower_of_fisa.paydeuk_server_service.user.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import jakarta.transaction.Transactional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.io.IOException;
 import java.time.LocalDate;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 @Slf4j
 @Service
@@ -28,17 +27,20 @@ public class UserService {
   private final BCryptPasswordEncoder passwordEncoder;
   private final RedisTemplate<String, String> redisTemplate;
   private final S3Service s3Service;
+
   /**
    * [내 정보 변경] 사용자의 프로필 이미지를 변경한다.
    *
    * @param userId 인증된 사용자 ID
    * @param image 변경할 이미지 정보를 담은 MultipartFile
-   *
    * @return 변경된 이미지 URL을 담은 응답 DTO (UserProfileImageResponse)
    */
   @Transactional
-  public UserProfileImageResponse updateProfileImage(Long userId, MultipartFile image) throws IOException {
-    User user = userRepository.findById(userId)
+  public UserProfileImageResponse updateProfileImage(Long userId, MultipartFile image)
+      throws IOException {
+    User user =
+        userRepository
+            .findById(userId)
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
     // 기존 이미지 삭제
@@ -48,12 +50,10 @@ public class UserService {
     }
     // 어디서 용량크기 에러가 터지는지? 확인후 거기에 따른 에러 코드 설정 및 프론트에서 막기    yml파일 변경ㅎ 실험
     // 새 이미지 업로드
-    String newImageUrl = s3Service.uploadProfileImage(image,userId);
+    String newImageUrl = s3Service.uploadProfileImage(image, userId);
     user.setImageUrl(newImageUrl);
     userRepository.save(user);
-    return UserProfileImageResponse.builder()
-            .imageUrl(newImageUrl)
-            .build();
+    return UserProfileImageResponse.builder().imageUrl(newImageUrl).build();
   }
 
   private String extractKeyFromUrl(String url) {
@@ -171,7 +171,12 @@ public class UserService {
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
     return new UserInfoResponse(
-        user.getName(), user.getBirthDate(), user.getPhone(), user.getEmail(), user.getAddress(), user.getImageUrl());
+        user.getName(),
+        user.getBirthDate(),
+        user.getPhone(),
+        user.getEmail(),
+        user.getAddress(),
+        user.getImageUrl());
   }
 
   /**

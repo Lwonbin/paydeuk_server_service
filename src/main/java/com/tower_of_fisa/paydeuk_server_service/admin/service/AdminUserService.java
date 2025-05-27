@@ -27,7 +27,8 @@ public class AdminUserService {
    */
   public Page<UserListResponse> getAllUsers(int page, int size) {
     Pageable pageable = PageRequest.of(page - 1, size);
-    return userRepository.findByRole(pageable) // 일반 사용자만 필터링
+    return userRepository
+        .findByRole(pageable) // 일반 사용자만 필터링
         .map(this::convertToDto);
   }
 

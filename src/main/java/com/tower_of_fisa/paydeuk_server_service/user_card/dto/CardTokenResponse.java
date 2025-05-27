@@ -6,11 +6,11 @@ import lombok.Getter;
 
 @Builder
 @Getter
-@Schema(description = "카드 등록 요청")
-public class AddCardResponse {
+@Schema(description = "카드 등록 응답")
+public class CardTokenResponse {
   @Schema(description = "카드 ID", example = "1")
-  private Long cardId;
+  private final Long cardId;
 
-  @Schema(description = "카드 이미지", example = "s3.amazonaws.com/paydeuk/card/1.png")
-  private String cardImage;
+  @Schema(description = "카드 토큰", example = "RF1yH2cquzK5T2vJ7TLHs5ygCtQ1Fchd")
+  private final String cardToken;
 }

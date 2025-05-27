@@ -4,14 +4,12 @@ import com.tower_of_fisa.paydeuk_server_service.admin.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.admin.service.AdminMerchantService;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.EmptyResponse;
-import com.tower_of_fisa.paydeuk_server_service.global.common.response.SwaggerErrorResponseType;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.swagger_response.SwaggerResponseExample;
 import com.tower_of_fisa.paydeuk_server_service.global.dto.CustomPageResDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
-import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -41,33 +39,35 @@ public class AdminMerchantController {
   @GetMapping("/payments")
   @Operation(summary = "ADMIN_02 : 전체 가맹점 결제 내역 조회", description = "전체 가맹점의 결제 내역을 조회한다.")
   public CommonResponse<CustomPageResDto<MerchantPaymentResponse>> getAllMerchantPaymentHistories(
-          @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
-          @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
+      @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
+      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
 
     Page<MerchantPaymentResponse> response =
-            adminMerchantService.getAllMerchantPaymentHistories(page,size);
-    return new CommonResponse<>(true, HttpStatus.OK, "전체 결제 내역 조회 성공", CustomPageResDto.fromPage(response));
+        adminMerchantService.getAllMerchantPaymentHistories(page, size);
+    return new CommonResponse<>(
+        true, HttpStatus.OK, "전체 결제 내역 조회 성공", CustomPageResDto.fromPage(response));
   }
 
   @GetMapping("/{merchantId}/payments")
   @Operation(summary = "ADMIN_03 : 개별 가맹점 결제 내역 조회", description = "개별 가맹점의 결제 내역을 조회한다.")
   @ApiResponses(
-          value = {
-                  @ApiResponse(responseCode = "200", description = "가맹점 상세 정보 조회 성공"),
-                  @ApiResponse(
-                          responseCode = "404",
-                          description = "가맹점을 찾을 수 없음",
-                          content =
-                          @Content(examples = {@ExampleObject(value = SwaggerResponseExample.MERCHANT_404)}))
-          })
+      value = {
+        @ApiResponse(responseCode = "200", description = "가맹점 상세 정보 조회 성공"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "가맹점을 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.MERCHANT_404)}))
+      })
   public CommonResponse<CustomPageResDto<SingleMerchantPaymentResponse>> getSingleMerchantPayment(
-          @Parameter(description = "가맹점 ID", example = "1") @PathVariable Long merchantId,
-          @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
-          @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
+      @Parameter(description = "가맹점 ID", example = "1") @PathVariable Long merchantId,
+      @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
+      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
 
     Page<SingleMerchantPaymentResponse> response =
-            adminMerchantService.getSingleMerchantPayment(merchantId,page,size);
-    return new CommonResponse<>(true, HttpStatus.OK, "가맹점별 결제 내역 조회 성공", CustomPageResDto.fromPage(response));
+        adminMerchantService.getSingleMerchantPayment(merchantId, page, size);
+    return new CommonResponse<>(
+        true, HttpStatus.OK, "가맹점별 결제 내역 조회 성공", CustomPageResDto.fromPage(response));
   }
 
   @GetMapping("/trends")
@@ -75,23 +75,21 @@ public class AdminMerchantController {
   @ApiResponse(responseCode = "200", description = "전체 가맹점 거래 추이 조회 성공")
   public CommonResponse<List<MerchantTransactionTrendResponse>> getMerchantTransactionTrends() {
     List<MerchantTransactionTrendResponse> response =
-            adminMerchantService.getTotalMerchantTransactionTrends();
+        adminMerchantService.getTotalMerchantTransactionTrends();
     return new CommonResponse<>(true, HttpStatus.OK, "거래 추이 조회 성공", response);
   }
-
-
 
   @GetMapping("/{merchantId}/stats")
   @Operation(summary = "ADMIN_05 : 가맹점별 통계 조회", description = "특정 가맹점의 통계를 조회한다.")
   @ApiResponses(
-          value = {
-                  @ApiResponse(responseCode = "200", description = "특정 가맹점 정보 조회 성공"),
-                  @ApiResponse(
-                          responseCode = "404",
-                          description = "가맹점을 찾을 수 없음",
-                          content =
-                          @Content(examples = {@ExampleObject(value = SwaggerResponseExample.MERCHANT_404)}))
-          })
+      value = {
+        @ApiResponse(responseCode = "200", description = "특정 가맹점 정보 조회 성공"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "가맹점을 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.MERCHANT_404)}))
+      })
   public CommonResponse<MerchantIndividualStatsResponse> getMerchantStatisticsById(
       @Parameter(description = "가맹점 ID", example = "1") @PathVariable Long merchantId) {
     MerchantIndividualStatsResponse response =
@@ -100,9 +98,11 @@ public class AdminMerchantController {
   }
 
   @GetMapping("/top-stats")
-  @Operation(summary = "ADMIN_06 : 상위 가맹점 통계 조회", description = "거래 금액 또는 거래 건수 기준 상위 가맹점들의 통계를 조회한다.")
+  @Operation(
+      summary = "ADMIN_06 : 상위 가맹점 통계 조회",
+      description = "거래 금액 또는 거래 건수 기준 상위 가맹점들의 통계를 조회한다.")
   @ApiResponse(responseCode = "200", description = "가맹점 목록 조회 성공")
-  public CommonResponse<List<MerchantTopStatsResponse>> getTopMerchantStats(){
+  public CommonResponse<List<MerchantTopStatsResponse>> getTopMerchantStats() {
     List<MerchantTopStatsResponse> response = adminMerchantService.getTopMerchantStats();
     return new CommonResponse<>(true, HttpStatus.OK, "상위 가맹점 통계 조회 성공", response);
   }

@@ -9,16 +9,13 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 
 @SpringBootTest
 public class RedisConnectionTestForGithubActionsTest {
-    @Autowired
-    private StringRedisTemplate redisTemplate;
+  @Autowired private StringRedisTemplate redisTemplate;
 
-    @Test
-    void testRedisConnection() {
-        // ping 명령 보내기
-        String result = redisTemplate.getConnectionFactory()
-                .getConnection()
-                .ping();
+  @Test
+  void testRedisConnection() {
+    // ping 명령 보내기
+    String result = redisTemplate.getConnectionFactory().getConnection().ping();
 
-        assertThat(result).isEqualTo("PONG");
-    }
+    assertThat(result).isEqualTo("PONG");
+  }
 }
