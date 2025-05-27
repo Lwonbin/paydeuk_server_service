@@ -163,12 +163,6 @@ public class UserCardService {
             .findById(userId)
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
-    // addCardRequest를 카드사에게 주고 카드사에게 이 카드의 정보(cardId or cardName, ex-현대카드와 cardToken을 받음)
-    Card card =
-        cardRepository
-            .findById(1L)
-            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.CARD_NOT_FOUND));
-
     // 2.카드 토큰 생성 (실제로는 addCardRequest를 카드사에게 주고 카드사 API를 통해 토큰화)
     String url = "http://localhost:8081/api/card/token/issue";
 
@@ -203,6 +197,13 @@ public class UserCardService {
       if (body == null || body.getResponse() == null) {
         throw new NoSuchElementFoundException404(ErrorDefineCode.UNCAUGHT);
       }
+
+      // 3. 카드 정보 조회
+      Card card =
+          cardRepository
+              .findById(body.getResponse().getCardId())
+              .orElseThrow(
+                  () -> new NoSuchElementFoundException404(ErrorDefineCode.CARD_NOT_FOUND));
 
       String cardToken = body.getResponse().getCardToken();
 
