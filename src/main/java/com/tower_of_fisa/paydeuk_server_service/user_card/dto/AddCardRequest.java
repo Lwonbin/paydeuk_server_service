@@ -6,18 +6,18 @@ import lombok.Getter;
 @Getter
 @Schema(description = "카드 추가 요청")
 public class AddCardRequest {
-  @Schema(description = "카드 번호", example = "1234567890123456")
+  @Schema(description = "카드 번호", example = "1111222233334440")
   private String cardNumber;
 
   @Schema(description = "만료 월", example = "12")
   private String month;
 
-  @Schema(description = "만료 연도", example = "25")
+  @Schema(description = "만료 연도", example = "26")
   private String year;
 
   @Schema(description = "CVC", example = "123")
   private String cvc;
 
-  @Schema(description = "카드 앞 두자리", example = "12")
+  @Schema(description = "카드 앞 두자리", example = "00")
   private String pinPrefix;
 }
