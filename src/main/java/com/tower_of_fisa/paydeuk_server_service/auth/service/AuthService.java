@@ -13,6 +13,7 @@ import com.tower_of_fisa.paydeuk_server_service.global.config.security.JwtProvid
 import com.tower_of_fisa.paydeuk_server_service.global.util.cookie.CookieUtil;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -88,14 +89,9 @@ public class AuthService {
    * [회원가입] 신규 유저 정보를 저장한다.
    *
    * @param request SignupRequestDto - 추가할 유저 정보를 담은 DTO 객체
-   * @return Long - 추가된 유저의 ID
    */
   @Transactional
   public void registerUser(SignupRequest request) {
-    if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-      throw new AlreadyExistElementException409(ErrorDefineCode.DUPLICATE_EXAMPLE_NAME);
-    }
-
     User user =
         User.builder()
             .name(request.getName())
@@ -107,9 +103,16 @@ public class AuthService {
             .birthDate(request.getBirthdate())
             .status(UserStatus.ACTIVE)
             .personalAuthKey(request.getPersonalAuthKey())
+            .paymentPinCode(passwordEncoder.encode(request.getPaymentPinCode()))
             .build();
 
     userRepository.save(user);
+  }
+
+  public void signupVerify(@Valid SignupVerifyRequest request) {
+    if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+      throw new AlreadyExistElementException409(ErrorDefineCode.DUPLICATE_EXAMPLE_NAME);
+    }
   }
 
   /**

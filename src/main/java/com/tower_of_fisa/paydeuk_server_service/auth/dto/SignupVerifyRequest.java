@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Schema(title = "SignupRequestDto : 회원가입 요청 스키마")
-public class SignupRequest {
+public class SignupVerifyRequest {
 
   @NotBlank(message = "이름을 입력해주세요.")
   @Schema(description = "이름", example = "홍길동")
@@ -47,7 +47,4 @@ public class SignupRequest {
   @NotBlank(message = "사용자 식별키가 필요합니다.")
   @Schema(description = "본인인증 후 발급된 개인 식별키", example = "uheeR/P2ECGn+...")
   private String personalAuthKey;
-
-  @Schema(description = "간편 결제 비밀번호", example = "191559")
-  private String paymentPinCode;
 }
