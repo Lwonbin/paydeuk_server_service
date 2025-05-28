@@ -14,6 +14,8 @@ import com.tower_of_fisa.paydeuk_server_service.global.util.cookie.CookieUtil;
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Map;
+
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -91,10 +93,6 @@ public class AuthService {
    */
   @Transactional
   public void registerUser(SignupRequest request) {
-    if (userRepository.findByUsername(request.getUsername()).isPresent()) {
-      throw new AlreadyExistElementException409(ErrorDefineCode.DUPLICATE_EXAMPLE_NAME);
-    }
-
     User user =
         User.builder()
             .name(request.getName())
@@ -110,6 +108,12 @@ public class AuthService {
             .build();
 
     userRepository.save(user);
+  }
+
+  public void signupVerify(@Valid SignupVerifyRequest request) {
+    if (userRepository.findByUsername(request.getUsername()).isPresent()) {
+      throw new AlreadyExistElementException409(ErrorDefineCode.DUPLICATE_EXAMPLE_NAME);
+    }
   }
 
   /**

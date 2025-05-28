@@ -74,6 +74,14 @@ public class AuthController {
     return new CommonResponse<>(true, HttpStatus.OK, "회원가입에 성공했습니다", null);
   }
 
+  @PostMapping("/signup/verify")
+  @Operation(summary = "AUTH_01-1 : 회원가입 인증", description = "회원가입 시 검증.")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "Success")})
+  public CommonResponse<Void> signupVerify(@Valid @RequestBody SignupVerifyRequest request) {
+    authService.signupVerify(request);
+    return new CommonResponse<>(true, HttpStatus.OK, "회원가입 인증에 성공했습니다", null);
+  }
+
   @PostMapping("/reset-password")
   @Operation(summary = "AUTH_06 : 비밀번호 재설정", description = "본인인증이 완료된 사용자의 비밀번호를 재설정합니다.")
   @ApiResponses(
