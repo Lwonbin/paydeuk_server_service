@@ -47,4 +47,7 @@ public class SignupRequest {
   @NotBlank(message = "사용자 식별키가 필요합니다.")
   @Schema(description = "본인인증 후 발급된 개인 식별키", example = "uheeR/P2ECGn+...")
   private String personalAuthKey;
+
+  @Schema(description = "간편 결제 비밀번호", example = "191559")
+  private String paymentPinCode;
 }

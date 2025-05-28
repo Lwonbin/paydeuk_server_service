@@ -88,7 +88,6 @@ public class AuthService {
    * [회원가입] 신규 유저 정보를 저장한다.
    *
    * @param request SignupRequestDto - 추가할 유저 정보를 담은 DTO 객체
-   * @return Long - 추가된 유저의 ID
    */
   @Transactional
   public void registerUser(SignupRequest request) {
@@ -107,6 +106,7 @@ public class AuthService {
             .birthDate(request.getBirthdate())
             .status(UserStatus.ACTIVE)
             .personalAuthKey(request.getPersonalAuthKey())
+            .paymentPinCode(passwordEncoder.encode(request.getPaymentPinCode()))
             .build();
 
     userRepository.save(user);
