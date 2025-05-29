@@ -27,6 +27,7 @@ public enum ErrorDefineCode {
   CARD_OWNER_MISMATCH("CAR_02", "카드 소유자가 아닙니다."),
   INVALID_CARD("CAR_03", "카드 정보가 유효하지 않습니다."),
   CARD_ALREADY_ISSUED("CAR_04", "이미 발급된 카드입니다."),
+  DEFAULT_CARD_NOT_REMOVABLE("CAR_05", "대표 카드는 삭제할 수 없습니다."),
   INVALID_PAYMENT_PIN_CODE("PIN_01", "적절하지 않은 비밀번호 형식입니다."),
   ALREADY_HAS_PIN_CODE("PIN_02", "간편 결제 비밀번호가 이미 설정되었습니다."),
   WRONG_PAYMENT_PIN_CODE("PIN_03", "간편 결제 비밀번호가 일치 하지 않습니다.");
