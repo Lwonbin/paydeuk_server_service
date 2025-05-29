@@ -19,10 +19,16 @@ VALUES ('관리자', 'admin', '$2a$12$2JKJbuJMKQJe0hX5zr9c0e.BgSBjVe2cKnBRis1e4v
 -- CARD TABLE
 -- card_id == 1
 INSERT INTO card (name, type, image_url, annual_fee, company, created_at, updated_at)
-VALUES ('현대카드 M', 'credit', 'https://paydeuk-s3-bucket.s3.ap-northeast-2.amazonaws.com/hyundaiM.png', 30000, 'HYUNDAI',
+VALUES ('현대카드 M', 'CREDIT', 'https://paydeuk-s3-bucket.s3.ap-northeast-2.amazonaws.com/hyundaiM.png', 30000, 'HYUNDAI',
         NOW(), NOW()),
-       ('삼성카드 S', 'credit', 'https://paydeuk-s3-bucket.s3.ap-northeast-2.amazonaws.com/samsungTaptap.png', 20000,
-        'SAMSUNG', NOW(), NOW());
+       ('신한카드 Mr.Life', 'CREDIT', 'https://paydeuk-s3-bucket.s3.ap-northeast-2.amazonaws.com/shinhanMrLife.png', 15000,
+        'SHINHAN', NOW(), NOW()),
+       ('KB국민 다담카드', 'CREDIT', 'https://paydeuk-s3-bucket.s3.ap-northeast-2.amazonaws.com/kbDadam.png', 15000,
+        'KOOKMIN', NOW(), NOW()),
+       ('삼성카드 taptap O', 'CREDIT', 'https://paydeuk-s3-bucket.s3.ap-northeast-2.amazonaws.com/samsungTaptap.png', 10000,
+        'SAMSUNG', NOW(), NOW()),
+       ('DA카드의정석 II', 'CREDIT', 'https://paydeuk-s3-bucket.s3.ap-northeast-2.amazonaws.com/da2.png', 15000, 'WOORI',
+        NOW(), NOW());
 -- USER_CARD TABLE
 INSERT INTO user_card (user_id, card_id, card_token, card_number, is_default_card, created_at, updated_at)
 VALUES (1, 1, 'mock_token', '1234', 1, NOW(), NOW()),

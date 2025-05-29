@@ -240,6 +240,18 @@ public class UserCardService {
     }
   }
 
+  @Transactional
+  public void deleteCard(Long userId, Long cardId) {
+    UserCard userCard = validateUserCard(userId, cardId);
+
+    // 카드가 대표카드인 경우 예외 처리
+    if (Boolean.TRUE.equals(userCard.getIsDefaultCard())) {
+      throw new ForbiddenException403(ErrorDefineCode.DEFAULT_CARD_NOT_REMOVABLE);
+    }
+
+    userCardRepository.delete(userCard);
+  }
+
   private String extractStatusFromJson(String json) {
     try {
       ObjectMapper mapper = new ObjectMapper();
