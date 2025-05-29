@@ -108,4 +108,21 @@ public class UserCardController {
     userCardService.updateDefaultCard(userDetails.getId(), req.getCardId());
     return new CommonResponse<>(true, HttpStatus.OK, "대표카드가 변경되었습니다.", new EmptyResponse());
   }
+
+  @DeleteMapping("/{cardId}")
+  @Operation(summary = "CARD_06 : 카드 삭제", description = "사용자의 카드를 삭제합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "카드 삭제 성공"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "카드를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.CARD_404)}))
+      })
+  public CommonResponse<EmptyResponse> deleteCard(
+      @AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long cardId) {
+    userCardService.deleteCard(userDetails.getId(), cardId);
+    return new CommonResponse<>(true, HttpStatus.OK, "카드가 삭제되었습니다.", new EmptyResponse());
+  }
 }
