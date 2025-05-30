@@ -1,6 +1,5 @@
 package com.tower_of_fisa.paydeuk_server_service.global.config.security;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,12 +18,10 @@ import org.springframework.web.servlet.HandlerExceptionResolver;
 @RequiredArgsConstructor
 public class SecurityConfig {
   private final CustomUserDetailsService userDetailsService;
-  private final JwtProvider jwtProvider;
-  private final LoginSuccessHandler successHandler;
-  private final LoginFailureHandler failureHandler;
   private final CustomAuthenticationEntryPoint authenticationEntryPoint;
   private final CustomAccessDeniedHandler accessDeniedHandler;
   private final HandlerExceptionResolver handlerExceptionResolver;
+  private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
   private static final String[] AUTH_WHITELIST = {
     "/v3/api-docs",
@@ -47,13 +44,6 @@ public class SecurityConfig {
   public SecurityFilterChain filterChain(
       HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
 
-    // 로그인 필터 설정
-    LoginFilter loginFilter =
-        new LoginFilter(new ObjectMapper(), authenticationManager, handlerExceptionResolver);
-    loginFilter.setAuthenticationSuccessHandler(successHandler);
-    loginFilter.setAuthenticationFailureHandler(failureHandler);
-    loginFilter.setFilterProcessesUrl("/api/auth/signin");
-
     http.csrf(AbstractHttpConfigurer::disable)
         .authorizeHttpRequests(
             auth ->
@@ -66,13 +56,9 @@ public class SecurityConfig {
                     .hasRole("USER")
                     .requestMatchers("/api/user/**")
                     .hasRole("USER"))
-        .formLogin(AbstractHttpConfigurer::disable)
         .httpBasic(AbstractHttpConfigurer::disable)
+        .addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class)
         .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(loginFilter, UsernamePasswordAuthenticationFilter.class)
-        .addFilterBefore(
-            new JwtAuthorizationFilter(jwtProvider, userDetailsService, handlerExceptionResolver),
-            UsernamePasswordAuthenticationFilter.class)
         .exceptionHandling(
             e ->
                 e.authenticationEntryPoint(authenticationEntryPoint)
