@@ -125,6 +125,8 @@ public class UserCardController {
   }
 
   @GetMapping("/recommendation/{category}")
+  @Operation(summary = "CARD_07 : 혜택별 카드 추천 조회", description = "카드 추천을 조회합니다.")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "카드 추천 조회 성공")})
   public CommonResponse<List<CardRecommendationResponse>> getCardRecommendation(
       @PathVariable MerchantCategory category) {
     List<CardRecommendationResponse> recommendedCards =
