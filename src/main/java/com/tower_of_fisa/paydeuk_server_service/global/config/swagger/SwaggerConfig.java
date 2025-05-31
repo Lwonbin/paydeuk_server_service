@@ -17,22 +17,19 @@ import org.springframework.context.annotation.Configuration;
             version = "v1"))
 @Configuration
 public class SwaggerConfig {
-
-  private static final String BEARER_TOKEN_PREFIX = "Bearer";
-
   @Bean
   public OpenAPI openAPI() {
-    String securityJwtName = "JWT";
-    SecurityRequirement securityRequirement = new SecurityRequirement().addList(securityJwtName);
+    SecurityRequirement securityRequirement =
+        new SecurityRequirement().addList("userNameSecurityName");
     Components components =
         new Components()
             .addSecuritySchemes(
-                securityJwtName,
+                "userNameSecurityName",
                 new SecurityScheme()
-                    .name(securityJwtName)
-                    .type(SecurityScheme.Type.HTTP)
-                    .scheme(BEARER_TOKEN_PREFIX)
-                    .bearerFormat(securityJwtName));
+                    .name("X-User-Name")
+                    .type(SecurityScheme.Type.APIKEY)
+                    .in(SecurityScheme.In.HEADER)
+                    .bearerFormat("X-User-Name"));
 
     return new OpenAPI().addSecurityItem(securityRequirement).components(components);
   }
