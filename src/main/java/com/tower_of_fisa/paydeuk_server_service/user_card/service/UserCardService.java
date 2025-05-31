@@ -264,11 +264,7 @@ public class UserCardService {
   }
 
   public List<CardRecommendationResponse> getCardRecommendation(MerchantCategory category) {
-    // 1. 해당 카테고리의 가맹점들이 제공하는 혜택을 가진 카드들을 조회
-    List<Card> recommendedCards = cardRepository.findCardsByMerchantCategory(category);
-
-    // 2. 각 카드에 대한 추천 응답 생성
-    return recommendedCards.stream()
+    return cardRepository.findCardsByMerchantCategory(category).stream()
         .map(
             card ->
                 CardRecommendationResponse.builder()
@@ -276,34 +272,7 @@ public class UserCardService {
                     .cardName(card.getName())
                     .imageUrl(card.getImageUrl())
                     .cardCompany(card.getCompany())
-                    .benefits(
-                        card.getCardBenefits().stream()
-                            .map(CardBenefit::getBenefit)
-                            .filter(
-                                benefit ->
-                                    benefit.getMerchant() != null
-                                        && benefit.getMerchant().getCategory() == category)
-                            .map(
-                                benefit ->
-                                    BenefitResponse.builder()
-                                        .id(benefit.getId())
-                                        .title(benefit.getTitle())
-                                        .description(benefit.getDescription())
-                                        .benefitType(benefit.getBenefitType().name())
-                                        .hasAdditionalCondition(benefit.getHasAdditionalCondition())
-                                        .benefitConditions(
-                                            benefit.getBenefitConditions().stream()
-                                                .map(
-                                                    condition ->
-                                                        BenefitConditionResponse.builder()
-                                                            .id(condition.getId())
-                                                            .value(condition.getValue())
-                                                            .category(
-                                                                condition.getCategory().name())
-                                                            .build())
-                                                .toList())
-                                        .build())
-                            .toList())
+                    .benefits(convertToBenefitResponses(card, category))
                     .build())
         .toList();
   }
@@ -320,29 +289,41 @@ public class UserCardService {
         .cardCompany(card.getCompany())
         .annualFee(card.getAnnualFee())
         .minSpending(String.format("%,d원 이상", cardRepository.findMinSpendingByCardId(cardId)))
-        .benefits(
-            card.getCardBenefits().stream()
-                .map(
-                    cardBenefit ->
-                        BenefitResponse.builder()
-                            .id(cardBenefit.getBenefit().getId())
-                            .title(cardBenefit.getBenefit().getTitle())
-                            .description(cardBenefit.getBenefit().getDescription())
-                            .benefitType(cardBenefit.getBenefit().getBenefitType().name())
-                            .hasAdditionalCondition(
-                                cardBenefit.getBenefit().getHasAdditionalCondition())
-                            .benefitConditions(
-                                cardBenefit.getBenefit().getBenefitConditions().stream()
-                                    .map(
-                                        condition ->
-                                            BenefitConditionResponse.builder()
-                                                .id(condition.getId())
-                                                .value(condition.getValue())
-                                                .category(condition.getCategory().name())
-                                                .build())
-                                    .toList())
-                            .build())
-                .toList())
+        .benefits(convertToBenefitResponses(card, null))
         .build();
+  }
+
+  private List<BenefitResponse> convertToBenefitResponses(Card card, MerchantCategory category) {
+    return card.getCardBenefits().stream()
+        .map(CardBenefit::getBenefit)
+        .sorted(
+            (b1, b2) -> {
+              if (category == null) return 0;
+              boolean b1Matches =
+                  b1.getMerchant() != null && b1.getMerchant().getCategory() == category;
+              boolean b2Matches =
+                  b2.getMerchant() != null && b2.getMerchant().getCategory() == category;
+              return Boolean.compare(!b1Matches, !b2Matches); // true < false
+            })
+        .map(
+            benefit ->
+                BenefitResponse.builder()
+                    .id(benefit.getId())
+                    .title(benefit.getTitle())
+                    .description(benefit.getDescription())
+                    .benefitType(benefit.getBenefitType().name())
+                    .hasAdditionalCondition(benefit.getHasAdditionalCondition())
+                    .benefitConditions(
+                        benefit.getBenefitConditions().stream()
+                            .map(
+                                cond ->
+                                    BenefitConditionResponse.builder()
+                                        .id(cond.getId())
+                                        .value(cond.getValue())
+                                        .category(cond.getCategory().name())
+                                        .build())
+                            .toList())
+                    .build())
+        .toList();
   }
 }
