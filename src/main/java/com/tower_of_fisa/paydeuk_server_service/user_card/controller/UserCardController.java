@@ -133,4 +133,20 @@ public class UserCardController {
         userCardService.getCardRecommendation(category);
     return new CommonResponse<>(true, HttpStatus.OK, "카드 추천 조회에 성공했습니다.", recommendedCards);
   }
+
+  @GetMapping("/{cardId}")
+  @Operation(summary = "CARD_08 : 카드 상세 정보 조회", description = "카드의 상세 정보를 조회합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "카드 상세 정보 조회 성공"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "카드를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.CARD_404)}))
+      })
+  public CommonResponse<CardDetailResponse> getCardDetail(@PathVariable Long cardId) {
+    CardDetailResponse cardDetail = userCardService.getCardDetail(cardId);
+    return new CommonResponse<>(true, HttpStatus.OK, "카드 상세 정보 조회에 성공했습니다.", cardDetail);
+  }
 }

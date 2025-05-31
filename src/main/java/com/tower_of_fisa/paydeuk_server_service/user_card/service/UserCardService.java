@@ -307,4 +307,42 @@ public class UserCardService {
                     .build())
         .toList();
   }
+
+  public CardDetailResponse getCardDetail(Long cardId) {
+    Card card =
+        cardRepository
+            .findById(cardId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.CARD_NOT_FOUND));
+
+    return CardDetailResponse.builder()
+        .cardName(card.getName())
+        .imageUrl(card.getImageUrl())
+        .cardCompany(card.getCompany())
+        .annualFee(card.getAnnualFee())
+        .minSpending(String.format("%,d원 이상", cardRepository.findMinSpendingByCardId(cardId)))
+        .benefits(
+            card.getCardBenefits().stream()
+                .map(
+                    cardBenefit ->
+                        BenefitResponse.builder()
+                            .id(cardBenefit.getBenefit().getId())
+                            .title(cardBenefit.getBenefit().getTitle())
+                            .description(cardBenefit.getBenefit().getDescription())
+                            .benefitType(cardBenefit.getBenefit().getBenefitType().name())
+                            .hasAdditionalCondition(
+                                cardBenefit.getBenefit().getHasAdditionalCondition())
+                            .benefitConditions(
+                                cardBenefit.getBenefit().getBenefitConditions().stream()
+                                    .map(
+                                        condition ->
+                                            BenefitConditionResponse.builder()
+                                                .id(condition.getId())
+                                                .value(condition.getValue())
+                                                .category(condition.getCategory().name())
+                                                .build())
+                                    .toList())
+                            .build())
+                .toList())
+        .build();
+  }
 }

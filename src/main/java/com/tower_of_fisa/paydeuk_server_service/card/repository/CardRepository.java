@@ -17,4 +17,15 @@ public interface CardRepository extends JpaRepository<Card, Long> {
           + "JOIN b.merchant m "
           + "WHERE m.category = :category")
   List<Card> findCardsByMerchantCategory(@Param("category") MerchantCategory category);
+
+  @Query(
+      "SELECT sr.minSpending FROM Card c "
+          + "JOIN c.cardBenefits cb "
+          + "JOIN cb.benefit b "
+          + "JOIN b.discounts d "
+          + "JOIN d.spendingRange sr "
+          + "WHERE c.id = :cardId "
+          + "ORDER BY sr.minSpending ASC "
+          + "LIMIT 1")
+  Long findMinSpendingByCardId(@Param("cardId") Long cardId);
 }
