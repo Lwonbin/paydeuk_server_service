@@ -8,6 +8,7 @@ import com.tower_of_fisa.paydeuk_server_service.domain.entity.Card;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.CardBenefit;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.UserCard;
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.MerchantCategory;
 import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.AlreadyExistElementException409;
@@ -260,5 +261,50 @@ public class UserCardService {
     } catch (Exception e) {
       return "500";
     }
+  }
+
+  public List<CardRecommendationResponse> getCardRecommendation(MerchantCategory category) {
+    // 1. 해당 카테고리의 가맹점들이 제공하는 혜택을 가진 카드들을 조회
+    List<Card> recommendedCards = cardRepository.findCardsByMerchantCategory(category);
+
+    // 2. 각 카드에 대한 추천 응답 생성
+    return recommendedCards.stream()
+        .map(
+            card ->
+                CardRecommendationResponse.builder()
+                    .cardId(card.getId())
+                    .cardName(card.getName())
+                    .imageUrl(card.getImageUrl())
+                    .cardCompany(card.getCompany())
+                    .benefits(
+                        card.getCardBenefits().stream()
+                            .map(CardBenefit::getBenefit)
+                            .filter(
+                                benefit ->
+                                    benefit.getMerchant() != null
+                                        && benefit.getMerchant().getCategory() == category)
+                            .map(
+                                benefit ->
+                                    BenefitResponse.builder()
+                                        .id(benefit.getId())
+                                        .title(benefit.getTitle())
+                                        .description(benefit.getDescription())
+                                        .benefitType(benefit.getBenefitType().name())
+                                        .hasAdditionalCondition(benefit.getHasAdditionalCondition())
+                                        .benefitConditions(
+                                            benefit.getBenefitConditions().stream()
+                                                .map(
+                                                    condition ->
+                                                        BenefitConditionResponse.builder()
+                                                            .id(condition.getId())
+                                                            .value(condition.getValue())
+                                                            .category(
+                                                                condition.getCategory().name())
+                                                            .build())
+                                                .toList())
+                                        .build())
+                            .toList())
+                    .build())
+        .toList();
   }
 }

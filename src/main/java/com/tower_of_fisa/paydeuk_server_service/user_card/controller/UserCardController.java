@@ -1,14 +1,12 @@
 package com.tower_of_fisa.paydeuk_server_service.user_card.controller;
 
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.MerchantCategory;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.EmptyResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.swagger_response.SwaggerResponseExample;
 import com.tower_of_fisa.paydeuk_server_service.global.config.security.CustomUserDetails;
 import com.tower_of_fisa.paydeuk_server_service.global.dto.CustomPageResDto;
-import com.tower_of_fisa.paydeuk_server_service.user_card.dto.AddCardRequest;
-import com.tower_of_fisa.paydeuk_server_service.user_card.dto.MyCardResponse;
-import com.tower_of_fisa.paydeuk_server_service.user_card.dto.PaymentHistoryResponse;
-import com.tower_of_fisa.paydeuk_server_service.user_card.dto.SetDefaultCardRequest;
+import com.tower_of_fisa.paydeuk_server_service.user_card.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.user_card.service.UserCardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -124,5 +122,13 @@ public class UserCardController {
       @AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long cardId) {
     userCardService.deleteCard(userDetails.getId(), cardId);
     return new CommonResponse<>(true, HttpStatus.OK, "카드가 삭제되었습니다.", new EmptyResponse());
+  }
+
+  @GetMapping("/recommendation/{category}")
+  public CommonResponse<List<CardRecommendationResponse>> getCardRecommendation(
+      @PathVariable MerchantCategory category) {
+    List<CardRecommendationResponse> recommendedCards =
+        userCardService.getCardRecommendation(category);
+    return new CommonResponse<>(true, HttpStatus.OK, "카드 추천 조회에 성공했습니다.", recommendedCards);
   }
 }
