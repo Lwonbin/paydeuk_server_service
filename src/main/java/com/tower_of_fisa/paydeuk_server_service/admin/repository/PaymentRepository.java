@@ -43,7 +43,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
   Long sumAmountByMerchantIdAndPaymentSuccessTrue(@Param("merchantId") Long merchantId);
 
   @Query(
-      """
+"""
       SELECT new com.tower_of_fisa.paydeuk_server_service.admin.dto.MerchantPaymentResponse(
           p.id,
           m.name,
@@ -57,8 +57,23 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
       JOIN p.merchant m
       JOIN p.userCard uc
       JOIN uc.card c
-      """)
-  Page<MerchantPaymentResponse> findAllPaymentHistories(Pageable pageable);
+      WHERE (:status IS NULL
+         OR :status = '모든 상태'
+         OR (p.paymentSuccess = CASE
+                                  WHEN :status = '승인' THEN true
+                                  WHEN :status = '취소' THEN false
+                                  ELSE p.paymentSuccess
+                                END))
+    AND (:search IS NULL OR LOWER(m.name) LIKE LOWER(CONCAT('%', :search, '%')))
+  ORDER BY
+    CASE WHEN :sort = '금액높은순' THEN p.amount END DESC,
+    CASE WHEN :sort = '금액낮은순' THEN p.amount END ASC,
+    CASE WHEN :sort = '최신순' THEN p.createdAt END DESC,
+    CASE WHEN :sort = '오래된순' THEN p.createdAt END ASC,
+    p.createdAt DESC
+""")
+  Page<MerchantPaymentResponse> findAllPaymentHistories(
+      Pageable pageable, String status, String sort, String search);
 
   @Query(
       "SELECT p FROM Payment p "

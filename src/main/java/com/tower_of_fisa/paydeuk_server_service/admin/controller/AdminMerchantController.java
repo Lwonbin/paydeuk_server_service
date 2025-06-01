@@ -40,10 +40,13 @@ public class AdminMerchantController {
   @Operation(summary = "ADMIN_02 : 전체 가맹점 결제 내역 조회", description = "전체 가맹점의 결제 내역을 조회한다.")
   public CommonResponse<CustomPageResDto<MerchantPaymentResponse>> getAllMerchantPaymentHistories(
       @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
-      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
+      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size,
+      @RequestParam(defaultValue = "모든 상태") String status,
+      @RequestParam(defaultValue = "최신순") String sort,
+      @RequestParam(defaultValue = "") String search) {
 
     Page<MerchantPaymentResponse> response =
-        adminMerchantService.getAllMerchantPaymentHistories(page, size);
+        adminMerchantService.getAllMerchantPaymentHistories(page, size, status, sort, search);
     return new CommonResponse<>(
         true, HttpStatus.OK, "전체 결제 내역 조회 성공", CustomPageResDto.fromPage(response));
   }
