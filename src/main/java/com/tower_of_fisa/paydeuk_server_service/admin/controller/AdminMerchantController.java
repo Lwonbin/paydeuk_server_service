@@ -112,8 +112,12 @@ public class AdminMerchantController {
   @ApiResponse(responseCode = "200", description = "가맹점 목록 조회 성공")
   public CommonResponse<CustomPageResDto<MerchantAllResponse>> getAllMerchants(
       @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
-      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
-    Page<MerchantAllResponse> merchants = adminMerchantService.getAllMerchants(page, size);
+      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size,
+      @RequestParam(defaultValue = "모든 상태") String status,
+      @RequestParam(defaultValue = "최신순") String sort,
+      @RequestParam(defaultValue = "") String search) {
+    Page<MerchantAllResponse> merchants =
+        adminMerchantService.getAllMerchants(page, size, status, sort, search);
     return new CommonResponse<>(
         true, HttpStatus.OK, "가맹점 목록 조회에 성공했습니다.", CustomPageResDto.fromPage(merchants));
   }

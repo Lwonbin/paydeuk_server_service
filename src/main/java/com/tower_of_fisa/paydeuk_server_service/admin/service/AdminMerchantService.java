@@ -138,10 +138,19 @@ public class AdminMerchantService {
   }
 
   /** [가맹점 목록 페이징 조회] 전체 가맹점을 페이징 처리하여 거래 건수 및 총 금액과 함께 반환한다. */
-  public Page<MerchantAllResponse> getAllMerchants(int page, int size) {
+  public Page<MerchantAllResponse> getAllMerchants(
+      int page, int size, String status, String sort, String search) {
     Pageable pageable = PageRequest.of(page - 1, size);
+
+    String statusCode = null;
+    if ("활성".equals(status)) {
+      statusCode = "ACTIVE";
+    } else if ("비활성".equals(status)) {
+      statusCode = "INACTIVE";
+    }
+
     return merchantRepository
-        .findAllMerchantsWithPayment(pageable)
+        .findAllMerchantsWithPayment(pageable, statusCode, sort, search)
         .map(
             result -> {
               Merchant merchant = (Merchant) result[0];
