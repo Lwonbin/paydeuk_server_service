@@ -1,7 +1,6 @@
 package com.tower_of_fisa.paydeuk_server_service.admin.repository;
 
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.Merchant;
-import com.tower_of_fisa.paydeuk_server_service.domain.entity.Payment;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
