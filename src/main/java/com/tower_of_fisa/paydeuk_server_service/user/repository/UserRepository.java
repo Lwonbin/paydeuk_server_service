@@ -1,8 +1,8 @@
 package com.tower_of_fisa.paydeuk_server_service.user.repository;
 
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
-import java.util.Optional;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.UserStatus;
+import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
