@@ -118,4 +118,10 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
 
   @Query("SELECT COALESCE(SUM(p.amount), 0) FROM Payment p")
   Long sumTotalAmount();
+
+  Page<Payment> findByUserCard_User_IdAndCreatedAtBetween(
+      Long userId, LocalDateTime start, LocalDateTime end, Pageable pageable);
+
+  Page<Payment> findByUserCard_User_IdAndCreatedAtAfter(
+      Long userId, LocalDateTime start, Pageable pageable);
 }
