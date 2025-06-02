@@ -45,9 +45,12 @@ public class UserCardController {
   public CommonResponse<CustomPageResDto<PaymentHistoryResponse>> getPaymentHistory(
       @AuthenticationPrincipal CustomUserDetails userDetails,
       @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
-      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
+      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size,
+      @Parameter(description = "정렬 파라미터 예: createdAt,desc")
+          @RequestParam(defaultValue = "createdAt,desc")
+          String sort) {
     Page<PaymentHistoryResponse> payments =
-        userCardService.getPaymentHistory(userDetails.getId(), page, size);
+        userCardService.getPaymentHistory(userDetails.getId(), page, size, sort);
     return new CommonResponse<>(
         true, HttpStatus.OK, "결제 내역 조회에 성공했습니다.", CustomPageResDto.fromPage(payments));
   }

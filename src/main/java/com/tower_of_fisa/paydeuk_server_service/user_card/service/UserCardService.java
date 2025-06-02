@@ -25,6 +25,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,8 +77,18 @@ public class UserCardService {
    * @param userId Long - 유저 ID
    * @return List<PaymentHistoryResponse> - 결제 내역 리스트
    */
-  public Page<PaymentHistoryResponse> getPaymentHistory(Long userId, int page, int size) {
-    Pageable pageable = PageRequest.of(page - 1, size);
+  public Page<PaymentHistoryResponse> getPaymentHistory(
+      Long userId, int page, int size, String sort) {
+    String[] sortParams = sort.split(",");
+    String sortBy = sortParams[0];
+    String direction = sortParams.length > 1 ? sortParams[1] : "desc";
+
+    Sort sortObj =
+        direction.equalsIgnoreCase("asc")
+            ? Sort.by(sortBy).ascending()
+            : Sort.by(sortBy).descending();
+
+    Pageable pageable = PageRequest.of(page - 1, size, sortObj);
 
     return paymentRepository
         .findPaymentHistoryByUserId(userId, pageable)
