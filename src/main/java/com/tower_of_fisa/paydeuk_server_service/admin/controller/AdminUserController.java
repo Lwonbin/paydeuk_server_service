@@ -32,8 +32,11 @@ public class AdminUserController {
   @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "사용자 목록 조회 성공")})
   public CommonResponse<CustomPageResDto<UserListResponse>> getAllUsers(
       @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
-      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
-    Page<UserListResponse> result = adminUserService.getAllUsers(page, size);
+      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size,
+      @RequestParam(defaultValue = "전체") String status,
+      @RequestParam(defaultValue = "기본 정렬") String sort,
+      @RequestParam(defaultValue = "") String search) {
+    Page<UserListResponse> result = adminUserService.getAllUsers(page, size, status, sort, search);
     return new CommonResponse<>(
         true, HttpStatus.OK, "사용자 목록 조회에 성공했습니다", CustomPageResDto.fromPage(result));
   }
