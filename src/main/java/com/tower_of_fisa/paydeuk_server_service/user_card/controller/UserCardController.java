@@ -1,14 +1,12 @@
 package com.tower_of_fisa.paydeuk_server_service.user_card.controller;
 
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.MerchantCategory;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.EmptyResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.swagger_response.SwaggerResponseExample;
 import com.tower_of_fisa.paydeuk_server_service.global.config.security.CustomUserDetails;
 import com.tower_of_fisa.paydeuk_server_service.global.dto.CustomPageResDto;
-import com.tower_of_fisa.paydeuk_server_service.user_card.dto.AddCardRequest;
-import com.tower_of_fisa.paydeuk_server_service.user_card.dto.MyCardResponse;
-import com.tower_of_fisa.paydeuk_server_service.user_card.dto.PaymentHistoryResponse;
-import com.tower_of_fisa.paydeuk_server_service.user_card.dto.SetDefaultCardRequest;
+import com.tower_of_fisa.paydeuk_server_service.user_card.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.user_card.service.UserCardService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -124,5 +122,31 @@ public class UserCardController {
       @AuthenticationPrincipal CustomUserDetails userDetails, @PathVariable Long cardId) {
     userCardService.deleteCard(userDetails.getId(), cardId);
     return new CommonResponse<>(true, HttpStatus.OK, "카드가 삭제되었습니다.", new EmptyResponse());
+  }
+
+  @GetMapping("/recommendation/{category}")
+  @Operation(summary = "CARD_07 : 혜택별 카드 추천 조회", description = "카드 추천을 조회합니다.")
+  @ApiResponses(value = {@ApiResponse(responseCode = "200", description = "카드 추천 조회 성공")})
+  public CommonResponse<List<CardRecommendationResponse>> getCardRecommendation(
+      @PathVariable MerchantCategory category) {
+    List<CardRecommendationResponse> recommendedCards =
+        userCardService.getCardRecommendation(category);
+    return new CommonResponse<>(true, HttpStatus.OK, "카드 추천 조회에 성공했습니다.", recommendedCards);
+  }
+
+  @GetMapping("/{cardId}")
+  @Operation(summary = "CARD_08 : 카드 상세 정보 조회", description = "카드의 상세 정보를 조회합니다.")
+  @ApiResponses(
+      value = {
+        @ApiResponse(responseCode = "200", description = "카드 상세 정보 조회 성공"),
+        @ApiResponse(
+            responseCode = "404",
+            description = "카드를 찾을 수 없음",
+            content =
+                @Content(examples = {@ExampleObject(value = SwaggerResponseExample.CARD_404)}))
+      })
+  public CommonResponse<CardDetailResponse> getCardDetail(@PathVariable Long cardId) {
+    CardDetailResponse cardDetail = userCardService.getCardDetail(cardId);
+    return new CommonResponse<>(true, HttpStatus.OK, "카드 상세 정보 조회에 성공했습니다.", cardDetail);
   }
 }

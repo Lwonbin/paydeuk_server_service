@@ -8,6 +8,7 @@ import com.tower_of_fisa.paydeuk_server_service.domain.entity.Card;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.CardBenefit;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
 import com.tower_of_fisa.paydeuk_server_service.domain.entity.UserCard;
+import com.tower_of_fisa.paydeuk_server_service.domain.enums.MerchantCategory;
 import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
 import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.exception.AlreadyExistElementException409;
@@ -260,5 +261,69 @@ public class UserCardService {
     } catch (Exception e) {
       return "500";
     }
+  }
+
+  public List<CardRecommendationResponse> getCardRecommendation(MerchantCategory category) {
+    return cardRepository.findCardsByMerchantCategory(category).stream()
+        .map(
+            card ->
+                CardRecommendationResponse.builder()
+                    .cardId(card.getId())
+                    .cardName(card.getName())
+                    .imageUrl(card.getImageUrl())
+                    .cardCompany(card.getCompany())
+                    .benefits(convertToBenefitResponses(card, category))
+                    .build())
+        .toList();
+  }
+
+  public CardDetailResponse getCardDetail(Long cardId) {
+    Card card =
+        cardRepository
+            .findById(cardId)
+            .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.CARD_NOT_FOUND));
+
+    return CardDetailResponse.builder()
+        .cardName(card.getName())
+        .imageUrl(card.getImageUrl())
+        .cardCompany(card.getCompany())
+        .annualFee(card.getAnnualFee())
+        .minSpending(String.format("%,d원 이상", cardRepository.findMinSpendingByCardId(cardId)))
+        .benefits(convertToBenefitResponses(card, null))
+        .build();
+  }
+
+  private List<BenefitResponse> convertToBenefitResponses(Card card, MerchantCategory category) {
+    return card.getCardBenefits().stream()
+        .map(CardBenefit::getBenefit)
+        .sorted(
+            (b1, b2) -> {
+              if (category == null) return 0;
+              boolean b1Matches =
+                  b1.getMerchant() != null && b1.getMerchant().getCategory() == category;
+              boolean b2Matches =
+                  b2.getMerchant() != null && b2.getMerchant().getCategory() == category;
+              return Boolean.compare(!b1Matches, !b2Matches); // true < false
+            })
+        .map(
+            benefit ->
+                BenefitResponse.builder()
+                    .id(benefit.getId())
+                    .title(benefit.getTitle())
+                    .description(benefit.getDescription())
+                    .benefitType(benefit.getBenefitType().name())
+                    .hasAdditionalCondition(benefit.getHasAdditionalCondition())
+                    .benefitConditions(
+                        benefit.getBenefitConditions().stream()
+                            .map(
+                                cond ->
+                                    BenefitConditionResponse.builder()
+                                        .id(cond.getId())
+                                        .value(cond.getValue())
+                                        .category(cond.getCategory().name())
+                                        .build())
+                            .toList())
+                    .build())
+        .toList();
   }
 }
