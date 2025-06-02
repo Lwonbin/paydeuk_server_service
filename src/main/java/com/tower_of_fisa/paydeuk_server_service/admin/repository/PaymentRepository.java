@@ -67,8 +67,7 @@ public interface PaymentRepository extends JpaRepository<Payment, Long> {
           + "JOIN FETCH p.merchant m "
           + "JOIN FETCH p.cardBenefit cb "
           + "JOIN FETCH cb.benefit b "
-          + "WHERE uc.user.id = :userId "
-          + "ORDER BY p.createdAt DESC")
+          + "WHERE uc.user.id = :userId ")
   Page<Payment> findPaymentHistoryByUserId(@Param("userId") Long userId, Pageable pageable);
 
   @Query("SELECT COUNT(p) FROM Payment p WHERE p.paymentSuccess = true AND p.createdAt < :before")
