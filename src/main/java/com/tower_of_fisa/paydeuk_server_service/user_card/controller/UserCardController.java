@@ -9,15 +9,16 @@ import com.tower_of_fisa.paydeuk_server_service.global.dto.CustomPageResDto;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.user_card.service.UserCardService;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
@@ -40,14 +41,18 @@ public class UserCardController {
   }
 
   @GetMapping("/my/payment")
-  @Operation(summary = "CARD_02 : 내 결제 내역 조회", description = "사용자의 결제 내역을 조회합니다.")
-  @ApiResponse(responseCode = "200", description = "결제 내역 조회에 성공")
   public CommonResponse<CustomPageResDto<PaymentHistoryResponse>> getPaymentHistory(
       @AuthenticationPrincipal CustomUserDetails userDetails,
-      @Parameter(description = "페이지 번호 (1부터 시작)") @RequestParam(defaultValue = "1") int page,
-      @Parameter(description = "페이지 크기") @RequestParam(defaultValue = "5") int size) {
+      @RequestParam(defaultValue = "1") int page,
+      @RequestParam(defaultValue = "5") int size,
+      @RequestParam(defaultValue = "createdAt,desc") String sort,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+          LocalDateTime startDate,
+      @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+          LocalDateTime endDate) {
     Page<PaymentHistoryResponse> payments =
-        userCardService.getPaymentHistory(userDetails.getId(), page, size);
+        userCardService.getPaymentHistory(
+            userDetails.getId(), page, size, sort, startDate, endDate);
     return new CommonResponse<>(
         true, HttpStatus.OK, "결제 내역 조회에 성공했습니다.", CustomPageResDto.fromPage(payments));
   }

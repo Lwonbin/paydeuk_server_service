@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tower_of_fisa.paydeuk_server_service.admin.repository.PaymentRepository;
 import com.tower_of_fisa.paydeuk_server_service.card.repository.CardRepository;
-import com.tower_of_fisa.paydeuk_server_service.domain.entity.Card;
-import com.tower_of_fisa.paydeuk_server_service.domain.entity.CardBenefit;
-import com.tower_of_fisa.paydeuk_server_service.domain.entity.User;
-import com.tower_of_fisa.paydeuk_server_service.domain.entity.UserCard;
+import com.tower_of_fisa.paydeuk_server_service.domain.entity.*;
 import com.tower_of_fisa.paydeuk_server_service.domain.enums.MerchantCategory;
 import com.tower_of_fisa.paydeuk_server_service.global.common.ErrorDefineCode;
 import com.tower_of_fisa.paydeuk_server_service.global.common.response.CommonResponse;
@@ -18,6 +15,7 @@ import com.tower_of_fisa.paydeuk_server_service.global.config.exception.custom.e
 import com.tower_of_fisa.paydeuk_server_service.user.repository.UserRepository;
 import com.tower_of_fisa.paydeuk_server_service.user_card.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.user_card.repository.UserCardRepository;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +23,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -76,22 +75,52 @@ public class UserCardService {
    * @param userId Long - 유저 ID
    * @return List<PaymentHistoryResponse> - 결제 내역 리스트
    */
-  public Page<PaymentHistoryResponse> getPaymentHistory(Long userId, int page, int size) {
-    Pageable pageable = PageRequest.of(page - 1, size);
+  public Page<PaymentHistoryResponse> getPaymentHistory(
+      Long userId,
+      int page,
+      int size,
+      String sort,
+      LocalDateTime startDate,
+      LocalDateTime endDate) {
 
-    return paymentRepository
-        .findPaymentHistoryByUserId(userId, pageable)
-        .map(
-            payment ->
-                PaymentHistoryResponse.builder()
-                    .id(payment.getId())
-                    .shopName(payment.getMerchant().getName())
-                    .cardName(payment.getUserCard().getCard().getName())
-                    .transactionAmount(payment.getAmount())
-                    .discountAmount(payment.getDiscountAmount())
-                    .applicationBenefit(payment.getCardBenefit().getBenefit().getDescription())
-                    .createdAt(payment.getCreatedAt())
-                    .build());
+    String[] sortParams = sort.split(",");
+    String sortBy = sortParams[0];
+    String direction = sortParams.length > 1 ? sortParams[1] : "desc";
+
+    Sort sortObj =
+        direction.equalsIgnoreCase("asc")
+            ? Sort.by(sortBy).ascending()
+            : Sort.by(sortBy).descending();
+
+    Pageable pageable = PageRequest.of(page - 1, size, sortObj);
+
+    log.info("startDate: {}", startDate);
+    log.info("endDate: {}", endDate);
+
+    Page<Payment> payments;
+
+    if (startDate != null && endDate != null) {
+      payments =
+          paymentRepository.findByUserCard_User_IdAndCreatedAtBetween(
+              userId, startDate, endDate, pageable);
+    } else if (startDate != null) {
+      payments =
+          paymentRepository.findByUserCard_User_IdAndCreatedAtAfter(userId, startDate, pageable);
+    } else {
+      payments = paymentRepository.findPaymentHistoryByUserId(userId, pageable); // 기존 메서드
+    }
+
+    return payments.map(
+        payment ->
+            PaymentHistoryResponse.builder()
+                .id(payment.getId())
+                .shopName(payment.getMerchant().getName())
+                .cardName(payment.getUserCard().getCard().getName())
+                .transactionAmount(payment.getAmount())
+                .discountAmount(payment.getDiscountAmount())
+                .applicationBenefit(payment.getCardBenefit().getBenefit().getDescription())
+                .createdAt(payment.getCreatedAt())
+                .build());
   }
 
   /**
