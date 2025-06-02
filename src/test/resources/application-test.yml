@@ -1,0 +1,25 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        format_sql: true
+  data:
+    redis:
+      port: 6399
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-test.sql
+      data-locations:
+
+logging.level:
+  org.springframework.jdbc.datasource.init.ScriptUtils: debug
+  org.hibernate.SQL: debug
+

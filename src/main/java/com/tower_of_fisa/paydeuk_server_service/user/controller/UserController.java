@@ -102,7 +102,7 @@ public class UserController {
             description = "사용자를 찾을 수 없음",
             content = @Content(examples = @ExampleObject(value = SwaggerResponseExample.USER_404)))
       })
-  public CommonResponse<EmptyResponse> checkUserExists(@PathVariable Long userId) {
+  public CommonResponse<EmptyResponse> checkUserExists(@PathVariable("userId") Long userId) {
     userService.checkUserExists(userId);
     return new CommonResponse<>(true, HttpStatus.OK, "사용자가 존재합니다.", new EmptyResponse());
   }

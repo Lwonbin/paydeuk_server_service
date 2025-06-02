@@ -1,10 +1,16 @@
 package com.tower_of_fisa.paydeuk_server_service.user_card.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Schema(description = "카드 추가 요청")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AddCardRequest {
   @Schema(description = "카드 번호", example = "1111222233334440")
   private String cardNumber;
