@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,10 +26,28 @@ public class AdminUserService {
    *
    * @return List<UserListResponse> - 사용자 목록
    */
-  public Page<UserListResponse> getAllUsers(int page, int size) {
-    Pageable pageable = PageRequest.of(page - 1, size);
+  public Page<UserListResponse> getAllUsers(
+      int page, int size, String status, String sort, String search) {
+
+    UserStatus statusEnum =
+        switch (status) {
+          case "활성" -> UserStatus.ACTIVE;
+          case "비활성" -> UserStatus.INACTIVE;
+          case "임시" -> UserStatus.TEMPORARY;
+          default -> null; // "전체" 혹은 null일 경우
+        };
+
+    Sort sortSpec =
+        switch (sort) {
+          case "이름순" -> Sort.by(Sort.Direction.ASC, "name");
+          case "가입일순" -> Sort.by(Sort.Direction.DESC, "createdAt");
+          case "상태순" -> Sort.by(Sort.Direction.ASC, "status");
+          default -> Sort.by(Sort.Direction.ASC, "id"); // 기본 정렬
+        };
+
+    Pageable pageable = PageRequest.of(page - 1, size, sortSpec);
     return userRepository
-        .findByRole(pageable) // 일반 사용자만 필터링
+        .findByRole(pageable, statusEnum, search) // 일반 사용자만 필터링
         .map(this::convertToDto);
   }
 

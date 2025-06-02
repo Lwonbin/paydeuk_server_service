@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,6 +27,8 @@ public class AdminMerchantService {
   private final PaymentRepository paymentRepository;
   private final AdminMerchantUtils adminMerchantUtils;
   private static final int TOP_MERCHANT_LIMIT = 8;
+  private static final String CREATED_AT = "createdAt";
+  private static final String AMOUNT = "amount";
 
   /**
    * [전체 가맹점 통계 조회] 전체 가맹점 수, 결제 성공 건수, 전체 거래 금액, 평균 거래 금액, 최근 24시간 거래 증가 수, 전월 대비 거래 금액 증감율을 반환한다.
@@ -132,16 +135,36 @@ public class AdminMerchantService {
   }
 
   /** [전체 가맹점 결제 내역 조회] 모든 결제 내역을 조회하여 가맹점명, 카드 유형 등 상세 정보와 함께 반환한다. */
-  public Page<MerchantPaymentResponse> getAllMerchantPaymentHistories(int page, int size) {
-    Pageable pageable = PageRequest.of(page - 1, size);
-    return paymentRepository.findAllPaymentHistories(pageable);
+  public Page<MerchantPaymentResponse> getAllMerchantPaymentHistories(
+      int page, int size, String status, String sort, String search) {
+
+    Sort sortSpec =
+        switch (sort) {
+          case "금액높은순" -> Sort.by(Sort.Direction.DESC, AMOUNT);
+          case "금액낮은순" -> Sort.by(Sort.Direction.ASC, AMOUNT);
+          case "최신순" -> Sort.by(Sort.Direction.DESC, CREATED_AT);
+          case "오래된순" -> Sort.by(Sort.Direction.ASC, CREATED_AT);
+          default -> Sort.by(Sort.Direction.DESC, CREATED_AT);
+        };
+
+    Pageable pageable = PageRequest.of(page - 1, size, sortSpec);
+    return paymentRepository.findAllPaymentHistories(pageable, status, search);
   }
 
   /** [가맹점 목록 페이징 조회] 전체 가맹점을 페이징 처리하여 거래 건수 및 총 금액과 함께 반환한다. */
-  public Page<MerchantAllResponse> getAllMerchants(int page, int size) {
+  public Page<MerchantAllResponse> getAllMerchants(
+      int page, int size, String status, String sort, String search) {
     Pageable pageable = PageRequest.of(page - 1, size);
+
+    String statusCode = null;
+    if ("활성".equals(status)) {
+      statusCode = "ACTIVE";
+    } else if ("비활성".equals(status)) {
+      statusCode = "INACTIVE";
+    }
+
     return merchantRepository
-        .findAllMerchantsWithPayment(pageable)
+        .findAllMerchantsWithPayment(pageable, statusCode, sort, search)
         .map(
             result -> {
               Merchant merchant = (Merchant) result[0];
