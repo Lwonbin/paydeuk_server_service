@@ -5,7 +5,7 @@ INSERT INTO users (name, username, password, personal_auth_key, phone, email, pa
                    status, created_at, updated_at)
 VALUES ('일반유저', 'user', '$2a$10$B4vWjDxTtmML4Uwx03JVMeRJgrcJC3tVlfPUVILfrAqJfbH2SMIPS', '12345', '010-1234-5678',
         'test@test.com',
-        NULL, '서울 마포구 월드컵북로 434 상암 IT Tower', 'USER', '1990-01-01', 'active', NOW(),
+        NULL, '서울 마포구 월드컵북로 434 상암 IT Tower', 'USER', '1990.01.01', 'active', NOW(),
         NOW());
 
 --      ROLE == ADMIN
@@ -14,8 +14,7 @@ INSERT INTO users (name, username, password, personal_auth_key, phone, email, pa
                    status, created_at, updated_at)
 VALUES ('관리자', 'admin', '$2a$10$B4vWjDxTtmML4Uwx03JVMeRJgrcJC3tVlfPUVILfrAqJfbH2SMIPS', '1234', '010-0000-0000',
         'admin@example.com', NULL, NULL, 'ADMIN',
-        '1980-01-01', 'ACTIVE', NOW(), NOW());
-
+        '1980.01.01', 'ACTIVE', NOW(), NOW());
 -- CARD TABLE
 -- card_id == 1
 INSERT INTO card (name, type, image_url, annual_fee, company, created_at, updated_at)

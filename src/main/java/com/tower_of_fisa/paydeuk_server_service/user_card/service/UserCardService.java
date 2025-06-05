@@ -194,7 +194,7 @@ public class UserCardService {
             .orElseThrow(() -> new NoSuchElementFoundException404(ErrorDefineCode.USER_NOT_FOUND));
 
     // 2.카드 토큰 생성 (실제로는 addCardRequest를 카드사에게 주고 카드사 API를 통해 토큰화)
-    String url = "http://localhost:8081/api/card/token/issue";
+    String url = "http://localhost:8084/api/card/token/issue";
 
     HttpHeaders headers = new HttpHeaders();
     headers.setContentType(MediaType.APPLICATION_JSON);
@@ -245,7 +245,7 @@ public class UserCardService {
       UserCard userCard =
           UserCard.builder()
               .cardToken(cardToken)
-              .cardNumber(addCardRequest.getCardNumber())
+              .cardNumber(addCardRequest.getCardNumber().substring(0, 4))
               .isDefaultCard(user.getUserCards().isEmpty()) // 첫 카드면 대표카드로 설정
               .user(user)
               .card(card)
