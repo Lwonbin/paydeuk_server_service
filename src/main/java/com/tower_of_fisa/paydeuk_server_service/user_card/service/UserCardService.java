@@ -245,7 +245,7 @@ public class UserCardService {
       UserCard userCard =
           UserCard.builder()
               .cardToken(cardToken)
-              .cardNumber(addCardRequest.getCardNumber())
+              .cardNumber(addCardRequest.getCardNumber().substring(0, 4))
               .isDefaultCard(user.getUserCards().isEmpty()) // 첫 카드면 대표카드로 설정
               .user(user)
               .card(card)
