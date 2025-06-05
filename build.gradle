@@ -143,3 +143,7 @@ tasks.named('test') {
     useJUnitPlatform()
     finalizedBy 'jacocoTestReport'
 }
+
+tasks.named("sonarqube") {
+    dependsOn test
+}
