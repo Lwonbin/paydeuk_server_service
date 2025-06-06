@@ -3,6 +3,7 @@ package com.tower_of_fisa.paydeuk_server_service.admin.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.when;
 
 import com.tower_of_fisa.paydeuk_server_service.admin.dto.UserListResponse;
@@ -105,11 +106,18 @@ class AdminUserServiceTest {
     @Test
     @DisplayName("status가 빈칸일 경우 전체 조회")
     void getAllUsers_statusIsNull_returnsAll() {
-        when(userRepository.findByRole(any(Pageable.class), eq(null), eq("")))
-                .thenReturn(new PageImpl<>(List.of()));
 
+
+        //given
+        given(userRepository.findByRole(any(Pageable.class), eq(null), eq("")))
+                .willReturn(new PageImpl<>(List.of()));
+
+
+        //when
         Page<UserListResponse> result = adminUserService.getAllUsers(1, 5, "", "이름순", "");
 
+
+        //then
         assertThat(result).isEmpty(); // 내부 실행 여부만 확인
     }
 
@@ -117,17 +125,25 @@ class AdminUserServiceTest {
     @Test
     @DisplayName("정렬 조건이 예상 외일 경우 기본 정렬(id ASC) 적용")
     void getAllUsers_invalidSort_appliesDefaultSort() {
-        when(userRepository.findByRole(any(Pageable.class), eq(UserStatus.ACTIVE), eq("")))
-                .thenReturn(new PageImpl<>(List.of()));
 
+        //given
+        given(userRepository.findByRole(any(Pageable.class), eq(UserStatus.ACTIVE), eq("")))
+                .willReturn(new PageImpl<>(List.of()));
+
+
+        //when
         Page<UserListResponse> result = adminUserService.getAllUsers(1, 5, "활성", "잘못된값", "");
 
+
+        //then
         assertThat(result).isEmpty(); // 내부 실행 여부만 확인
     }
 
     @Test
     @DisplayName("비활성 상태 유저 목록 조회")
     void getAllUsers_inactiveStatus() {
+
+        //given
         User user =
                 User.builder()
                         .id(2L)
@@ -136,11 +152,15 @@ class AdminUserServiceTest {
                         .role(UserRole.USER)
                         .build();
 
-        when(userRepository.findByRole(any(Pageable.class), eq(UserStatus.INACTIVE), eq("")))
-                .thenReturn(new PageImpl<>(List.of(user)));
+        given(userRepository.findByRole(any(Pageable.class), eq(UserStatus.INACTIVE), eq("")))
+                .willReturn(new PageImpl<>(List.of(user)));
 
+
+        //when
         Page<UserListResponse> result = adminUserService.getAllUsers(1, 5, "비활성", "이름순", "");
 
+
+        //then
         assertThat(result).hasSize(1);
         assertThat(result.getContent().get(0).getStatus()).isEqualTo(UserStatus.INACTIVE.name());
     }
@@ -148,6 +168,8 @@ class AdminUserServiceTest {
     @Test
     @DisplayName("임시 상태 유저 목록 조회")
     void getAllUsers_temporaryStatus() {
+
+        //given
         User user =
                 User.builder()
                         .id(3L)
@@ -156,11 +178,15 @@ class AdminUserServiceTest {
                         .role(UserRole.USER)
                         .build();
 
-        when(userRepository.findByRole(any(Pageable.class), eq(UserStatus.TEMPORARY), eq("")))
-                .thenReturn(new PageImpl<>(List.of(user)));
+        given(userRepository.findByRole(any(Pageable.class), eq(UserStatus.TEMPORARY), eq("")))
+                .willReturn(new PageImpl<>(List.of(user)));
 
+
+        //when
         Page<UserListResponse> result = adminUserService.getAllUsers(1, 5, "임시", "이름순", "");
 
+
+        //then
         assertThat(result).hasSize(1);
         assertThat(result.getContent().get(0).getStatus()).isEqualTo(UserStatus.TEMPORARY.name());
     }
@@ -168,6 +194,8 @@ class AdminUserServiceTest {
     @Test
     @DisplayName("status가 '비활성'일 경우 필터링된 유저 반환")
     void getAllUsers_statusIsInactive() {
+
+        //given
         User user = User.builder()
                 .id(2L)
                 .name("jane")
@@ -177,11 +205,15 @@ class AdminUserServiceTest {
                 .role(UserRole.USER)
                 .build();
 
-        when(userRepository.findByRole(any(Pageable.class), eq(UserStatus.INACTIVE), eq("")))
-                .thenReturn(new PageImpl<>(List.of(user)));
+        given(userRepository.findByRole(any(Pageable.class), eq(UserStatus.INACTIVE), eq("")))
+                .willReturn(new PageImpl<>(List.of(user)));
 
+
+        //when
         Page<UserListResponse> result = adminUserService.getAllUsers(1, 5, "비활성", "기본 정렬", "");
 
+
+        //then
         assertThat(result).hasSize(1);
         assertThat(result.getContent().get(0).getStatus()).isEqualTo(UserStatus.INACTIVE.name());
     }
@@ -191,6 +223,8 @@ class AdminUserServiceTest {
     @Test
     @DisplayName("status가 '임시'일 경우 필터링된 유저 반환")
     void getAllUsers_statusIsTemporary() {
+
+        //given
         User user = User.builder()
                 .id(3L)
                 .name("temp")
@@ -200,11 +234,15 @@ class AdminUserServiceTest {
                 .role(UserRole.USER)
                 .build();
 
-        when(userRepository.findByRole(any(Pageable.class), eq(UserStatus.TEMPORARY), eq("")))
-                .thenReturn(new PageImpl<>(List.of(user)));
+        given(userRepository.findByRole(any(Pageable.class), eq(UserStatus.TEMPORARY), eq("")))
+                .willReturn(new PageImpl<>(List.of(user)));
 
+
+        //when
         Page<UserListResponse> result = adminUserService.getAllUsers(1, 5, "임시", "기본 정렬", "");
 
+
+        //then
         assertThat(result).hasSize(1);
         assertThat(result.getContent().get(0).getStatus()).isEqualTo(UserStatus.TEMPORARY.name());
     }
@@ -216,11 +254,15 @@ class AdminUserServiceTest {
     @Test
     @DisplayName("sort가 '가입일순'일 경우 createdAt DESC로 정렬")
     void getAllUsers_sortByCreatedAt() {
-        when(userRepository.findByRole(any(Pageable.class), eq(null), eq("")))
-                .thenReturn(new PageImpl<>(List.of()));
 
+        //given
+        given(userRepository.findByRole(any(Pageable.class), eq(null), eq("")))
+                .willReturn(new PageImpl<>(List.of()));
+
+        //when
         Page<UserListResponse> result = adminUserService.getAllUsers(1, 5, "", "가입일순", "");
 
+        //then
         assertThat(result).isEmpty(); // 내부 실행 여부만 확인
     }
 
@@ -229,11 +271,15 @@ class AdminUserServiceTest {
     @Test
     @DisplayName("sort가 '상태순'일 경우 status ASC로 정렬")
     void getAllUsers_sortByStatus() {
-        when(userRepository.findByRole(any(Pageable.class), eq(null), eq("")))
-                .thenReturn(new PageImpl<>(List.of()));
 
+        //given
+        given(userRepository.findByRole(any(Pageable.class), eq(null), eq("")))
+                .willReturn(new PageImpl<>(List.of()));
+
+        //when
         Page<UserListResponse> result = adminUserService.getAllUsers(1, 5, "", "상태순", "");
 
+        //then
         assertThat(result).isEmpty(); // 내부 실행 여부만 확인
     }
 
@@ -254,7 +300,7 @@ class AdminUserServiceTest {
         // createdAt을 이번 달로 설정
         ReflectionTestUtils.setField(newUser, "createdAt", java.time.LocalDateTime.now());
 
-        when(userRepository.findAll()).thenReturn(List.of(newUser));
+        given(userRepository.findAll()).willReturn(List.of(newUser));
 
         // when
         UserStatsResponse stats = adminUserService.getUserStats();
@@ -284,7 +330,7 @@ class AdminUserServiceTest {
         java.time.LocalDateTime lastMonth = java.time.LocalDateTime.now().minusMonths(1);
         ReflectionTestUtils.setField(user, "createdAt", lastMonth);
 
-        when(userRepository.findAll()).thenReturn(List.of(user));
+        given(userRepository.findAll()).willReturn(List.of(user));
 
         // when
         UserStatsResponse stats = adminUserService.getUserStats();
@@ -312,7 +358,7 @@ class AdminUserServiceTest {
         java.time.LocalDateTime lastYear = java.time.LocalDateTime.now().minusYears(1);
         ReflectionTestUtils.setField(user, "createdAt", lastYear);
 
-        when(userRepository.findAll()).thenReturn(List.of(user));
+        given(userRepository.findAll()).willReturn(List.of(user));
 
         // when
         UserStatsResponse stats = adminUserService.getUserStats();

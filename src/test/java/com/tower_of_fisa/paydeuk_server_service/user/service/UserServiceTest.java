@@ -71,6 +71,7 @@ class UserServiceTest {
   @Test
   @DisplayName("기존 이미지가 null이면 삭제하지 않는다")
   void updateProfileImage_shouldNotDelete_whenImageUrlIsNull() throws Exception {
+    //given
     Long userId = 1L;
     MultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[10]);
     User mockUser = User.builder().id(userId).imageUrl(null).build();
@@ -79,8 +80,12 @@ class UserServiceTest {
     given(s3Service.uploadProfileImage(image, userId))
             .willReturn("https://bucket.s3.amazonaws.com/new.jpg");
 
+
+    //when
     UserProfileImageResponse response = userService.updateProfileImage(userId, image);
 
+
+    //then
     assertEquals("https://bucket.s3.amazonaws.com/new.jpg", response.getImageUrl());
     verify(s3Service, never()).deleteImage(any());
   }
@@ -88,6 +93,7 @@ class UserServiceTest {
   @Test
   @DisplayName("기존 이미지가 S3 URL이 아니면 삭제하지 않는다")
   void updateProfileImage_shouldNotDelete_whenImageUrlIsNotAmazonS3() throws Exception {
+    //given
     Long userId = 1L;
     MultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[10]);
     User mockUser = User.builder().id(userId).imageUrl("https://cdn.other.com/avatar.jpg").build();
@@ -96,8 +102,12 @@ class UserServiceTest {
     given(s3Service.uploadProfileImage(image, userId))
             .willReturn("https://bucket.s3.amazonaws.com/new.jpg");
 
+
+    //when
     UserProfileImageResponse response = userService.updateProfileImage(userId, image);
 
+
+    //then
     assertEquals("https://bucket.s3.amazonaws.com/new.jpg", response.getImageUrl());
     verify(s3Service, never()).deleteImage(any());
   }
@@ -144,6 +154,8 @@ class UserServiceTest {
   @Test
   @DisplayName("새 결제 비밀번호가 유효하지 않으면 예외 발생")
   void setNewPaymentPinCode_shouldThrowException_whenInvalid() {
+
+    //given
     Long userId = 1L;
     String oldPin = "123456";
     String newPin = "111111";
@@ -157,6 +169,8 @@ class UserServiceTest {
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
     given(paymentPinCodeValidator.isValid(newPin, oldPin, birth)).willReturn(false);
 
+
+    //when & then
     assertThrows(
             BadRequestException400.class,
             () -> userService.setNewPaymentPinCode(userId, request)
@@ -167,6 +181,7 @@ class UserServiceTest {
   @Test
   @DisplayName("입력된 결제 비밀번호가 기존과 다르면 예외 발생")
   void verifyPaymentPinCode_shouldThrow_whenPinDoesNotMatch() {
+    //given
     Long userId = 1L;
     String rawPin = "000000";
     String encodedPin = "$2a$10$encoded";
@@ -178,6 +193,8 @@ class UserServiceTest {
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
     given(passwordEncoder.matches(rawPin, encodedPin)).willReturn(false);
 
+
+    //when & then
     assertThrows(
             BadRequestException400.class,
             () -> userService.verifyPaymentPinCode(userId, request)
@@ -188,6 +205,8 @@ class UserServiceTest {
   @Test
   @DisplayName("Redis에 유저 혜택 정보가 없을 경우 0으로 처리된다")
   void getUserBenefits_shouldReturnZero_whenRedisMiss() {
+
+    //given
     Long userId = 1L;
     User user = User.builder().id(userId).name("홍길동").build();
     String currentMonth = String.format("%02d", LocalDate.now().getMonthValue());
@@ -198,8 +217,10 @@ class UserServiceTest {
     given(valueOperations.get("user_benefit:1:" + currentMonth)).willReturn(null);
     given(valueOperations.get("user_benefit:1:" + lastMonth)).willReturn(null);
 
+    //when
     UserBenefitResponse response = userService.getUserBenefits(userId);
 
+    //then
     assertEquals(0, response.getLastMonthSum());
     assertEquals(0, response.getCurrentMonthSum());
   }
@@ -225,20 +246,27 @@ class UserServiceTest {
   @Test
   @DisplayName("주소 요청이 null이면 변경하지 않는다")
   void updateAddress_shouldDoNothing_whenAddressIsNull() {
+
+    //given
     Long userId = 1L;
     UpdateAddressRequest request = new UpdateAddressRequest(null);
     User user = User.builder().id(userId).address("기존주소").build();
 
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
+
+    //when
     userService.updateAddress(userId, request);
 
+    //then
     assertEquals("기존주소", user.getAddress());
   }
 
   @Test
   @DisplayName("유저 이메일을 변경한다")
   void updateEmail_shouldChangeUserEmail() {
+
+    //given
     Long userId = 1L;
     String newEmail = "user@example.com";
     UpdateEmailRequest request = new UpdateEmailRequest(newEmail);
@@ -246,22 +274,32 @@ class UserServiceTest {
 
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
+
+    //when
     userService.updateEmail(userId, request);
 
+
+    //then
     assertEquals(newEmail, user.getEmail());
   }
 
   @Test
   @DisplayName("이메일 요청이 null이면 변경하지 않는다")
   void updateEmail_shouldDoNothing_whenEmailIsNull() {
+
+    //given
     Long userId = 1L;
     UpdateEmailRequest request = new UpdateEmailRequest(null);
     User user = User.builder().id(userId).email("old@example.com").build();
 
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
+
+    //when
     userService.updateEmail(userId, request);
 
+
+    //then
     assertEquals("old@example.com", user.getEmail());
   }
 
@@ -269,11 +307,15 @@ class UserServiceTest {
   @Test
   @DisplayName("존재하지 않는 유저 ID로 주소 변경 시 예외 발생")
   void updateAddress_shouldThrow_whenUserNotFound() {
+
+    //given
     Long userId = 999L;
     UpdateAddressRequest request = new UpdateAddressRequest("주소");
 
     given(userRepository.findById(userId)).willReturn(Optional.empty());
 
+
+    //when & then
     assertThrows(
             NoSuchElementFoundException404.class,
             () -> userService.updateAddress(userId, request)
@@ -283,11 +325,15 @@ class UserServiceTest {
   @Test
   @DisplayName("존재하지 않는 유저 ID로 이메일 변경 시 예외 발생")
   void updateEmail_shouldThrow_whenUserNotFound() {
+
+    //given
     Long userId = 999L;
     UpdateEmailRequest request = new UpdateEmailRequest("user@example.com");
 
     given(userRepository.findById(userId)).willReturn(Optional.empty());
 
+
+    //when & then
     assertThrows(
             NoSuchElementFoundException404.class,
             () -> userService.updateEmail(userId, request)
@@ -306,9 +352,13 @@ class UserServiceTest {
   @Test
   @DisplayName("유저가 존재하지 않으면 checkUserExists는 예외를 던진다")
   void checkUserExists_shouldThrow_whenUserNotFound() {
+
+    //given
     Long userId = 999L;
     given(userRepository.findById(userId)).willReturn(Optional.empty());
 
+
+    //when & then
     assertThrows(
             NoSuchElementFoundException404.class,
             () -> userService.checkUserExists(userId)
@@ -458,9 +508,12 @@ class UserServiceTest {
   @Test
   @DisplayName("존재하지 않는 유저 ID로 정보 조회 시 예외 발생")
   void getUserInfo_shouldThrow_whenUserNotFound() {
+
+    //given
     Long userId = 999L;
     given(userRepository.findById(userId)).willReturn(Optional.empty());
 
+    //when & then
     assertThrows(NoSuchElementFoundException404.class, () -> userService.getUserInfo(userId));
   }
 

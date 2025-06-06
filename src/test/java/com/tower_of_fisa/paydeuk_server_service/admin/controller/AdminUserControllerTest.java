@@ -1,5 +1,6 @@
 package com.tower_of_fisa.paydeuk_server_service.admin.controller;
 
+import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -39,10 +40,12 @@ class AdminUserControllerTest {
     @DisplayName("ADMIN_USER_01: 사용자 목록 조회 성공")
     @WithMockUser(roles = "ADMIN")
     void getAllUsers_success() throws Exception {
+        //given
         var pageImpl = new PageImpl<>(List.of(new UserListResponse()));
-        org.mockito.BDDMockito.given(adminUserService.getAllUsers(1, 5, "전체", "기본 정렬", ""))
+        given(adminUserService.getAllUsers(1, 5, "전체", "기본 정렬", ""))
                 .willReturn(pageImpl);
 
+        //when & then
         mockMvc
                 .perform(
                         get("/api/admin/users")
@@ -59,9 +62,12 @@ class AdminUserControllerTest {
     @DisplayName("ADMIN_USER_02: 사용자 통계 조회 성공")
     @WithMockUser(roles = "ADMIN")
     void getUserStats_success() throws Exception {
-        org.mockito.BDDMockito.given(adminUserService.getUserStats())
+
+        //given
+        given(adminUserService.getUserStats())
                 .willReturn(new UserStatsResponse());
 
+        //when & then
         mockMvc.perform(get("/api/admin/users/stats"))
                 .andDo(print())
                 .andExpect(status().isOk());

@@ -988,9 +988,13 @@ class UserCardServiceTest {
 
   @Test
   void getCardDetail_cardNotFound_throws() {
+
+    //given
     Long cardId = 999L;
     given(cardRepository.findById(cardId)).willReturn(Optional.empty());
 
+
+    //when & then
     assertThatThrownBy(() -> userCardService.getCardDetail(cardId))
             .isInstanceOf(NoSuchElementFoundException404.class);
   }

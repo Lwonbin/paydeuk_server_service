@@ -52,6 +52,8 @@ class UserCardControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void getMyCards_success() throws Exception {
+
+    //given
     MyCardResponse dummyResponse =
         MyCardResponse.builder()
             .id(1L)
@@ -63,6 +65,8 @@ class UserCardControllerTest {
             .build();
 
     given(userCardService.getMyCards(any())).willReturn(List.of(dummyResponse));
+
+
 
     mockMvc.perform(get("/api/card/my")).andDo(print()).andExpect(status().isOk());
   }
@@ -111,6 +115,8 @@ class UserCardControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void addCard_success() throws Exception {
+
+    //given
     AddCardRequest dummyRequest =
         AddCardRequest.builder()
             .cardNumber("1111222233334440")
@@ -122,6 +128,7 @@ class UserCardControllerTest {
 
     BDDMockito.willDoNothing().given(userCardService).addCard(any(), any());
 
+    //when & then
     mockMvc
         .perform(
             post("/api/card")
@@ -136,9 +143,12 @@ class UserCardControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void setDefaultCard_success() throws Exception {
+
+    //given
     SetDefaultCardRequest request = new SetDefaultCardRequest(1L);
     BDDMockito.willDoNothing().given(userCardService).setDefaultCard(any(), any());
 
+    //when & then
     mockMvc
         .perform(
             post("/api/card/default")
@@ -153,9 +163,11 @@ class UserCardControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void updateDefaultCard_success() throws Exception {
+    //given
     SetDefaultCardRequest request = new SetDefaultCardRequest(2L);
     BDDMockito.willDoNothing().given(userCardService).updateDefaultCard(any(), any());
 
+    //when & then
     mockMvc
         .perform(
             patch("/api/card/default")
@@ -170,8 +182,11 @@ class UserCardControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void deleteCard_success() throws Exception {
+
+    //given
     BDDMockito.willDoNothing().given(userCardService).deleteCard(any(), eq(1L));
 
+    //when & then
     mockMvc.perform(delete("/api/card/1").with(csrf())).andDo(print()).andExpect(status().isOk());
   }
 
@@ -179,6 +194,8 @@ class UserCardControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void getCardRecommendation_success() throws Exception {
+
+    //given
     MerchantCategory category = MerchantCategory.FOOD_BEVERAGE;
 
     Card dummyCard = Card.builder()
@@ -202,6 +219,7 @@ class UserCardControllerTest {
 
     given(userCardService.getCardRecommendation(category)).willReturn(List.of(dto));
 
+    //when & then
     mockMvc.perform(get("/api/card/recommendation/" + category.name()))
             .andDo(print())
             .andExpect(status().isOk())
@@ -214,6 +232,7 @@ class UserCardControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void getCardDetail_success() throws Exception {
+    //given
     Long cardId = 1L;
 
     BenefitResponse benefit = BenefitResponse.builder()
@@ -231,6 +250,7 @@ class UserCardControllerTest {
 
     given(userCardService.getCardDetail(cardId)).willReturn(detailResponse);
 
+    //when & then
     mockMvc.perform(get("/api/card/" + cardId))
             .andDo(print())
             .andExpect(status().isOk())
