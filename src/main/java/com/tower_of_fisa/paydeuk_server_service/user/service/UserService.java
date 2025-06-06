@@ -203,7 +203,7 @@ public class UserService {
     // key 이름 ex) user_benefit:2:05 -> userId가 2인 user 5월에 받은 총 혜택 금액
     String redisKey = String.format("user_benefit:%d:%s", userId, month);
     String value = redisTemplate.opsForValue().get(redisKey);
-    return value != null ? Integer.parseInt(value) : 0;
+    return value != null ? Integer.parseInt(value.split("\\.")[0]) : 0;
   }
 
   /** 현재 월을 MM 형식으로 반환 (예: "05") */
