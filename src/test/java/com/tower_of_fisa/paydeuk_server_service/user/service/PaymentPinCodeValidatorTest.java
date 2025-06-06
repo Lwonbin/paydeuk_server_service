@@ -20,7 +20,8 @@ class PaymentPinCodeValidatorTest {
   private PaymentPinCodeValidator validator;
   private BCryptPasswordEncoder passwordEncoder;
   private final String birthDate = "2000.05.12";
-  private final String dummyEncoded = "$2a$10$7Q9XtfuDW5VLkX7aUeavZ.T3LScVnrF7Dc1f9VqUlzR9U2QTuXeK2"; // dummy
+  private final String dummyEncoded =
+      "$2a$10$7Q9XtfuDW5VLkX7aUeavZ.T3LScVnrF7Dc1f9VqUlzR9U2QTuXeK2"; // dummy
 
   @BeforeEach
   void setUp() {

@@ -71,21 +71,19 @@ class UserServiceTest {
   @Test
   @DisplayName("기존 이미지가 null이면 삭제하지 않는다")
   void updateProfileImage_shouldNotDelete_whenImageUrlIsNull() throws Exception {
-    //given
+    // given
     Long userId = 1L;
     MultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[10]);
     User mockUser = User.builder().id(userId).imageUrl(null).build();
 
     given(userRepository.findById(userId)).willReturn(Optional.of(mockUser));
     given(s3Service.uploadProfileImage(image, userId))
-            .willReturn("https://bucket.s3.amazonaws.com/new.jpg");
+        .willReturn("https://bucket.s3.amazonaws.com/new.jpg");
 
-
-    //when
+    // when
     UserProfileImageResponse response = userService.updateProfileImage(userId, image);
 
-
-    //then
+    // then
     assertEquals("https://bucket.s3.amazonaws.com/new.jpg", response.getImageUrl());
     verify(s3Service, never()).deleteImage(any());
   }
@@ -93,26 +91,22 @@ class UserServiceTest {
   @Test
   @DisplayName("기존 이미지가 S3 URL이 아니면 삭제하지 않는다")
   void updateProfileImage_shouldNotDelete_whenImageUrlIsNotAmazonS3() throws Exception {
-    //given
+    // given
     Long userId = 1L;
     MultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", new byte[10]);
     User mockUser = User.builder().id(userId).imageUrl("https://cdn.other.com/avatar.jpg").build();
 
     given(userRepository.findById(userId)).willReturn(Optional.of(mockUser));
     given(s3Service.uploadProfileImage(image, userId))
-            .willReturn("https://bucket.s3.amazonaws.com/new.jpg");
+        .willReturn("https://bucket.s3.amazonaws.com/new.jpg");
 
-
-    //when
+    // when
     UserProfileImageResponse response = userService.updateProfileImage(userId, image);
 
-
-    //then
+    // then
     assertEquals("https://bucket.s3.amazonaws.com/new.jpg", response.getImageUrl());
     verify(s3Service, never()).deleteImage(any());
   }
-
-
 
   @Test
   @DisplayName("결제 비밀번호가 없는 유저에게 새 비밀번호를 설정한다")
@@ -146,67 +140,56 @@ class UserServiceTest {
 
     // when & then
     assertThrows(
-            NoSuchElementFoundException404.class,
-            () -> userService.updateProfileImage(userId, image)
-    );
+        NoSuchElementFoundException404.class, () -> userService.updateProfileImage(userId, image));
   }
 
   @Test
   @DisplayName("새 결제 비밀번호가 유효하지 않으면 예외 발생")
   void setNewPaymentPinCode_shouldThrowException_whenInvalid() {
 
-    //given
+    // given
     Long userId = 1L;
     String oldPin = "123456";
     String newPin = "111111";
     String birth = "000512";
 
     SetNewPaymentPinCodeRequest request =
-            SetNewPaymentPinCodeRequest.builder().newPaymentPinCode(newPin).build();
+        SetNewPaymentPinCodeRequest.builder().newPaymentPinCode(newPin).build();
 
     User user = User.builder().id(userId).birthDate(birth).paymentPinCode(oldPin).build();
 
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
     given(paymentPinCodeValidator.isValid(newPin, oldPin, birth)).willReturn(false);
 
-
-    //when & then
+    // when & then
     assertThrows(
-            BadRequestException400.class,
-            () -> userService.setNewPaymentPinCode(userId, request)
-    );
+        BadRequestException400.class, () -> userService.setNewPaymentPinCode(userId, request));
   }
-
 
   @Test
   @DisplayName("입력된 결제 비밀번호가 기존과 다르면 예외 발생")
   void verifyPaymentPinCode_shouldThrow_whenPinDoesNotMatch() {
-    //given
+    // given
     Long userId = 1L;
     String rawPin = "000000";
     String encodedPin = "$2a$10$encoded";
 
-    PaymentPinCodeRequest request =
-            PaymentPinCodeRequest.builder().paymentPinCode(rawPin).build();
+    PaymentPinCodeRequest request = PaymentPinCodeRequest.builder().paymentPinCode(rawPin).build();
     User user = User.builder().id(userId).paymentPinCode(encodedPin).build();
 
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
     given(passwordEncoder.matches(rawPin, encodedPin)).willReturn(false);
 
-
-    //when & then
+    // when & then
     assertThrows(
-            BadRequestException400.class,
-            () -> userService.verifyPaymentPinCode(userId, request)
-    );
+        BadRequestException400.class, () -> userService.verifyPaymentPinCode(userId, request));
   }
-
 
   @Test
   @DisplayName("Redis에 유저 혜택 정보가 없을 경우 0으로 처리된다")
   void getUserBenefits_shouldReturnZero_whenRedisMiss() {
 
-    //given
+    // given
     Long userId = 1L;
     User user = User.builder().id(userId).name("홍길동").build();
     String currentMonth = String.format("%02d", LocalDate.now().getMonthValue());
@@ -217,10 +200,10 @@ class UserServiceTest {
     given(valueOperations.get("user_benefit:1:" + currentMonth)).willReturn(null);
     given(valueOperations.get("user_benefit:1:" + lastMonth)).willReturn(null);
 
-    //when
+    // when
     UserBenefitResponse response = userService.getUserBenefits(userId);
 
-    //then
+    // then
     assertEquals(0, response.getLastMonthSum());
     assertEquals(0, response.getCurrentMonthSum());
   }
@@ -247,18 +230,17 @@ class UserServiceTest {
   @DisplayName("주소 요청이 null이면 변경하지 않는다")
   void updateAddress_shouldDoNothing_whenAddressIsNull() {
 
-    //given
+    // given
     Long userId = 1L;
     UpdateAddressRequest request = new UpdateAddressRequest(null);
     User user = User.builder().id(userId).address("기존주소").build();
 
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
-
-    //when
+    // when
     userService.updateAddress(userId, request);
 
-    //then
+    // then
     assertEquals("기존주소", user.getAddress());
   }
 
@@ -266,7 +248,7 @@ class UserServiceTest {
   @DisplayName("유저 이메일을 변경한다")
   void updateEmail_shouldChangeUserEmail() {
 
-    //given
+    // given
     Long userId = 1L;
     String newEmail = "user@example.com";
     UpdateEmailRequest request = new UpdateEmailRequest(newEmail);
@@ -274,12 +256,10 @@ class UserServiceTest {
 
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
-
-    //when
+    // when
     userService.updateEmail(userId, request);
 
-
-    //then
+    // then
     assertEquals(newEmail, user.getEmail());
   }
 
@@ -287,64 +267,56 @@ class UserServiceTest {
   @DisplayName("이메일 요청이 null이면 변경하지 않는다")
   void updateEmail_shouldDoNothing_whenEmailIsNull() {
 
-    //given
+    // given
     Long userId = 1L;
     UpdateEmailRequest request = new UpdateEmailRequest(null);
     User user = User.builder().id(userId).email("old@example.com").build();
 
     given(userRepository.findById(userId)).willReturn(Optional.of(user));
 
-
-    //when
+    // when
     userService.updateEmail(userId, request);
 
-
-    //then
+    // then
     assertEquals("old@example.com", user.getEmail());
   }
-
 
   @Test
   @DisplayName("존재하지 않는 유저 ID로 주소 변경 시 예외 발생")
   void updateAddress_shouldThrow_whenUserNotFound() {
 
-    //given
+    // given
     Long userId = 999L;
     UpdateAddressRequest request = new UpdateAddressRequest("주소");
 
     given(userRepository.findById(userId)).willReturn(Optional.empty());
 
-
-    //when & then
+    // when & then
     assertThrows(
-            NoSuchElementFoundException404.class,
-            () -> userService.updateAddress(userId, request)
-    );
+        NoSuchElementFoundException404.class, () -> userService.updateAddress(userId, request));
   }
 
   @Test
   @DisplayName("존재하지 않는 유저 ID로 이메일 변경 시 예외 발생")
   void updateEmail_shouldThrow_whenUserNotFound() {
 
-    //given
+    // given
     Long userId = 999L;
     UpdateEmailRequest request = new UpdateEmailRequest("user@example.com");
 
     given(userRepository.findById(userId)).willReturn(Optional.empty());
 
-
-    //when & then
+    // when & then
     assertThrows(
-            NoSuchElementFoundException404.class,
-            () -> userService.updateEmail(userId, request)
-    );
+        NoSuchElementFoundException404.class, () -> userService.updateEmail(userId, request));
   }
 
   @Test
   @DisplayName("유저가 존재하면 checkUserExists는 예외 없이 통과한다")
   void checkUserExists_shouldNotThrow_whenUserExists() {
     Long userId = 1L;
-    given(userRepository.findById(userId)).willReturn(Optional.of(User.builder().id(userId).build()));
+    given(userRepository.findById(userId))
+        .willReturn(Optional.of(User.builder().id(userId).build()));
 
     assertDoesNotThrow(() -> userService.checkUserExists(userId));
   }
@@ -353,20 +325,13 @@ class UserServiceTest {
   @DisplayName("유저가 존재하지 않으면 checkUserExists는 예외를 던진다")
   void checkUserExists_shouldThrow_whenUserNotFound() {
 
-    //given
+    // given
     Long userId = 999L;
     given(userRepository.findById(userId)).willReturn(Optional.empty());
 
-
-    //when & then
-    assertThrows(
-            NoSuchElementFoundException404.class,
-            () -> userService.checkUserExists(userId)
-    );
+    // when & then
+    assertThrows(NoSuchElementFoundException404.class, () -> userService.checkUserExists(userId));
   }
-
-
-
 
   @Test
   @DisplayName("결제 비밀번호가 없는 유저에게 새 비밀번호를 설정하는 경우 형식에 맞지 않는 비밀번호로 설정하면 에러가 발생한다.")
@@ -455,7 +420,8 @@ class UserServiceTest {
   void getUserInfo_shouldReturnUserInfo() {
     // given
     Long userId = 1L;
-    User user = User.builder()
+    User user =
+        User.builder()
             .id(userId)
             .name("홍길동")
             .birthDate("000512")
@@ -486,9 +452,10 @@ class UserServiceTest {
     Long userId = 1L;
     String existingPin = "$2a$10$hashed";
     PaymentPinCodeRequest request =
-            PaymentPinCodeRequest.builder().paymentPinCode("609285").build();
+        PaymentPinCodeRequest.builder().paymentPinCode("609285").build();
 
-    User user = User.builder()
+    User user =
+        User.builder()
             .id(userId)
             .birthDate("000512")
             .paymentPinCode(existingPin) // 이미 설정됨
@@ -498,23 +465,18 @@ class UserServiceTest {
 
     // when & then
     assertThrows(
-            BadRequestException400.class,
-            () -> userService.setPaymentPinCode(userId, request)
-    );
+        BadRequestException400.class, () -> userService.setPaymentPinCode(userId, request));
   }
-
-
 
   @Test
   @DisplayName("존재하지 않는 유저 ID로 정보 조회 시 예외 발생")
   void getUserInfo_shouldThrow_whenUserNotFound() {
 
-    //given
+    // given
     Long userId = 999L;
     given(userRepository.findById(userId)).willReturn(Optional.empty());
 
-    //when & then
+    // when & then
     assertThrows(NoSuchElementFoundException404.class, () -> userService.getUserInfo(userId));
   }
-
 }

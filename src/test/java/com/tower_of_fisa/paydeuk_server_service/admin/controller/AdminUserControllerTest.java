@@ -27,49 +27,45 @@ import org.springframework.test.web.servlet.MockMvc;
 @MockBean(JpaMetamodelMappingContext.class)
 class AdminUserControllerTest {
 
-    @Autowired MockMvc mockMvc;
+  @Autowired MockMvc mockMvc;
 
-    @Autowired ObjectMapper objectMapper;
+  @Autowired ObjectMapper objectMapper;
 
-    @MockBean AdminUserService adminUserService;
-    @MockBean CustomUserDetailsService customUserDetailsService;
-    @MockBean CustomAuthenticationEntryPoint authenticationEntryPoint;
-    @MockBean CustomAccessDeniedHandler accessDeniedHandler;
+  @MockBean AdminUserService adminUserService;
+  @MockBean CustomUserDetailsService customUserDetailsService;
+  @MockBean CustomAuthenticationEntryPoint authenticationEntryPoint;
+  @MockBean CustomAccessDeniedHandler accessDeniedHandler;
 
-    @Test
-    @DisplayName("ADMIN_USER_01: 사용자 목록 조회 성공")
-    @WithMockUser(roles = "ADMIN")
-    void getAllUsers_success() throws Exception {
-        //given
-        var pageImpl = new PageImpl<>(List.of(new UserListResponse()));
-        given(adminUserService.getAllUsers(1, 5, "전체", "기본 정렬", ""))
-                .willReturn(pageImpl);
+  @Test
+  @DisplayName("ADMIN_USER_01: 사용자 목록 조회 성공")
+  @WithMockUser(roles = "ADMIN")
+  void getAllUsers_success() throws Exception {
+    // given
+    var pageImpl = new PageImpl<>(List.of(new UserListResponse()));
+    given(adminUserService.getAllUsers(1, 5, "전체", "기본 정렬", "")).willReturn(pageImpl);
 
-        //when & then
-        mockMvc
-                .perform(
-                        get("/api/admin/users")
-                                .param("page", "1")
-                                .param("size", "5")
-                                .param("status", "전체")
-                                .param("sort", "기본 정렬")
-                                .param("search", ""))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
+    // when & then
+    mockMvc
+        .perform(
+            get("/api/admin/users")
+                .param("page", "1")
+                .param("size", "5")
+                .param("status", "전체")
+                .param("sort", "기본 정렬")
+                .param("search", ""))
+        .andDo(print())
+        .andExpect(status().isOk());
+  }
 
-    @Test
-    @DisplayName("ADMIN_USER_02: 사용자 통계 조회 성공")
-    @WithMockUser(roles = "ADMIN")
-    void getUserStats_success() throws Exception {
+  @Test
+  @DisplayName("ADMIN_USER_02: 사용자 통계 조회 성공")
+  @WithMockUser(roles = "ADMIN")
+  void getUserStats_success() throws Exception {
 
-        //given
-        given(adminUserService.getUserStats())
-                .willReturn(new UserStatsResponse());
+    // given
+    given(adminUserService.getUserStats()).willReturn(new UserStatsResponse());
 
-        //when & then
-        mockMvc.perform(get("/api/admin/users/stats"))
-                .andDo(print())
-                .andExpect(status().isOk());
-    }
+    // when & then
+    mockMvc.perform(get("/api/admin/users/stats")).andDo(print()).andExpect(status().isOk());
+  }
 }

@@ -1,6 +1,5 @@
 package com.tower_of_fisa.paydeuk_server_service.user_card.controller;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -20,8 +19,6 @@ import com.tower_of_fisa.paydeuk_server_service.user_card.dto.*;
 import com.tower_of_fisa.paydeuk_server_service.user_card.service.UserCardService;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.BDDMockito;
@@ -43,8 +40,7 @@ class UserCardControllerTest {
 
   @MockBean UserCardService userCardService;
 
-  @MockBean
-  CardRepository cardRepository;
+  @MockBean CardRepository cardRepository;
 
   @MockBean private CustomUserDetailsService customUserDetailsService;
 
@@ -53,7 +49,7 @@ class UserCardControllerTest {
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void getMyCards_success() throws Exception {
 
-    //given
+    // given
     MyCardResponse dummyResponse =
         MyCardResponse.builder()
             .id(1L)
@@ -65,8 +61,6 @@ class UserCardControllerTest {
             .build();
 
     given(userCardService.getMyCards(any())).willReturn(List.of(dummyResponse));
-
-
 
     mockMvc.perform(get("/api/card/my")).andDo(print()).andExpect(status().isOk());
   }
@@ -116,7 +110,7 @@ class UserCardControllerTest {
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void addCard_success() throws Exception {
 
-    //given
+    // given
     AddCardRequest dummyRequest =
         AddCardRequest.builder()
             .cardNumber("1111222233334440")
@@ -128,7 +122,7 @@ class UserCardControllerTest {
 
     BDDMockito.willDoNothing().given(userCardService).addCard(any(), any());
 
-    //when & then
+    // when & then
     mockMvc
         .perform(
             post("/api/card")
@@ -144,11 +138,11 @@ class UserCardControllerTest {
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void setDefaultCard_success() throws Exception {
 
-    //given
+    // given
     SetDefaultCardRequest request = new SetDefaultCardRequest(1L);
     BDDMockito.willDoNothing().given(userCardService).setDefaultCard(any(), any());
 
-    //when & then
+    // when & then
     mockMvc
         .perform(
             post("/api/card/default")
@@ -163,11 +157,11 @@ class UserCardControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void updateDefaultCard_success() throws Exception {
-    //given
+    // given
     SetDefaultCardRequest request = new SetDefaultCardRequest(2L);
     BDDMockito.willDoNothing().given(userCardService).updateDefaultCard(any(), any());
 
-    //when & then
+    // when & then
     mockMvc
         .perform(
             patch("/api/card/default")
@@ -183,10 +177,10 @@ class UserCardControllerTest {
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void deleteCard_success() throws Exception {
 
-    //given
+    // given
     BDDMockito.willDoNothing().given(userCardService).deleteCard(any(), eq(1L));
 
-    //when & then
+    // when & then
     mockMvc.perform(delete("/api/card/1").with(csrf())).andDo(print()).andExpect(status().isOk());
   }
 
@@ -195,21 +189,21 @@ class UserCardControllerTest {
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void getCardRecommendation_success() throws Exception {
 
-    //given
+    // given
     MerchantCategory category = MerchantCategory.FOOD_BEVERAGE;
 
-    Card dummyCard = Card.builder()
+    Card dummyCard =
+        Card.builder()
             .id(1L)
             .name("카드의정석")
             .imageUrl("https://example.com/card.png")
             .company(CardCompany.WOORI)
             .build();
 
-    BenefitResponse benefit = BenefitResponse.builder()
-            .description("최대 5% 캐시백")
-            .build();
+    BenefitResponse benefit = BenefitResponse.builder().description("최대 5% 캐시백").build();
 
-    CardRecommendationResponse dto = CardRecommendationResponse.builder()
+    CardRecommendationResponse dto =
+        CardRecommendationResponse.builder()
             .cardId(dummyCard.getId())
             .cardName(dummyCard.getName())
             .imageUrl(dummyCard.getImageUrl())
@@ -219,27 +213,27 @@ class UserCardControllerTest {
 
     given(userCardService.getCardRecommendation(category)).willReturn(List.of(dto));
 
-    //when & then
-    mockMvc.perform(get("/api/card/recommendation/" + category.name()))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.response[0].cardName").value("카드의정석"))
-            .andExpect(jsonPath("$.response[0].benefits[0].description").value("최대 5% 캐시백"))
-            .andExpect(jsonPath("$.response[0].cardCompany").value("WOORI"));
+    // when & then
+    mockMvc
+        .perform(get("/api/card/recommendation/" + category.name()))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.response[0].cardName").value("카드의정석"))
+        .andExpect(jsonPath("$.response[0].benefits[0].description").value("최대 5% 캐시백"))
+        .andExpect(jsonPath("$.response[0].cardCompany").value("WOORI"));
   }
 
   @DisplayName("CARD_08: 카드 상세 정보 조회 성공")
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void getCardDetail_success() throws Exception {
-    //given
+    // given
     Long cardId = 1L;
 
-    BenefitResponse benefit = BenefitResponse.builder()
-            .description("커피 50% 할인")
-            .build();
+    BenefitResponse benefit = BenefitResponse.builder().description("커피 50% 할인").build();
 
-    CardDetailResponse detailResponse = CardDetailResponse.builder()
+    CardDetailResponse detailResponse =
+        CardDetailResponse.builder()
             .cardName("카드의정석")
             .imageUrl("https://example.com/card.png")
             .cardCompany(CardCompany.WOORI)
@@ -250,15 +244,15 @@ class UserCardControllerTest {
 
     given(userCardService.getCardDetail(cardId)).willReturn(detailResponse);
 
-    //when & then
-    mockMvc.perform(get("/api/card/" + cardId))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(jsonPath("$.response.cardName").value("카드의정석"))
-            .andExpect(jsonPath("$.response.benefits[0].description").value("커피 50% 할인"))
-            .andExpect(jsonPath("$.response.annualFee").value(10000))
-            .andExpect(jsonPath("$.response.cardCompany").value("WOORI"))
-            .andExpect(jsonPath("$.response.minSpending").value("300,000원 이상"));
+    // when & then
+    mockMvc
+        .perform(get("/api/card/" + cardId))
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.response.cardName").value("카드의정석"))
+        .andExpect(jsonPath("$.response.benefits[0].description").value("커피 50% 할인"))
+        .andExpect(jsonPath("$.response.annualFee").value(10000))
+        .andExpect(jsonPath("$.response.cardCompany").value("WOORI"))
+        .andExpect(jsonPath("$.response.minSpending").value("300,000원 이상"));
   }
-
 }

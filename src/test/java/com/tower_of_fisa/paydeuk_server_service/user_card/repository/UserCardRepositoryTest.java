@@ -30,7 +30,7 @@ class UserCardRepositoryTest {
   @DisplayName("User ID로 카드 및 혜택까지 fetch 조인하여 조회 성공")
   void findByUserIdWithCardAndBenefits_success() {
 
-    //given
+    // given
     User user = createUser();
     Benefit benefit = createBenefit();
     Card card = createCard();
@@ -60,11 +60,10 @@ class UserCardRepositoryTest {
     em.flush();
     em.clear();
 
-    //when
+    // when
     List<UserCard> results = userCardRepository.findByUserIdWithCardAndBenefits(user.getId());
 
-
-    //then
+    // then
     assertThat(results).hasSize(1);
     assertThat(results.get(0).getCard().getCardBenefits()).isNotEmpty();
     assertThat(results.get(0).getCard().getCardBenefits().get(0).getBenefit().getTitle())
@@ -75,7 +74,7 @@ class UserCardRepositoryTest {
   @DisplayName("userId와 cardId로 UserCard 조회 성공")
   void findByUserIdAndCardId_success() {
 
-    //given
+    // given
     User user = createUser();
     Card card = createCard();
     UserCard userCard =
@@ -92,11 +91,11 @@ class UserCardRepositoryTest {
     em.persist(userCard);
     em.flush();
 
-    //when
+    // when
     Optional<UserCard> result =
         userCardRepository.findByUserIdAndCardId(user.getId(), card.getId());
 
-    //then
+    // then
     assertThat(result).isPresent();
     assertThat(result.get().getCardToken()).isEqualTo("token999");
   }
@@ -105,7 +104,7 @@ class UserCardRepositoryTest {
   @DisplayName("cardToken 존재 여부 확인")
   void existsByCardToken_success() {
 
-    //given
+    // given
     User user = createUser();
     Card card = createCard();
     UserCard userCard =
@@ -122,11 +121,10 @@ class UserCardRepositoryTest {
     em.persist(userCard);
     em.flush();
 
-    //when
+    // when
     boolean exists = userCardRepository.existsByCardToken("exist-token");
 
-
-    //then
+    // then
     assertThat(exists).isTrue();
   }
 
