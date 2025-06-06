@@ -44,9 +44,12 @@ class UserControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void updateAddress_success() throws Exception {
+
+    // given
     UpdateAddressRequest request = new UpdateAddressRequest("서울시 강남구");
     BDDMockito.willDoNothing().given(userService).updateAddress(any(), any());
 
+    // when & then
     mockMvc
         .perform(
             patch("/api/user/profile/address")
@@ -61,9 +64,12 @@ class UserControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void updateEmail_success() throws Exception {
+
+    // given
     UpdateEmailRequest request = new UpdateEmailRequest("test@example.com");
     BDDMockito.willDoNothing().given(userService).updateEmail(any(), any());
 
+    // when & then
     mockMvc
         .perform(
             patch("/api/user/profile/email")
@@ -78,9 +84,12 @@ class UserControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void setPaymentPinCode_success() throws Exception {
+
+    // given
     PaymentPinCodeRequest request = new PaymentPinCodeRequest("1234");
     BDDMockito.willDoNothing().given(userService).setPaymentPinCode(any(), any());
 
+    // when & then
     mockMvc
         .perform(
             post("/api/user/payment-pin-code")
@@ -95,9 +104,12 @@ class UserControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void setNewPaymentPinCode_success() throws Exception {
+
+    // given
     SetNewPaymentPinCodeRequest request = new SetNewPaymentPinCodeRequest("5678");
     BDDMockito.willDoNothing().given(userService).setNewPaymentPinCode(any(), any());
 
+    // when & then
     mockMvc
         .perform(
             patch("/api/user/payment-pin-code")
@@ -112,9 +124,12 @@ class UserControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void verifyPaymentPinCode_success() throws Exception {
+
+    // given
     PaymentPinCodeRequest request = new PaymentPinCodeRequest("1234");
     BDDMockito.willDoNothing().given(userService).verifyPaymentPinCode(any(), any());
 
+    // when & then
     mockMvc
         .perform(
             post("/api/user/payment-pin-code/verify")
@@ -129,12 +144,15 @@ class UserControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void getUserProfile_success() throws Exception {
+
+    // given
     UserInfoResponse dummyResponse =
         new UserInfoResponse(
             "홍길동", "000512", "01033399037", "test@example.com", "서울시 강남구", "image");
 
     BDDMockito.given(userService.getUserInfo(any())).willReturn(dummyResponse);
 
+    // when & then
     mockMvc.perform(get("/api/user/profile")).andDo(print()).andExpect(status().isOk());
   }
 
@@ -143,10 +161,12 @@ class UserControllerTest {
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void getUserBenefits_success() throws Exception {
 
-    UserBenefitResponse dummyResponse = new UserBenefitResponse("홍길동", 100, 200);
+    // given
 
+    UserBenefitResponse dummyResponse = new UserBenefitResponse("홍길동", 100, 200);
     BDDMockito.given(userService.getUserBenefits(any())).willReturn(dummyResponse);
 
+    // when & then
     mockMvc.perform(get("/api/user/benefits")).andDo(print()).andExpect(status().isOk());
   }
 
@@ -154,8 +174,11 @@ class UserControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void checkUserExists_success() throws Exception {
+
+    // given
     BDDMockito.willDoNothing().given(userService).checkUserExists(any());
 
+    // when & then
     mockMvc.perform(get("/api/user/1/check")).andDo(print()).andExpect(status().isOk());
   }
 
@@ -163,12 +186,15 @@ class UserControllerTest {
   @Test
   @WithCustomMockUser(id = 1L, email = "test@example.com")
   void updateImage_success() throws Exception {
+
+    // given
     MockMultipartFile imageFile =
         new MockMultipartFile("image", "profile.jpg", "image/jpeg", "fake-image".getBytes());
 
     BDDMockito.given(userService.updateProfileImage(any(), any()))
         .willReturn(new UserProfileImageResponse("image-url"));
 
+    // when & then
     mockMvc
         .perform(
             multipart("/api/user/profile/image")
