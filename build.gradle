@@ -30,7 +30,6 @@ def jacocoExcludePatterns = [
         "**/example/**",
         "**/domain/**",
         "**/global/**",
-        "**/admin/**", // admin 제외 커버리지 확인을 위해서
         "**/test/**",
         "**/resources/**"
 ]
