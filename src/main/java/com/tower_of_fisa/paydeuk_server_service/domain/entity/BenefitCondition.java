@@ -4,6 +4,7 @@ import com.tower_of_fisa.paydeuk_server_service.domain.enums.BenefitConditionCat
 import com.tower_of_fisa.paydeuk_server_service.global.common.BaseEntity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 @Table(name = "benefit_condition")
 public class BenefitCondition extends BaseEntity {
   @Id

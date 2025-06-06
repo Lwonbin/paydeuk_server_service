@@ -282,7 +282,7 @@ public class UserCardService {
     userCardRepository.delete(userCard);
   }
 
-  private String extractStatusFromJson(String json) {
+  public String extractStatusFromJson(String json) {
     try {
       ObjectMapper mapper = new ObjectMapper();
       JsonNode node = mapper.readTree(json);
@@ -322,7 +322,7 @@ public class UserCardService {
         .build();
   }
 
-  private List<BenefitResponse> convertToBenefitResponses(Card card, MerchantCategory category) {
+  public List<BenefitResponse> convertToBenefitResponses(Card card, MerchantCategory category) {
     return card.getCardBenefits().stream()
         .map(CardBenefit::getBenefit)
         .sorted(
