@@ -223,8 +223,8 @@ public class UserCardService {
       log.debug("[addCard] 카드사 요청 payload={}", cardTokenRequest);
 
       ResponseEntity<CommonResponse<CardTokenResponse>> response =
-              restTemplate.exchange(
-                      url, HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
+          restTemplate.exchange(
+              url, HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
 
       CommonResponse<CardTokenResponse> body = response.getBody();
 
@@ -261,8 +261,11 @@ public class UserCardService {
       // 5. UserCard 저장
       userCardRepository.save(userCard);
     } catch (HttpClientErrorException | HttpServerErrorException e) {
-      log.error("[addCard] 카드사 API 호출 실패: statusCode={}, body={}",
-              e.getStatusCode(), e.getResponseBodyAsString(), e);
+      log.error(
+          "[addCard] 카드사 API 호출 실패: statusCode={}, body={}",
+          e.getStatusCode(),
+          e.getResponseBodyAsString(),
+          e);
       // 8081 서버의 에러 메시지 추출
       String errorBody = e.getResponseBodyAsString();
       String status = extractStatusFromJson(errorBody);
