@@ -27,7 +27,7 @@ class UserRepositoryTest {
   @DisplayName("개인 인증 키로 유저 조회")
   void findByPersonalAuthKey_success() {
 
-    //given
+    // given
     User user =
         User.builder()
             .name("홍길동")
@@ -42,12 +42,10 @@ class UserRepositoryTest {
 
     userRepository.save(user);
 
-
-    //when
+    // when
     Optional<User> found = userRepository.findByPersonalAuthKey("auth123");
 
-
-    //then
+    // then
     assertThat(found).isPresent();
     assertThat(found.get().getUsername()).isEqualTo("testUser");
   }
@@ -56,7 +54,7 @@ class UserRepositoryTest {
   @DisplayName("ROLE이 USER인 유저 페이징 조회")
   void findByRole_success() {
 
-    //given
+    // given
     User user1 =
         User.builder()
             .name("홍길동1")
@@ -97,12 +95,11 @@ class UserRepositoryTest {
     userRepository.save(user2);
     userRepository.save(admin);
 
-
-    //when
+    // when
     // status, search 둘 다 null로 전달 → 전체 USER만 조회
     Page<User> page = userRepository.findByRole(PageRequest.of(0, 10), null, null);
 
-    //then
+    // then
     assertThat(page.getContent()).hasSize(2);
     assertThat(page.getContent()).allMatch(u -> u.getRole() == UserRole.USER);
   }
@@ -110,7 +107,7 @@ class UserRepositoryTest {
   @Test
   @DisplayName("username으로 유저 조회")
   void findByUsername_success() {
-    //given
+    // given
     User user =
         User.builder()
             .name("홍길동1")
@@ -125,11 +122,10 @@ class UserRepositoryTest {
 
     userRepository.save(user);
 
-    //when
+    // when
     Optional<User> found = userRepository.findByUsername("u1");
 
-
-    //then
+    // then
     assertThat(found).isPresent();
     assertThat(found.get().getUsername()).isEqualTo("u1");
   }
