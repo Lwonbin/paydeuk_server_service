@@ -219,12 +219,19 @@ public class UserCardService {
     HttpEntity<CardTokenRequest> entity = new HttpEntity<>(cardTokenRequest, headers);
 
     try {
+      log.info("[addCard] userId={}, 카드사 API 요청 시작: {}", userId, url);
+      log.debug("[addCard] 카드사 요청 payload={}", cardTokenRequest);
+
       ResponseEntity<CommonResponse<CardTokenResponse>> response =
-          restTemplate.exchange(
-              url, HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
+              restTemplate.exchange(
+                      url, HttpMethod.POST, entity, new ParameterizedTypeReference<>() {});
+
       CommonResponse<CardTokenResponse> body = response.getBody();
 
+      log.info("[addCard] 카드사 응답 수신 성공: response={}", body);
+
       if (body == null || body.getResponse() == null) {
+        log.warn("[addCard] 응답 바디가 null입니다.");
         throw new NoSuchElementFoundException404(ErrorDefineCode.UNCAUGHT);
       }
 
@@ -254,6 +261,8 @@ public class UserCardService {
       // 5. UserCard 저장
       userCardRepository.save(userCard);
     } catch (HttpClientErrorException | HttpServerErrorException e) {
+      log.error("[addCard] 카드사 API 호출 실패: statusCode={}, body={}",
+              e.getStatusCode(), e.getResponseBodyAsString(), e);
       // 8081 서버의 에러 메시지 추출
       String errorBody = e.getResponseBodyAsString();
       String status = extractStatusFromJson(errorBody);
