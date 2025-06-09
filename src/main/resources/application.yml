@@ -64,5 +64,5 @@ error:
   printStackTraceLine: 10 # Stack trace 출력 줄 수
 
 logging:
-  level:
-    org.springframework.security: DEBUG
+  file:
+    name:  # 비워서 spring.log 비활성화
