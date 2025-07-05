@@ -4,56 +4,56 @@
 ## 프로젝트 상세 내용
 프로젝트 목표: 혜택 기반 카드 추천 간편 결제 서비스
 
-### ERD
+## ERD
 
-## V1
+### V1
 ![image](https://github.com/user-attachments/assets/337b273c-e675-45a5-a078-f0c20682c282)
 
-## V2
+### V2
 ![image](https://github.com/user-attachments/assets/b74442ed-e3a8-4b63-980e-ff085bd4cafd)
 
+---
 
-
-### API 개발, 인터페이스 작성 및 문서자동화(Notion, Swagger)
+## API 개발, 인터페이스 작성 및 문서자동화(Notion, Swagger)
 
 
 ![image](https://github.com/user-attachments/assets/d3a258cc-2e78-48ef-9e17-95c7d632f5cd)
 
 
+---
 
-
-### 의사소통(Slack, Notion)
+## 의사소통(Slack, Notion)
 
 ![image](https://github.com/user-attachments/assets/ceb5a220-3f54-423a-ac37-68e8fdad81c4)
 
 
+---
 
-
-### 🛠 개발 범위
+## 🛠 개발 범위
 
 **MSA 구조로 구성된 페이득 서비스의 주요 기능입니다.**
 카드 추천 및 결제 로직은 `CARD` 서버에 구현되어 있습니다.
 
-#### MEMBER (회원)
+### MEMBER (회원)
 
 * 회원 가입 및 수정, 탈퇴
 * 본인인증 및 아이디/비밀번호 찾기
 * 간편결제 비밀번호 등록 / 검증 / 변경
 * 사용자 정보 조회 및 수정
 
-#### CARD (카드)
+### CARD (카드)
 
 * 카드 등록 및 대표카드 설정/변경
 * 사용자 카드 목록 조회
 * 결제 내역 조회 (전체/단건)
 
-#### ADMIN (관리자)
+### ADMIN (관리자)
 
 * 가맹점 등록 / 조회 / 수정 / 삭제
 * 가맹점 결제 내역 및 통계/트렌드 조회
 * 사용자 목록 및 통계 조회
 
-#### MERCHANT (가맹점)
+### MERCHANT (가맹점)
 
 * 본인 가맹점의 결제 내역 조회
 
@@ -61,7 +61,7 @@
 
 
 
-### 👤 개인 기여
+##  개인 기여
 
 1. **관리자 대시보드 프론트/백엔드 구현**
 
