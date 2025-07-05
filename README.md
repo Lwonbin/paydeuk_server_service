@@ -38,10 +38,11 @@ Notion과 Slack을 기반으로 의사소통하고 작업을 정리했습니다.
 
 ## 개발 범위
 
-MSA 구조 기반으로 주요 기능은 아래와 같이 구성되어 있으며, 카드 추천 및 결제 로직은 `Module` 서버에 구현되어 있습니다. 
-`Module Server` - ](https://github.com/Lwonbin/paydeuk_server_module)  
-또한 카드 추천 및 결제로직에서 Baas형태로 제공되는 API는 `Card`서버에 구현되어 있습니다.  
-`Card Serever' - 
+MSA 구조 기반으로 주요 기능은 아래와 같이 구성되어 있으며,  
+카드 추천 및 결제 로직은 `Module` 서버에 구현되어 있습니다. 
+`Module Server` - https://github.com/Lwonbin/paydeuk_server_module
+또한 카드 추천 및 결제로직에서 BaaS형태로 제공되는 API는 `Card`서버에 구현되어 있습니다.  
+`Card Serever` - https://github.com/Lwonbin/paydeuk_server_card
 ### MEMBER (회원)
 
 - 회원 가입, 수정, 탈퇴
