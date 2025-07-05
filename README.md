@@ -2,11 +2,16 @@
 
 
 ## 프로젝트 상세 내용
+프로젝트 목표: 혜택 기반 카드 추천 간편 결제 서비스
 
+### ERD
 
-### 개발 목표
+## V1
+![image](https://github.com/user-attachments/assets/337b273c-e675-45a5-a078-f0c20682c282)
 
-![image](https://github.com/Lwonbin/DIDACTO_graprac/assets/128762057/00c79df5-b5d1-4d63-8051-822e53524537)
+## V2
+![image](https://github.com/user-attachments/assets/b74442ed-e3a8-4b63-980e-ff085bd4cafd)
+
 
 
 ### API 개발, 인터페이스 작성 및 문서자동화(Notion, Swagger)
