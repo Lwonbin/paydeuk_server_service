@@ -9,10 +9,11 @@
 ![image](https://github.com/Lwonbin/DIDACTO_graprac/assets/128762057/00c79df5-b5d1-4d63-8051-822e53524537)
 
 
-### API 개발, 인터페이스 작성 및 문서자동화(Swagger)
+### API 개발, 인터페이스 작성 및 문서자동화(Notion, Swagger)
 
 
-![image](https://github.com/Lwonbin/DIDACTO_graprac/assets/128762057/11ef7b1a-01f3-4e99-876f-2d490b1c116b)
+![image](https://github.com/user-attachments/assets/d3a258cc-2e78-48ef-9e17-95c7d632f5cd)
+
 
 
 
