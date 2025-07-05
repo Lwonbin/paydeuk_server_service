@@ -19,15 +19,14 @@
 
 ### 의사소통(Slack, Notion)
 
-![image](https://github.com/Lwonbin/DIDACTO_graprac/assets/128762057/13170eff-4b77-4f23-bc8a-25cf5600434d)
+![image](https://github.com/user-attachments/assets/ceb5a220-3f54-423a-ac37-68e8fdad81c4)
 
 
 
 
-### 1차 개발범위
+### 개발범위
 
-1차 개발범위에 해당하는 기능입니다.
-
+개발범위에 해당하는 기능입니다. - MSA구조로 페이득서비스의 카드 추천 및 결제로직은 CARD 서버쪽에 구현이 되어있습니다.
 MEMBER (회원)
 i. 회원 가입 및 수정, 탈퇴
 ii. 본인인증 및 아이디/비밀번호 찾기
@@ -48,38 +47,36 @@ MERCHANT (가맹점)
 i. 본인 가맹점의 결제 내역 조회
 
 
-  
-
-
-
-
-### 2차 개발범위
-
-1. 모니터링 : 일정 간격으로 실습 컴퓨터들의 상태와 스크린을 Push 및 Polling하여 웹에서 학생들의 접속 현황과 스크린 상태를 모니터링   할 수 있는 모니터링 기능
-2. 결제시스템 : SW의 지속성을 고려해 수익모델이 필요함. 따라서 유료결제 시스템을 이용해 교수자의 등급으로 강의 설계를 제한하도록 하는 결제시스템 기능
-3. 스트리밍 : 학생과 교수자의 1:N 단위의 화면 스트리밍기능
-
 
 
 ## 개인 기여
-1. MEMBER(회원) API 작성 -1차
-2. 결제시스템 구축 - 2차
+1. 관리자 대시보드 프론트/백엔드 구현
+  1. 가맹점, 거래건수·거래금액 조회 API 개발 및 연동
+  2. 거래 추이를 시각화한 대시보드 개발
+2. 간편결제 비밀번호 검증 및 변경 기능 구현
+3. 사용자 회원가입 및 프로필 관리 기능 개발
+4. KG이니시스 본인인증 연동
+  1. 토스, 카카오 등 다양한 인증 수단 지원
+5. 인증/인가 및 카드사 API에 대한 로깅 처리
+  1. Logback 기반 로깅 적용
+6. ELK 스택 기반 모니터링 체계 구축
+  1. 실시간 API 처리 결과 추적 및 분석
+7. GitHub Actions 기반 CI/CD 파이프라인 구축
+8. 전체 프론트엔드·백엔드 코드 리뷰 및 검수
 
 
 
 
 
-### 결제 시스템 기본동작 설명
-https://decorous-calendula-c7c.notion.site/e16b4b3b9aee49b2b700a78841c080e9?pvs=4
+### MSA에서 DB 정합성 유지하기
+[https://decorous-calendula-c7c.notion.site/e16b4b3b9aee49b2b700a78841c080e9?pvs=4](https://lwb9036.tistory.com/25)
 
 
 
 
 
-### 결제시스템 고도화 진행
-웹훅을 이용한 결제시스템 안정성 높이기
-
-https://decorous-calendula-c7c.notion.site/62ac3394b2e449fbb671d2f83f187cd0?pvs=4
+### Cypress와 Puppeteer로 E2E 테스트하기
+[https://decorous-calendula-c7c.notion.site/62ac3394b2e449fbb671d2f83f187cd0?pvs=4](https://lwb9036.tistory.com/26)
 
 
 
