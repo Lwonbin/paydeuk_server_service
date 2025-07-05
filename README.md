@@ -94,6 +94,3 @@ MSA 구조 기반으로 주요 기능은 아래와 같이 구성되어 있으며
 
 **MSA에서 DB 정합성 유지하기**  
 https://lwb9036.tistory.com/25
-
-**Cypress와 Puppeteer로 E2E 테스트하기**  
-https://lwb9036.tistory.com/26
