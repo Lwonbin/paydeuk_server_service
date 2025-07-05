@@ -81,15 +81,10 @@
 
 7. **GitHub Actions 기반 CI/CD 파이프라인 구축**
 
-8. **전체 프론트엔드·백엔드 코드 리뷰 및 검수**
+8. **전체 프론트엔드·백엔드 코드 리뷰 및 검수**  
 
-
-
-
-
-
-
-
+  
+  
 ### MSA에서 DB 정합성 유지하기
 [https://decorous-calendula-c7c.notion.site/e16b4b3b9aee49b2b700a78841c080e9?pvs=4](https://lwb9036.tistory.com/25)
 
