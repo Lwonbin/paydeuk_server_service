@@ -3,9 +3,8 @@
 
 ## 프로젝트 상세 내용
 프로젝트 목표: 혜택 기반 카드 추천 간편 결제 서비스
-
+---
 ## ERD
-
 ### V1
 ![image](https://github.com/user-attachments/assets/337b273c-e675-45a5-a078-f0c20682c282)
 
@@ -15,7 +14,6 @@
 ---
 
 ## API 개발, 인터페이스 작성 및 문서자동화(Notion, Swagger)
-
 
 ![image](https://github.com/user-attachments/assets/d3a258cc-2e78-48ef-9e17-95c7d632f5cd)
 
