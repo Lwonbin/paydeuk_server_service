@@ -5,6 +5,9 @@
 혜택 기반 카드 추천 및 간편 결제 서비스  
 MSA 구조로 설계되었으며, 서비스·카드사·결제모듈 서버로 구성되어 있습니다.
 
+## 시스템 아키텍처
+![image](https://github.com/user-attachments/assets/76459aad-525b-47db-b0f6-9f7eccc52bd3)
+
 ---
 
 ## ERD
