@@ -3,7 +3,9 @@
 
 ## 프로젝트 상세 내용
 프로젝트 목표: 혜택 기반 카드 추천 간편 결제 서비스
+
 ---
+
 ## ERD
 ### V1
 ![image](https://github.com/user-attachments/assets/337b273c-e675-45a5-a078-f0c20682c282)
