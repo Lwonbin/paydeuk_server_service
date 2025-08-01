@@ -22,7 +22,7 @@ MSA 구조로 설계되었으며, 서비스·카드사·결제모듈 서버로 �
 
 ## API 문서 자동화 및 인터페이스 작성
 
-Swagger와 Notion을 활용해 API 명세를 관리했습니다.
+Notion을 이용해 API명세를 작성하고 Swagger를 활용해 API 명세를 관리했습니다.
 
 ![image](https://github.com/user-attachments/assets/d3a258cc-2e78-48ef-9e17-95c7d632f5cd)
 
